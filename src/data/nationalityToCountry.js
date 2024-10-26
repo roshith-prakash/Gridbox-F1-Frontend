@@ -1,3 +1,4 @@
+// Maps nationality to country name to get flag for driver nationality.
 export const nationalityMap = {
     "Afghan": "Afghanistan",
     "Albanian": "Albania",

@@ -14,7 +14,11 @@ const Home = () => {
   const [drivers, setDrivers] = useState([]);
 
   // Query function to fetch drivers for each year
-  const { data, refetch: fetchDrivers } = useQuery({
+  const {
+    data,
+    refetch: fetchDrivers,
+    isLoading,
+  } = useQuery({
     queryKey: ["drivers", year],
     queryFn: () => {
       return axiosInstance.post("/getDrivers", {
@@ -26,7 +30,7 @@ const Home = () => {
 
   // Set drivers for the current year into the state
   useEffect(() => {
-    if (data?.data) {
+    if (data?.data?.drivers) {
       setDrivers(data?.data?.drivers?.drivers?.drivers);
     }
   }, [data?.data]);
@@ -43,10 +47,11 @@ const Home = () => {
         <button onClick={fetchDrivers}>Fetch</button>
       </div>
 
+      {isLoading && <p>Fetching drivers...</p>}
       {/* Show driver name and country when driver data is present */}
-      {data && (
+      {drivers && (
         <div>
-          {drivers?.map((driver) => {
+          {drivers?.map((driver, i) => {
             const country = nationalityMap[driver?.nationality];
             console.log(country);
             const countryCode = countries.getAlpha2Code(country, "en");
@@ -54,7 +59,7 @@ const Home = () => {
 
             return (
               <p key={driver?.driverId}>
-                {" "}
+                {i + 1}.
                 <span
                   className={`mx-2 fi fi-${countryCode.toLowerCase()}`}
                 ></span>

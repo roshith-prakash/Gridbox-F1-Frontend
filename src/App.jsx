@@ -1,32 +1,66 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-
-// Create a client
-const queryClient = new QueryClient();
+import { RotateLoader } from "react-spinners";
+import { axiosInstance } from "./utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import { GiCarWheel } from "react-icons/gi";
+import SecurityHeaders from "./components/SecurityHeaders";
 
 function App() {
+  // Check if server is active
+  const { isLoading, error } = useQuery({
+    queryKey: ["check"],
+    queryFn: () => {
+      return axiosInstance.get("/");
+    },
+    refetchInterval: 10000,
+    retry: 5,
+  });
+
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Please Note</DialogTitle>
-                <DialogDescription className="pt-5 text-md text-black">
-                  Initial request may take upto a minute due to server
-                  limitations. Please be patient.
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog> */}
-      {/* <SecurityHeaders /> */}
-      <BrowserRouter>
-        <Routes>
-          {/* Home Page */}
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <>
+      <SecurityHeaders />
+
+      {/* If server isn't ready for use, show a loading indicator */}
+      {isLoading && (
+        <main className="h-screen w-full flex flex-col gap-y-5 justify-center items-center">
+          <p className="text-4xl flex items-center gap-x-2 font-bold italic">
+            <GiCarWheel /> Gridbox <GiCarWheel />
+          </p>
+          <img
+            alt="Man giving a presentation"
+            src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1729931902/logo_ahpe4j.png"
+            className="w-72 pointer-events-none"
+          />
+          {/* Three dots loading indicator */}
+          <RotateLoader
+            color={"#000000"}
+            loading={isLoading}
+            size={25}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </main>
+      )}
+
+      {error && (
+        <main className="h-screen w-full flex flex-col gap-y-10 justify-center items-center">
+          {/* Error text */}
+          <p className="text-red-600 text-2xl">
+            Cannot connect to server. Please try later.
+          </p>
+        </main>
+      )}
+
+      {!isLoading && !error && (
+        <BrowserRouter>
+          <Routes>
+            {/* Home page */}
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </BrowserRouter>
+      )}
+    </>
   );
 }
 
