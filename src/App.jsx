@@ -24,13 +24,15 @@ function App() {
       {/* If server isn't ready for use, show a loading indicator */}
       {isLoading && (
         <main className="h-screen w-full flex flex-col gap-y-5 justify-center items-center">
-          <p className="text-4xl flex items-center gap-x-2 font-bold italic">
-            <GiCarWheel /> Gridbox <GiCarWheel />
+          <p className="text-2xl md:text-4xl flex items-center gap-x-2 font-bold italic">
+            <GiCarWheel className="animate-spin text-3xl md:text-5xl" />{" "}
+            Starting the Engine
+            <GiCarWheel className="animate-spin text-3xl md:text-5xl" />
           </p>
           <img
             alt="Man giving a presentation"
             src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1729931902/logo_ahpe4j.png"
-            className="w-72 pointer-events-none"
+            className="w-60 md:w-72 pointer-events-none"
           />
           {/* Three dots loading indicator */}
           <RotateLoader
@@ -43,15 +45,17 @@ function App() {
         </main>
       )}
 
+      {/* Show error text if we could not connect to server */}
       {error && (
         <main className="h-screen w-full flex flex-col gap-y-10 justify-center items-center">
           {/* Error text */}
-          <p className="text-red-600 text-2xl">
+          <p className="text-red-600 text-xl md:text-2xl text-center">
             Cannot connect to server. Please try later.
           </p>
         </main>
       )}
 
+      {/* Server is ready to be used */}
       {!isLoading && !error && (
         <BrowserRouter>
           <Routes>
