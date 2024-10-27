@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
 import { RotateLoader } from "react-spinners";
 import { axiosInstance } from "./utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import { GiCarWheel } from "react-icons/gi";
 import SecurityHeaders from "./components/SecurityHeaders";
+import { Drivers } from "./pages";
 
 function App() {
   // Check if server is active
@@ -60,7 +60,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* Home page */}
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Drivers />} />
           </Routes>
         </BrowserRouter>
       )}
