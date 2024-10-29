@@ -8,14 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import dayjs from "dayjs";
 import { FaLink } from "react-icons/fa6";
 import PropTypes from "prop-types";
 
 // To get country from nationality
 import { nationalityMap } from "../data/nationalityToCountry";
 
-// To show flags for the drivers
+// To show flags for the constructors
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
@@ -24,27 +23,24 @@ import "flag-icons/css/flag-icons.min.css";
 countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
-const DriverCard = ({ driver }) => {
-  const country = nationalityMap[driver?.nationality];
+const ConstructorCard = ({ constructor }) => {
+  const country = nationalityMap[constructor?.nationality];
   const countryCode = countries.getAlpha2Code(country, "en");
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
       <p className="text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100">
-        {driver?.givenName} {driver?.familyName}
-        <span className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}></span>
+        {constructor?.name}
       </p>
-      <div className="flex px-5 py-3">
-        <p className="flex-1">Code : {driver?.code ? driver?.code : "-"}</p>
-        <p className="flex-1">
-          Number : {driver?.permanentNumber ? driver?.permanentNumber : "-"}
-        </p>
+      <div className="px-5 py-3">
+        <span>
+          Nationality:{" "}
+          <span className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}></span>
+          {constructor?.nationality}
+        </span>
       </div>
-      <p className="px-5 py-3">
-        Date of Birth : {dayjs(driver.dateOfBirth).format("DD-MM-YYYY")}
-      </p>
       <a
-        href={driver?.url}
+        href={constructor?.url}
         target="_blank"
         className="flex justify-center gap-x-2 py-5 items-center text-blue-600"
       >
@@ -54,32 +50,28 @@ const DriverCard = ({ driver }) => {
   );
 };
 
-DriverCard.propTypes = {
-  driver: PropTypes.shape({
-    givenName: PropTypes.string.isRequired,
-    familyName: PropTypes.string.isRequired,
+ConstructorCard.propTypes = {
+  constructor: PropTypes.shape({
+    name: PropTypes.string.isRequired,
     nationality: PropTypes.string.isRequired,
-    code: PropTypes.string,
-    permanentNumber: PropTypes.number,
-    dateOfBirth: PropTypes.string.isRequired,
     url: PropTypes.string,
   }).isRequired,
 };
 
-const Drivers = () => {
+const Constructors = () => {
   const [year, setYear] = useState(2024);
   const [displayYear, setDisplayYear] = useState();
-  const [drivers, setDrivers] = useState([]);
+  const [constructors, setConstructors] = useState([]);
 
-  // Query function to fetch drivers for each year
+  // Query function to fetch constructors for each year
   const {
     data,
-    refetch: fetchDrivers,
+    refetch: fetchConstructors,
     isLoading,
   } = useQuery({
-    queryKey: ["drivers", year],
+    queryKey: ["constructors", year],
     queryFn: () => {
-      return axiosInstance.post("/getDrivers", {
+      return axiosInstance.post("/getConstructors", {
         year: year,
       });
     },
@@ -87,19 +79,19 @@ const Drivers = () => {
     staleTime: Infinity,
   });
 
-  // Set drivers for the current year into the state
+  // Set constructors for the current year into the state
   useEffect(() => {
-    if (data?.data?.drivers) {
-      setDrivers(data?.data?.drivers?.drivers?.drivers);
-      setDisplayYear(data?.data?.drivers?.year);
+    if (data?.data?.constructors) {
+      setConstructors(data?.data?.constructors?.constructors?.constructors);
+      setDisplayYear(data?.data?.constructors?.year);
     }
   }, [data?.data]);
 
   useEffect(() => {
-    fetchDrivers();
-  }, [fetchDrivers]);
+    fetchConstructors();
+  }, [fetchConstructors]);
 
-  console.log(drivers);
+  console.log(constructors);
 
   return (
     <>
@@ -111,72 +103,55 @@ const Drivers = () => {
           onChange={(e) => setYear(e.target.value)}
           className="border-2 rounded"
         ></input>
-        <button disabled={isLoading} onClick={fetchDrivers}>
+        <button disabled={isLoading} onClick={fetchConstructors}>
           Fetch
         </button>
       </div>
 
-      {isLoading && <p>Fetching drivers...</p>}
-      {/* Show driver name and country when driver data is present */}
-      {drivers.length > 0 && (
+      {isLoading && <p>Fetching constructors...</p>}
+      {/* Show constructor name and country when constructor data is present */}
+      {constructors.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
-            Drivers who drove in {displayYear}
+            Constructors in {displayYear}
           </p>
           <div className="hidden md:flex justify-center py-10 overflow-x-auto">
             <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
               <TableHeader>
                 <TableRow className="text-left bg-gray-100">
                   <TableHead className="py-6">Sr. no.</TableHead>
-                  <TableHead>Driver</TableHead>
-                  <TableHead>Driver Code</TableHead>
-                  <TableHead>Driver Number</TableHead>
+                  <TableHead>Constructor</TableHead>
                   <TableHead>Nationality</TableHead>
-                  <TableHead>Date of Birth</TableHead>
                   <TableHead>Know More</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {drivers?.map((driver, i) => {
-                  const country = nationalityMap[driver?.nationality];
+                {constructors?.map((constructor, i) => {
+                  const country = nationalityMap[constructor?.nationality];
                   const countryCode = countries.getAlpha2Code(country, "en");
 
                   return (
                     <TableRow
                       className="text-left border-b-2 border-gray-100"
-                      key={driver.driverId}
+                      key={constructor.constructorId}
                     >
                       <TableCell className="font-medium py-3 px-3 md:w-[5em]">
                         {i + 1}.
                       </TableCell>
-                      <TableCell className="px-2">
-                        {driver?.givenName} {driver?.familyName}
-                      </TableCell>
-                      <TableCell className="px-2">
-                        {driver?.code ? driver?.code : "-"}
-                      </TableCell>
-                      <TableCell className="px-2">
-                        {driver?.permanentNumber
-                          ? driver?.permanentNumber
-                          : "-"}
-                      </TableCell>
-                      <TableCell className="gap-x-2 px-2 text-nowrap">
+                      <TableCell>{constructor?.name}</TableCell>
+                      <TableCell className="gap-x-2">
                         <span
                           className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
                         ></span>
-                        <span>{driver?.nationality}</span>
+                        <span>{constructor?.nationality}</span>
                       </TableCell>
-                      <TableCell className="px-2 text-nowrap">
-                        {dayjs(driver.dateOfBirth).format("DD-MM-YYYY")}
-                      </TableCell>
-                      <TableCell className="px-2">
+                      <TableCell className="px-5 md:pl-5 lg:pl-10">
                         <a
-                          href={driver?.url}
+                          href={constructor?.url}
                           target="_blank"
-                          className="text-blue-600 flex items-center gap-x-2 w-fit"
+                          className="flex items-center gap-x-2 text-blue-600"
                         >
-                          <FaLink />
-                          <span className="hidden lg:block">{driver?.url}</span>
+                          <FaLink className="" /> {constructor?.url}
                         </a>
                       </TableCell>
                     </TableRow>
@@ -186,8 +161,13 @@ const Drivers = () => {
             </table>
           </div>
           <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-            {drivers?.map((driver) => {
-              return <DriverCard driver={driver} key={driver.driverId} />;
+            {constructors?.map((constructor) => {
+              return (
+                <ConstructorCard
+                  constructor={constructor}
+                  key={constructor.constructorId}
+                />
+              );
             })}
           </div>
         </>
@@ -196,4 +176,4 @@ const Drivers = () => {
   );
 };
 
-export default Drivers;
+export default Constructors;

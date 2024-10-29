@@ -4,7 +4,16 @@ import { axiosInstance } from "./utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import { GiCarWheel } from "react-icons/gi";
 import SecurityHeaders from "./components/SecurityHeaders";
-import { Drivers } from "./pages";
+import {
+  Circuits,
+  Constructors,
+  ConstructorStandings,
+  Drivers,
+  DriverStandings,
+  Home,
+  RaceResult,
+  Schedule,
+} from "./pages";
 
 function App() {
   // Check if server is active
@@ -60,7 +69,17 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* Home page */}
-            <Route path="/" element={<Drivers />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/drivers" element={<Drivers />} />
+            <Route path="/constructors" element={<Constructors />} />
+            <Route path="/drivers-standings" element={<DriverStandings />} />
+            <Route
+              path="/constructors-standings"
+              element={<ConstructorStandings />}
+            />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/circuits" element={<Circuits />} />
+            <Route path="/race-result" element={<RaceResult />} />
           </Routes>
         </BrowserRouter>
       )}

@@ -66,20 +66,20 @@ DriverCard.propTypes = {
   }).isRequired,
 };
 
-const Drivers = () => {
+const Schedule = () => {
   const [year, setYear] = useState(2024);
   const [displayYear, setDisplayYear] = useState();
-  const [drivers, setDrivers] = useState([]);
+  const [schedule, setSchedule] = useState([]);
 
   // Query function to fetch drivers for each year
   const {
     data,
-    refetch: fetchDrivers,
+    refetch: fetchSchedule,
     isLoading,
   } = useQuery({
-    queryKey: ["drivers", year],
+    queryKey: ["schedule", year],
     queryFn: () => {
-      return axiosInstance.post("/getDrivers", {
+      return axiosInstance.post("/getSchedule", {
         year: year,
       });
     },
@@ -89,17 +89,17 @@ const Drivers = () => {
 
   // Set drivers for the current year into the state
   useEffect(() => {
-    if (data?.data?.drivers) {
-      setDrivers(data?.data?.drivers?.drivers?.drivers);
-      setDisplayYear(data?.data?.drivers?.year);
+    if (data?.data?.schedule) {
+      setSchedule(data?.data?.schedule?.schedule?.raceschedule);
+      setDisplayYear(data?.data?.schedule?.year);
     }
   }, [data?.data]);
 
   useEffect(() => {
-    fetchDrivers();
-  }, [fetchDrivers]);
+    fetchSchedule();
+  }, [fetchSchedule]);
 
-  console.log(drivers);
+  console.log(schedule);
 
   return (
     <>
@@ -111,17 +111,17 @@ const Drivers = () => {
           onChange={(e) => setYear(e.target.value)}
           className="border-2 rounded"
         ></input>
-        <button disabled={isLoading} onClick={fetchDrivers}>
+        <button disabled={isLoading} onClick={fetchSchedule}>
           Fetch
         </button>
       </div>
 
       {isLoading && <p>Fetching drivers...</p>}
       {/* Show driver name and country when driver data is present */}
-      {drivers.length > 0 && (
+      {schedule.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
-            Drivers who drove in {displayYear}
+            Schedule for the {displayYear} season
           </p>
           <div className="hidden md:flex justify-center py-10 overflow-x-auto">
             <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
@@ -137,7 +137,7 @@ const Drivers = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {drivers?.map((driver, i) => {
+                {schedule?.map((driver, i) => {
                   const country = nationalityMap[driver?.nationality];
                   const countryCode = countries.getAlpha2Code(country, "en");
 
@@ -186,7 +186,7 @@ const Drivers = () => {
             </table>
           </div>
           <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-            {drivers?.map((driver) => {
+            {schedule?.map((driver) => {
               return <DriverCard driver={driver} key={driver.driverId} />;
             })}
           </div>
@@ -196,4 +196,4 @@ const Drivers = () => {
   );
 };
 
-export default Drivers;
+export default Schedule;
