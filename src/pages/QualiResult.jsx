@@ -43,49 +43,31 @@ const DriverPositionCard = ({ item }) => {
           className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
         ></span>
       </p>
-      <div className="flex justify-between px-5 py-3 font-medium">
-        <p>
-          Status : <span>{item?.status}</span>
-        </p>
-        <p>
-          Points : <span>{item?.points}</span>
-        </p>
-      </div>
       <p className="px-5 py-3">
         Constructor : {item?.constructor?.name}{" "}
         <span
           className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
         ></span>
       </p>
-      <p
-        className={`px-5 py-3 ${
-          item?.fastestLap?.rank == 1 && "bg-purple-200"
-        }`}
-      >
-        Fastest Lap : {item?.fastestLap?.time?.time}
-      </p>
-
-      <p className="px-5 py-3">
-        Time : {item?.time?.time ? item?.time?.time : "---"}
-      </p>
+      <p className={`px-5 py-3`}>Q1 : {item?.q1 ? item?.q1 : "---"}</p>
+      <p className={`px-5 py-3`}>Q2 : {item?.q2 ? item?.q2 : "---"}</p>
+      <p className={`px-5 py-3`}>Q3 : {item?.q3 ? item?.q3 : "---"}</p>
     </div>
   );
 };
 
 DriverPositionCard.propTypes = {
   item: PropTypes.shape({
+    position: PropTypes.number,
     driver: PropTypes.object,
     constructor: PropTypes.object,
-    fastestLap: PropTypes.object,
-    time: PropTypes.object,
-    status: PropTypes.string,
-    position: PropTypes.number,
-    points: PropTypes.number,
-    wins: PropTypes.number,
+    q1: PropTypes.string,
+    q2: PropTypes.string,
+    q3: PropTypes.string,
   }).isRequired,
 };
 
-const RaceResult = () => {
+const QualiResult = () => {
   const [year, setYear] = useState(2024);
   const [round, setRound] = useState(2);
   const [displayYear, setDisplayYear] = useState(2024);
@@ -98,9 +80,9 @@ const RaceResult = () => {
     refetch: fetchRaceResult,
     isLoading,
   } = useQuery({
-    queryKey: ["raceResult", year, round],
+    queryKey: ["qualiResult", year, round],
     queryFn: () => {
-      return axiosInstance.post("/getRaceResult", {
+      return axiosInstance.post("/getQualifyingResult", {
         year: year,
         round: round,
       });
@@ -154,8 +136,8 @@ const RaceResult = () => {
       {standings.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
-            Race result for the {displayRound} round of the {displayYear} season
-            :
+            Qualifying result for the {displayRound} round of the {displayYear}{" "}
+            season :
           </p>
           <div className="hidden md:flex justify-center py-10 overflow-x-auto">
             <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
@@ -164,11 +146,9 @@ const RaceResult = () => {
                   <TableHead className="py-6">Position</TableHead>
                   <TableHead>Driver</TableHead>
                   <TableHead>Constructor</TableHead>
-                  <TableHead>Grid</TableHead>
-                  <TableHead>Points</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Fastest Lap</TableHead>
-                  <TableHead className="text-center">Time</TableHead>
+                  <TableHead>Q1</TableHead>
+                  <TableHead>Q2</TableHead>
+                  <TableHead>Q3</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -189,9 +169,7 @@ const RaceResult = () => {
 
                   return (
                     <TableRow
-                      className={`text-left border-b-2 border-gray-100 ${
-                        item?.fastestLap?.rank == 1 && "bg-purple-300"
-                      }`}
+                      className={`text-left border-b-2 border-gray-100`}
                       key={item.position}
                     >
                       <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
@@ -211,20 +189,15 @@ const RaceResult = () => {
                         ></span>
                         {item?.constructor?.name}
                       </TableCell>
+
                       <TableCell className="gap-x-2 px-2 text-nowrap">
-                        {item?.grid}
+                        {item?.q1 ? item?.q1 : "---"}
                       </TableCell>
                       <TableCell className="gap-x-2 px-2 text-nowrap">
-                        {item?.points}
+                        {item?.q2 ? item?.q2 : "---"}
                       </TableCell>
                       <TableCell className="px-2 text-nowrap">
-                        {item?.status}
-                      </TableCell>
-                      <TableCell className="px-2 text-nowrap text-center">
-                        {item?.fastestLap?.time?.time}
-                      </TableCell>
-                      <TableCell className="px-2 text-nowrap text-center">
-                        {item?.time?.time ? item?.time?.time : "---"}
+                        {item?.q3 ? item?.q3 : "---"}
                       </TableCell>
                     </TableRow>
                   );
@@ -243,4 +216,4 @@ const RaceResult = () => {
   );
 };
 
-export default RaceResult;
+export default QualiResult;

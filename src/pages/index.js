@@ -6,5 +6,6 @@ import ConstructorStandings from "./ConstructorStandings";
 import Schedule from "./Schedule"
 import Circuits from "./Circuits";
 import RaceResult from "./RaceResult";
+import QualiResult from "./QualiResult";
 
-export { Home, Drivers, Constructors, DriverStandings, ConstructorStandings, Schedule, Circuits, RaceResult }
+export { Home, Drivers, Constructors, DriverStandings, ConstructorStandings, Schedule, Circuits, RaceResult, QualiResult }

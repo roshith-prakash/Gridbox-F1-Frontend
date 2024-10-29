@@ -1,13 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../utils/axios";
-import {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import dayjs from "dayjs";
 import { FaLink } from "react-icons/fa6";
 import PropTypes from "prop-types";
@@ -123,68 +116,7 @@ const Schedule = () => {
           <p className="text-2xl font-semibold px-2">
             Schedule for the {displayYear} season
           </p>
-          <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-            <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
-              <TableHeader>
-                <TableRow className="text-left bg-gray-100">
-                  <TableHead className="py-6">Sr. no.</TableHead>
-                  <TableHead>Driver</TableHead>
-                  <TableHead>Driver Code</TableHead>
-                  <TableHead>Driver Number</TableHead>
-                  <TableHead>Nationality</TableHead>
-                  <TableHead>Date of Birth</TableHead>
-                  <TableHead>Know More</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {schedule?.map((driver, i) => {
-                  const country = nationalityMap[driver?.nationality];
-                  const countryCode = countries.getAlpha2Code(country, "en");
-
-                  return (
-                    <TableRow
-                      className="text-left border-b-2 border-gray-100"
-                      key={driver.driverId}
-                    >
-                      <TableCell className="font-medium py-3 px-3 md:w-[5em]">
-                        {i + 1}.
-                      </TableCell>
-                      <TableCell className="px-2">
-                        {driver?.givenName} {driver?.familyName}
-                      </TableCell>
-                      <TableCell className="px-2">
-                        {driver?.code ? driver?.code : "-"}
-                      </TableCell>
-                      <TableCell className="px-2">
-                        {driver?.permanentNumber
-                          ? driver?.permanentNumber
-                          : "-"}
-                      </TableCell>
-                      <TableCell className="gap-x-2 px-2 text-nowrap">
-                        <span
-                          className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
-                        ></span>
-                        <span>{driver?.nationality}</span>
-                      </TableCell>
-                      <TableCell className="px-2 text-nowrap">
-                        {dayjs(driver.dateOfBirth).format("DD-MM-YYYY")}
-                      </TableCell>
-                      <TableCell className="px-2">
-                        <a
-                          href={driver?.url}
-                          target="_blank"
-                          className="text-blue-600 flex items-center gap-x-2 w-fit"
-                        >
-                          <FaLink />
-                          <span className="hidden lg:block">{driver?.url}</span>
-                        </a>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </table>
-          </div>
+          <div className="hidden md:flex justify-center py-10 overflow-x-auto"></div>
           <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
             {schedule?.map((driver) => {
               return <DriverCard driver={driver} key={driver.driverId} />;

@@ -11,6 +11,7 @@ import {
   Drivers,
   DriverStandings,
   Home,
+  QualiResult,
   RaceResult,
   Schedule,
 } from "./pages";
@@ -80,6 +81,7 @@ function App() {
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/circuits" element={<Circuits />} />
             <Route path="/race-result" element={<RaceResult />} />
+            <Route path="/qualifying-result" element={<QualiResult />} />
           </Routes>
         </BrowserRouter>
       )}
