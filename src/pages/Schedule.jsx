@@ -2,6 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../utils/axios";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+
 import { FaLink } from "react-icons/fa6";
 import PropTypes from "prop-types";
 
@@ -116,10 +119,43 @@ const Schedule = () => {
           <p className="text-2xl font-semibold px-2">
             Schedule for the {displayYear} season
           </p>
-          <div className="hidden md:flex justify-center py-10 overflow-x-auto"></div>
-          <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-            {schedule?.map((driver) => {
-              return <DriverCard driver={driver} key={driver.driverId} />;
+          <div className="flex flex-col px-5 gap-y-5 py-10 overflow-x-auto">
+            {schedule?.map((race, i) => {
+              const countryCode = countries.getAlpha2Code(
+                race?.circuit?.location?.country,
+                "en"
+              );
+
+              let dateTime = dayjs(`${race.date}T${race.time}`);
+
+              console.log(dateTime);
+
+              return (
+                <div key={race?.date} className="flex gap-x-5">
+                  <div className="flex flex-col gap-y-1 items-center">
+                    <div className="p-4 rounded-full border-2" />
+                    {i + 1 != schedule.length && (
+                      <div className="h-full w-[1px] border-2" />
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-medium text-2xl">{race?.raceName}</p>
+                    <div className="mt-2 flex flex-col gap-y-2">
+                      <p className="text-lg">Round : {race?.round}</p>
+                      <p>
+                        {" "}
+                        Location : {race?.circuit?.location?.locality},{" "}
+                        {race?.circuit?.location?.country}
+                        <span
+                          className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
+                        ></span>
+                      </p>
+                      <p>Date: {dateTime.format("DD MMMM YYYY")}</p>
+                      <p>Time: {dateTime.format("HH:mm:ss")}</p>
+                    </div>
+                  </div>
+                </div>
+              );
             })}
           </div>
         </>
