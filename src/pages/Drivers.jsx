@@ -54,6 +54,7 @@ const DriverCard = ({ driver }) => {
   );
 };
 
+// PropTypes for Card Element
 DriverCard.propTypes = {
   driver: PropTypes.shape({
     givenName: PropTypes.string.isRequired,
@@ -64,6 +65,96 @@ DriverCard.propTypes = {
     dateOfBirth: PropTypes.string.isRequired,
     url: PropTypes.string,
   }).isRequired,
+};
+
+// Loading Placeholder Table / Card
+const LoadingTableCard = () => {
+  return (
+    <>
+      <div className="hidden md:flex justify-center py-10 overflow-x-auto">
+        {/* Loading Table on Large Screen */}
+        <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
+          <TableHeader>
+            <TableRow className="text-left bg-gray-100">
+              <TableHead className="py-6">Sr. no.</TableHead>
+              <TableHead>Driver</TableHead>
+              <TableHead>Driver Code</TableHead>
+              <TableHead>Driver Number</TableHead>
+              <TableHead>Nationality</TableHead>
+              <TableHead>Date of Birth</TableHead>
+              <TableHead>Know More</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Array(20)
+              .fill(null)
+              ?.map((driver, i) => {
+                return (
+                  <TableRow
+                    className="text-left border-b-2 border-gray-100"
+                    key={i}
+                  >
+                    <TableCell className="font-medium py-3 px-3 md:w-[5em]">
+                      <div className="bg-gray-300 animate-pulse w-10 h-5 rounded"></div>
+                    </TableCell>
+                    <TableCell className="px-2">
+                      <div className="bg-gray-300 animate-pulse w-[90%] h-5 rounded"></div>
+                    </TableCell>
+                    <TableCell className="px-2">
+                      <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
+                    </TableCell>
+                    <TableCell className="px-2">
+                      <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
+                    </TableCell>
+                    <TableCell className="gap-x-2 px-2 text-nowrap">
+                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                    </TableCell>
+                    <TableCell className="px-2 text-nowrap">
+                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                    </TableCell>
+                    <TableCell className="px-2">
+                      <div className="bg-gray-300 animate-pulse w-[90%] h-5 rounded"></div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </table>
+      </div>
+      <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
+        {/* Loading Cards on Mobile Screen */}
+        {Array(20)
+          .fill(null)
+          ?.map((_, i) => {
+            return (
+              <div
+                key={i}
+                className="md:hidden flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
+              >
+                <p className="flex text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100">
+                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                  <div className={`w-[10%] h-5 bg-gray-300 rounded`}></div>
+                </p>
+                <div className="flex px-5 py-3">
+                  <p className="flex-1">
+                    <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                  </p>
+                  <p className="flex-1">
+                    <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                  </p>
+                </div>
+                <p className="px-5 py-3">
+                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                </p>
+                <div className="flex justify-center gap-x-2 py-5 items-center text-blue-600">
+                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    </>
+  );
 };
 
 const Drivers = () => {
@@ -95,11 +186,10 @@ const Drivers = () => {
     }
   }, [data?.data]);
 
+  // Get drivers for 2024
   useEffect(() => {
     fetchDrivers();
   }, [fetchDrivers]);
-
-  console.log(drivers);
 
   return (
     <>
@@ -192,6 +282,9 @@ const Drivers = () => {
           </div>
         </>
       )}
+
+      {/* Show placeholder table / card when data is not present */}
+      {drivers.length == 0 && <LoadingTableCard />}
     </>
   );
 };
