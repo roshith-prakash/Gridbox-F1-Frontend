@@ -63,6 +63,83 @@ ConstructorStandingCard.propTypes = {
   }).isRequired,
 };
 
+// Loading Placeholder Table / Card
+const LoadingTableCard = () => {
+  return (
+    <>
+      <div className="hidden md:flex justify-center py-10 overflow-x-auto">
+        {/* Loading Table on Large Screen */}
+        <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
+          <TableHeader>
+            <TableRow className="text-left bg-gray-100">
+              <TableHead className="py-6">Position</TableHead>
+              <TableHead>Constructor</TableHead>
+              <TableHead>Nationality</TableHead>
+              <TableHead>Points</TableHead>
+              <TableHead>Wins</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Array(20)
+              .fill(null)
+              ?.map((driver, i) => {
+                return (
+                  <TableRow
+                    className="text-left border-b-2 border-gray-100"
+                    key={i}
+                  >
+                    <TableCell className="font-medium py-3 px-3 md:w-[5em]">
+                      <div className="bg-gray-300 animate-pulse w-10 h-5 rounded"></div>
+                    </TableCell>
+                    <TableCell className="px-2">
+                      <div className="bg-gray-300 animate-pulse w-[90%] h-5 rounded"></div>
+                    </TableCell>
+                    <TableCell className="px-2">
+                      <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
+                    </TableCell>
+                    <TableCell className="px-2">
+                      <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
+                    </TableCell>
+                    <TableCell className="gap-x-2 px-2 text-nowrap">
+                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </table>
+      </div>
+      <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
+        {/* Loading Cards on Mobile Screen */}
+        {Array(20)
+          .fill(null)
+          ?.map((_, i) => {
+            return (
+              <div
+                key={i}
+                className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
+              >
+                <div className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
+                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                </div>
+                <div className="flex justify-between px-5 py-3">
+                  <div className="h-5 w-[30%] bg-gray-300 rounded"></div>
+
+                  <div className="h-5 w-[30%] bg-gray-300 rounded"></div>
+                </div>
+
+                <div className="flex gap-x-2 px-5 py-3">
+                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[10%] bg-gray-300 rounded"></div>
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    </>
+  );
+};
+
 const ConstructorStandings = () => {
   const [year, setYear] = useState(2024);
   const [displayYear, setDisplayYear] = useState(2024);
@@ -74,7 +151,7 @@ const ConstructorStandings = () => {
     refetch: fetchStandings,
     isLoading,
   } = useQuery({
-    queryKey: ["driversStandings", year],
+    queryKey: ["constructorsStandings", year],
     queryFn: () => {
       return axiosInstance.post("/getConstructorStandings", {
         year: year,
@@ -181,6 +258,8 @@ const ConstructorStandings = () => {
           </div>
         </>
       )}
+      {/* Show when standings have not been fetched */}
+      {standings.length == 0 && <LoadingTableCard />}
     </>
   );
 };

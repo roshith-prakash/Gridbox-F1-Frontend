@@ -114,6 +114,7 @@ const Schedule = () => {
 
       {isLoading && <p>Fetching drivers...</p>}
       {/* Show driver name and country when driver data is present */}
+
       {schedule.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
@@ -160,6 +161,34 @@ const Schedule = () => {
           </div>
         </>
       )}
+
+      {schedule.length == 0 &&
+        Array(10)
+          .fill(null)
+          ?.map((_, i) => {
+            return (
+              <div key={i} className="flex gap-x-5 mt-3">
+                <div className="flex flex-col gap-y-1 items-center">
+                  <div className="p-4 rounded-full border-2" />
+                  {i + 1 != schedule.length && (
+                    <div className="h-full w-[1px] border-2" />
+                  )}
+                </div>
+                <div className="flex flex-col gap-y-2">
+                  <div className="w-40 h-8 bg-gray-300 animate-pulse rounded font-medium text-2xl"></div>
+                  <div className="mt-2 flex flex-col gap-y-2">
+                    <div className="w-40 h-5 bg-gray-300 animate-pulse rounded"></div>
+                    <div className="flex gap-x-3">
+                      <div className="w-40 h-5 bg-gray-300 animate-pulse rounded" />
+                      <div className="w-10 h-5 bg-gray-300 animate-pulse rounded" />
+                    </div>
+                  </div>
+                  <div className="w-40 h-5 bg-gray-300 animate-pulse rounded" />
+                  <div className="w-40 h-5 bg-gray-300 animate-pulse" />
+                </div>
+              </div>
+            );
+          })}
     </>
   );
 };
