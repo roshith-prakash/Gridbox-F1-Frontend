@@ -15,6 +15,14 @@ import {
   RaceResult,
   Schedule,
 } from "./pages";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./components/ui/dialog";
+import { useState } from "react";
 
 function App() {
   // Check if server is active
@@ -26,6 +34,8 @@ function App() {
     refetchInterval: 10000,
     retry: 5,
   });
+
+  const [open, setOpen] = useState(true);
 
   return (
     <>
@@ -67,23 +77,40 @@ function App() {
 
       {/* Server is ready to be used */}
       {!isLoading && !error && (
-        <BrowserRouter>
-          <Routes>
-            {/* Home page */}
-            <Route path="/" element={<Home />} />
-            <Route path="/drivers" element={<Drivers />} />
-            <Route path="/constructors" element={<Constructors />} />
-            <Route path="/drivers-standings" element={<DriverStandings />} />
-            <Route
-              path="/constructors-standings"
-              element={<ConstructorStandings />}
-            />
-            <Route path="/schedule" element={<Schedule />} />
-            <Route path="/circuits" element={<Circuits />} />
-            <Route path="/race-result" element={<RaceResult />} />
-            <Route path="/qualifying-result" element={<QualiResult />} />
-          </Routes>
-        </BrowserRouter>
+        <>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  GridBox F1: Data Availability Limitation
+                </DialogTitle>
+                <DialogDescription className="py-3">
+                  GridBox F1 relies on data from the Ergast Database, which will
+                  only be available up to the 2024 season. All site data will
+                  reflect information from the 2024 season and earlier.
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+
+          <BrowserRouter>
+            <Routes>
+              {/* Home page */}
+              <Route path="/" element={<Home />} />
+              <Route path="/drivers" element={<Drivers />} />
+              <Route path="/constructors" element={<Constructors />} />
+              <Route path="/drivers-standings" element={<DriverStandings />} />
+              <Route
+                path="/constructors-standings"
+                element={<ConstructorStandings />}
+              />
+              <Route path="/schedule" element={<Schedule />} />
+              <Route path="/circuits" element={<Circuits />} />
+              <Route path="/race-result" element={<RaceResult />} />
+              <Route path="/qualifying-result" element={<QualiResult />} />
+            </Routes>
+          </BrowserRouter>
+        </>
       )}
     </>
   );
