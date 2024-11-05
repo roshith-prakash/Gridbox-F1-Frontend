@@ -17,6 +17,7 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { useParams } from "react-router-dom";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -168,16 +169,17 @@ const LoadingTableCard = () => {
 };
 
 const QualiResult = () => {
-  const [year, setYear] = useState(2024);
-  const [round, setRound] = useState(2);
-  const [displayYear, setDisplayYear] = useState(2024);
-  const [displayRound, setDisplayRound] = useState(2);
+  const { year: urlYear, round: urlRound } = useParams();
+  const [year, setYear] = useState();
+  const [round, setRound] = useState();
+  const [displayYear, setDisplayYear] = useState();
+  const [displayRound, setDisplayRound] = useState();
   const [standings, setStandings] = useState([]);
 
   // Query function to fetch standings for each year
   const {
     data,
-    refetch: fetchRaceResult,
+    refetch: fetchQualiResult,
     isLoading,
   } = useQuery({
     queryKey: ["qualiResult", year, round],
@@ -202,12 +204,33 @@ const QualiResult = () => {
     }
   }, [data?.data]);
 
+  // If year is present
   useEffect(() => {
-    fetchRaceResult();
-  }, [fetchRaceResult]);
+    if (urlYear) {
+      // Valid Year in URL param
+      if (
+        urlYear &&
+        !Number.isNaN(urlYear) &&
+        parseInt(urlYear) >= 1950 &&
+        parseInt(urlYear) <= 2024 &&
+        urlRound &&
+        !Number.isNaN(urlRound)
+      ) {
+        setYear(parseInt(urlYear));
+        setRound(parseInt(urlRound));
+      } else {
+        console.log("Invalid year / round specified");
+      }
+    } else {
+      console.log("Year and round not provided");
+    }
+  }, [urlYear, urlRound]);
 
-  console.log(data?.data);
-  console.log(standings);
+  useEffect(() => {
+    if (!!year && !!round) {
+      fetchQualiResult();
+    }
+  }, [fetchQualiResult, year, round]);
 
   return (
     <>
@@ -226,7 +249,7 @@ const QualiResult = () => {
           onChange={(e) => setRound(e.target.value)}
           className="border-2 rounded"
         ></input>
-        <button disabled={isLoading} onClick={fetchRaceResult}>
+        <button disabled={isLoading} onClick={fetchQualiResult}>
           Fetch
         </button>
       </div>

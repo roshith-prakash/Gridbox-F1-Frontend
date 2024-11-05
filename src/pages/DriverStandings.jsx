@@ -17,6 +17,7 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { useParams } from "react-router-dom";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -178,8 +179,9 @@ const LoadingTableCard = () => {
 };
 
 const DriverStandings = () => {
-  const [year, setYear] = useState(2024);
-  const [displayYear, setDisplayYear] = useState(2024);
+  const { year: urlYear } = useParams();
+  const [year, setYear] = useState();
+  const [displayYear, setDisplayYear] = useState();
   const [standings, setStandings] = useState([]);
 
   // Query function to fetch standings for each year
@@ -195,7 +197,7 @@ const DriverStandings = () => {
       });
     },
     enabled: false,
-    staleTime: Infinity,
+    staleTime: 1000 * 60 * 15,
   });
 
   // Set standings for the current year into the state
@@ -206,12 +208,31 @@ const DriverStandings = () => {
     }
   }, [data?.data]);
 
+  // If year is present
   useEffect(() => {
-    fetchStandings();
-  }, [fetchStandings]);
+    if (urlYear) {
+      // Valid Year in URL param
+      if (
+        urlYear &&
+        !Number.isNaN(urlYear) &&
+        parseInt(urlYear) >= 1950 &&
+        parseInt(urlYear) <= 2024
+      ) {
+        setYear(parseInt(urlYear));
+      } else {
+        console.log("Invalid year specified");
+      }
+    } else {
+      setYear(2024);
+    }
+  }, [urlYear]);
 
-  console.log(data?.data);
-  console.log(standings);
+  // Fetch drivers
+  useEffect(() => {
+    if (year) {
+      fetchStandings();
+    }
+  }, [fetchStandings, year]);
 
   return (
     <>

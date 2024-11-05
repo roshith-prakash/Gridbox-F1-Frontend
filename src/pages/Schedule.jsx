@@ -9,12 +9,14 @@ dayjs.extend(utc);
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { useParams } from "react-router-dom";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
 
 const Schedule = () => {
-  const [year, setYear] = useState(2024);
+  const { year: urlYear } = useParams();
+  const [year, setYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [schedule, setSchedule] = useState([]);
 
@@ -42,11 +44,30 @@ const Schedule = () => {
     }
   }, [data?.data]);
 
+  // If year is present
   useEffect(() => {
-    fetchSchedule();
-  }, [fetchSchedule]);
+    if (urlYear) {
+      // Valid Year in URL param
+      if (
+        urlYear &&
+        !Number.isNaN(urlYear) &&
+        parseInt(urlYear) >= 1950 &&
+        parseInt(urlYear) <= 2024
+      ) {
+        setYear(parseInt(urlYear));
+      } else {
+        console.log("Invalid year specified");
+      }
+    } else {
+      setYear(2024);
+    }
+  }, [urlYear]);
 
-  console.log(schedule);
+  useEffect(() => {
+    if (year) {
+      fetchSchedule();
+    }
+  }, [fetchSchedule, year]);
 
   return (
     <>
@@ -80,12 +101,10 @@ const Schedule = () => {
 
               let dateTime = dayjs(`${race.date}T${race.time}`);
 
-              console.log(dateTime);
-
               return (
                 <div key={race?.date} className="flex gap-x-5">
                   <div className="flex flex-col gap-y-1 items-center">
-                    <div className="p-4 rounded-full border-2" />
+                    <div className="p-4 rounded-full border-4" />
                     {i + 1 != schedule.length && (
                       <div className="h-full w-[1px] border-2" />
                     )}

@@ -18,6 +18,7 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { useParams } from "react-router-dom";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -128,7 +129,8 @@ const LoadingTableCard = () => {
 };
 
 const Constructors = () => {
-  const [year, setYear] = useState(2024);
+  const { year: urlYear } = useParams();
+  const [year, setYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [constructors, setConstructors] = useState([]);
 
@@ -148,6 +150,25 @@ const Constructors = () => {
     staleTime: Infinity,
   });
 
+  // If year is present
+  useEffect(() => {
+    if (urlYear) {
+      // Valid Year in URL param
+      if (
+        urlYear &&
+        !Number.isNaN(urlYear) &&
+        parseInt(urlYear) >= 1950 &&
+        parseInt(urlYear) <= 2024
+      ) {
+        setYear(parseInt(urlYear));
+      } else {
+        console.log("Invalid year specified");
+      }
+    } else {
+      setYear(2024);
+    }
+  }, [urlYear]);
+
   // Set constructors for the current year into the state
   useEffect(() => {
     if (data?.data?.constructors) {
@@ -156,10 +177,12 @@ const Constructors = () => {
     }
   }, [data?.data]);
 
-  // Fetch constructors for 2024
+  // Fetch constructors
   useEffect(() => {
-    fetchConstructors();
-  }, [fetchConstructors]);
+    if (year) {
+      fetchConstructors();
+    }
+  }, [fetchConstructors, year]);
 
   return (
     <>

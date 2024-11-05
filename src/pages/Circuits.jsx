@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { useParams } from "react-router-dom";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -201,7 +202,8 @@ const LoadingTableCard = () => {
 };
 
 const Circuits = () => {
-  const [year, setYear] = useState(2024);
+  const { year: urlYear } = useParams();
+  const [year, setYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [circuits, setCircuits] = useState([]);
 
@@ -229,11 +231,30 @@ const Circuits = () => {
     }
   }, [data?.data]);
 
+  // If year is present
   useEffect(() => {
-    fetchCircuits();
-  }, [fetchCircuits]);
+    if (urlYear) {
+      // Valid Year in URL param
+      if (
+        urlYear &&
+        !Number.isNaN(urlYear) &&
+        parseInt(urlYear) >= 1950 &&
+        parseInt(urlYear) <= 2024
+      ) {
+        setYear(parseInt(urlYear));
+      } else {
+        console.log("Invalid year specified");
+      }
+    } else {
+      setYear(2024);
+    }
+  }, [urlYear]);
 
-  // console.log(circuits);
+  useEffect(() => {
+    if (year) {
+      fetchCircuits();
+    }
+  }, [fetchCircuits, year]);
 
   return (
     <>

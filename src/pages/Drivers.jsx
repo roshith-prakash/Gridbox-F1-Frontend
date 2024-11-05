@@ -19,6 +19,7 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { useParams } from "react-router-dom";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -158,7 +159,8 @@ const LoadingTableCard = () => {
 };
 
 const Drivers = () => {
-  const [year, setYear] = useState(2024);
+  const { year: urlYear } = useParams();
+  const [year, setYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [drivers, setDrivers] = useState([]);
 
@@ -178,6 +180,32 @@ const Drivers = () => {
     staleTime: Infinity,
   });
 
+  // If year is present
+  useEffect(() => {
+    if (urlYear) {
+      // Valid Year in URL param
+      if (
+        urlYear &&
+        !Number.isNaN(urlYear) &&
+        parseInt(urlYear) >= 1950 &&
+        parseInt(urlYear) <= 2024
+      ) {
+        setYear(parseInt(urlYear));
+      } else {
+        console.log("Invalid year specified");
+      }
+    } else {
+      setYear(2024);
+    }
+  }, [urlYear]);
+
+  // Fetch drivers
+  useEffect(() => {
+    if (year) {
+      fetchDrivers();
+    }
+  }, [fetchDrivers, year]);
+
   // Set drivers for the current year into the state
   useEffect(() => {
     if (data?.data?.drivers) {
@@ -185,11 +213,6 @@ const Drivers = () => {
       setDisplayYear(data?.data?.drivers?.year);
     }
   }, [data?.data]);
-
-  // Get drivers for 2024
-  useEffect(() => {
-    fetchDrivers();
-  }, [fetchDrivers]);
 
   return (
     <>
@@ -231,11 +254,6 @@ const Drivers = () => {
                   const country =
                     nationalityMap[String(driver?.nationality).trim()];
                   const countryCode = countries.getAlpha2Code(country, "en");
-
-                  console.log(";" + driver?.nationality + ";");
-                  console.log(country);
-                  console.log(countryCode);
-                  console.log("-------------------------");
 
                   return (
                     <TableRow

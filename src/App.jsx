@@ -4,6 +4,7 @@ import { axiosInstance } from "./utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import { GiCarWheel } from "react-icons/gi";
 import SecurityHeaders from "./components/SecurityHeaders";
+import Navbar from "./components/Navbar";
 import {
   Circuits,
   Constructors,
@@ -93,21 +94,58 @@ function App() {
             </DialogContent>
           </Dialog>
 
+          <Navbar />
           <BrowserRouter>
             <Routes>
               {/* Home page */}
               <Route path="/" element={<Home />} />
+
+              {/* Drivers who drove in a particular year */}
               <Route path="/drivers" element={<Drivers />} />
+              <Route path="/drivers/:year" element={<Drivers />} />
+
+              {/* Constructors who raced in a particular year */}
               <Route path="/constructors" element={<Constructors />} />
+              <Route path="/constructors/:year" element={<Constructors />} />
+
+              {/* World Drivers standings for a particular year*/}
               <Route path="/drivers-standings" element={<DriverStandings />} />
+              <Route
+                path="/drivers-standings/:year"
+                element={<DriverStandings />}
+              />
+
+              {/* World Constructors standings for a particular year*/}
               <Route
                 path="/constructors-standings"
                 element={<ConstructorStandings />}
               />
+              <Route
+                path="/constructors-standings/:year"
+                element={<ConstructorStandings />}
+              />
+
+              {/* The Season Schedule  */}
               <Route path="/schedule" element={<Schedule />} />
+              <Route path="/schedule/:year" element={<Schedule />} />
+
+              {/* The Circuits used in a specific year */}
               <Route path="/circuits" element={<Circuits />} />
+              <Route path="/circuits/:year" element={<Circuits />} />
+
+              {/* Result for a specific race */}
               <Route path="/race-result" element={<RaceResult />} />
+              <Route
+                path="/race-result/:year/:round"
+                element={<RaceResult />}
+              />
+
+              {/* Result for a specific Qualifying session */}
               <Route path="/qualifying-result" element={<QualiResult />} />
+              <Route
+                path="/qualifying-result/:year/:round"
+                element={<QualiResult />}
+              />
             </Routes>
           </BrowserRouter>
         </>
