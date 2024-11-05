@@ -25,7 +25,7 @@ countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
 const DriverCard = ({ driver }) => {
-  const country = nationalityMap[driver?.nationality];
+  const country = nationalityMap[String(driver?.nationality).trim()];
   const countryCode = countries.getAlpha2Code(country, "en");
 
   return (
@@ -228,8 +228,14 @@ const Drivers = () => {
               </TableHeader>
               <TableBody>
                 {drivers?.map((driver, i) => {
-                  const country = nationalityMap[driver?.nationality];
+                  const country =
+                    nationalityMap[String(driver?.nationality).trim()];
                   const countryCode = countries.getAlpha2Code(country, "en");
+
+                  console.log(";" + driver?.nationality + ";");
+                  console.log(country);
+                  console.log(countryCode);
+                  console.log("-------------------------");
 
                   return (
                     <TableRow

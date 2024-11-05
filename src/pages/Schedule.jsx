@@ -5,12 +5,6 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
-import { FaLink } from "react-icons/fa6";
-import PropTypes from "prop-types";
-
-// To get country from nationality
-import { nationalityMap } from "../data/nationalityToCountry";
-
 // To show flags for the drivers
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
@@ -18,49 +12,6 @@ import "flag-icons/css/flag-icons.min.css";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
-
-// To be displayed on Mobile screens
-const DriverCard = ({ driver }) => {
-  const country = nationalityMap[driver?.nationality];
-  const countryCode = countries.getAlpha2Code(country, "en");
-
-  return (
-    <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
-      <p className="text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100">
-        {driver?.givenName} {driver?.familyName}
-        <span className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}></span>
-      </p>
-      <div className="flex px-5 py-3">
-        <p className="flex-1">Code : {driver?.code ? driver?.code : "-"}</p>
-        <p className="flex-1">
-          Number : {driver?.permanentNumber ? driver?.permanentNumber : "-"}
-        </p>
-      </div>
-      <p className="px-5 py-3">
-        Date of Birth : {dayjs(driver.dateOfBirth).format("DD-MM-YYYY")}
-      </p>
-      <a
-        href={driver?.url}
-        target="_blank"
-        className="flex justify-center gap-x-2 py-5 items-center text-blue-600"
-      >
-        Read More <FaLink />
-      </a>
-    </div>
-  );
-};
-
-DriverCard.propTypes = {
-  driver: PropTypes.shape({
-    givenName: PropTypes.string.isRequired,
-    familyName: PropTypes.string.isRequired,
-    nationality: PropTypes.string.isRequired,
-    code: PropTypes.string,
-    permanentNumber: PropTypes.number,
-    dateOfBirth: PropTypes.string.isRequired,
-    url: PropTypes.string,
-  }).isRequired,
-};
 
 const Schedule = () => {
   const [year, setYear] = useState(2024);

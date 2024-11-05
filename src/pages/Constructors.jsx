@@ -24,7 +24,7 @@ countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
 const ConstructorCard = ({ constructor }) => {
-  const country = nationalityMap[constructor?.nationality];
+  const country = nationalityMap[String(constructor?.nationality).trim()];
   const countryCode = countries.getAlpha2Code(country, "en");
 
   return (
@@ -196,7 +196,8 @@ const Constructors = () => {
               </TableHeader>
               <TableBody>
                 {constructors?.map((constructor, i) => {
-                  const country = nationalityMap[constructor?.nationality];
+                  const country =
+                    nationalityMap[String(constructor?.nationality).trim()];
                   const countryCode = countries.getAlpha2Code(country, "en");
 
                   return (

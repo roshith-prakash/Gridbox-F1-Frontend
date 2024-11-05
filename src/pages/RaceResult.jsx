@@ -23,10 +23,12 @@ countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
 const DriverPositionCard = ({ item }) => {
-  const driverCountry = nationalityMap[item?.driver?.nationality];
+  const driverCountry =
+    nationalityMap[String(item?.driver?.nationality).trim()];
   const driverCountryCode = countries.getAlpha2Code(driverCountry, "en");
 
-  const constructorCountry = nationalityMap[item?.constructor?.nationality];
+  const constructorCountry =
+    nationalityMap[String(item?.constructor?.nationality).trim()];
   const constructorCountryCode = countries.getAlpha2Code(
     constructorCountry,
     "en"
@@ -282,14 +284,16 @@ const RaceResult = () => {
               <TableBody>
                 {standings?.map((item, i) => {
                   const driverCountry =
-                    nationalityMap[item?.driver?.nationality];
+                    nationalityMap[String(item?.driver?.nationality).trim()];
                   const driverCountryCode = countries.getAlpha2Code(
                     driverCountry,
                     "en"
                   );
 
                   const constructorCountry =
-                    nationalityMap[item?.constructor?.nationality];
+                    nationalityMap[
+                      String(item?.constructor?.nationality).trim()
+                    ];
                   const constructorCountryCode = countries.getAlpha2Code(
                     constructorCountry,
                     "en"

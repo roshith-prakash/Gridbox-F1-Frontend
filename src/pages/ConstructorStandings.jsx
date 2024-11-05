@@ -23,7 +23,8 @@ countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
 const ConstructorStandingCard = ({ item }) => {
-  const constructorCountry = nationalityMap[item?.constructor?.nationality];
+  const constructorCountry =
+    nationalityMap[String(item?.constructor?.nationality).trim()];
   const constructorCountryCode = countries.getAlpha2Code(
     constructorCountry,
     "en"
@@ -212,7 +213,9 @@ const ConstructorStandings = () => {
               <TableBody>
                 {standings?.map((item, i) => {
                   const constructorCountry =
-                    nationalityMap[item?.constructor?.nationality];
+                    nationalityMap[
+                      String(item?.constructor?.nationality).trim()
+                    ];
                   const constructorCountryCode = countries.getAlpha2Code(
                     constructorCountry,
                     "en"
