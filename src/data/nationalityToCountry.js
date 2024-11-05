@@ -7,6 +7,7 @@ export const nationalityMap = {
     "Andorran": "Andorra",
     "Angolan": "Angola",
     "Argentine": "Argentina",
+    "Argentinian": "Argentina",
     "Armenian": "Armenia",
     "Australian": "Australia",
     "Austrian": "Austria",
