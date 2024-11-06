@@ -11,14 +11,22 @@ import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 import { useParams } from "react-router-dom";
 
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import { Collapse } from "react-collapse";
+
+import { useNavigate } from "react-router-dom";
+
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
 
 const Schedule = () => {
+  const navigate = useNavigate();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [schedule, setSchedule] = useState([]);
+  const [open, setOpen] = useState(false);
 
   // Query function to fetch drivers for each year
   const {
@@ -36,7 +44,11 @@ const Schedule = () => {
     staleTime: Infinity,
   });
 
-  // Set drivers for the current year into the state
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  // Set Schedule for the current year into the state
   useEffect(() => {
     if (data?.data?.schedule) {
       setSchedule(data?.data?.schedule?.schedule?.raceschedule);
@@ -69,20 +81,41 @@ const Schedule = () => {
     }
   }, [fetchSchedule, year]);
 
+  const changeDate = (date) => {
+    if (
+      new Date(date._d).getFullYear() > 2024 ||
+      new Date(date._d).getFullYear() < 1950
+    ) {
+      console.log("Invalid Year");
+      setOpen(true);
+    } else {
+      setYear(new Date(date._d).getFullYear());
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       <div className="flex gap-x-5 p-5">
-        <input
-          type="number"
-          value={year}
-          disabled={isLoading}
-          onChange={(e) => setYear(e.target.value)}
-          className="border-2 rounded"
-        ></input>
+        <Datetime
+          dateFormat="YYYY"
+          timeFormat={false}
+          inputProps={{ placeholder: 2024 }}
+          onChange={(date) => {
+            changeDate(date);
+          }}
+        />
+
         <button disabled={isLoading} onClick={fetchSchedule}>
           Fetch
         </button>
       </div>
+
+      <Collapse isOpened={open} className="transition-all">
+        <div className="text-red-600 font-medium px-5">
+          Year must be between 1950 & 2024
+        </div>
+      </Collapse>
 
       {isLoading && <p>Fetching drivers...</p>}
       {/* Show driver name and country when driver data is present */}
@@ -123,6 +156,29 @@ const Schedule = () => {
                       </p>
                       <p>Date: {dateTime.format("DD MMMM YYYY")}</p>
                       <p>Time: {dateTime.format("HH:mm:ss")}</p>
+
+                      {new Date() > new Date(dateTime) && (
+                        <div className="flex gap-x-2">
+                          <button
+                            onClick={() => {
+                              navigate(
+                                `/qualifying-result/${displayYear}/${race?.round}`
+                              );
+                            }}
+                          >
+                            Qualifying
+                          </button>
+                          <button
+                            onClick={() => {
+                              navigate(
+                                `/race-result/${displayYear}/${race?.round}`
+                              );
+                            }}
+                          >
+                            Race
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

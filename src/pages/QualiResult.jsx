@@ -232,34 +232,18 @@ const QualiResult = () => {
     }
   }, [fetchQualiResult, year, round]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   return (
     <>
-      <div className="flex flex-wrap gap-x-5 gap-y-5 p-5">
-        <input
-          type="number"
-          value={year}
-          disabled={isLoading}
-          onChange={(e) => setYear(e.target.value)}
-          className="border-2 rounded"
-        ></input>
-        <input
-          type="number"
-          value={round}
-          disabled={isLoading}
-          onChange={(e) => setRound(e.target.value)}
-          className="border-2 rounded"
-        ></input>
-        <button disabled={isLoading} onClick={fetchQualiResult}>
-          Fetch
-        </button>
-      </div>
-
       {isLoading && <p>Fetching standings...</p>}
       {/* Show driver name and country when driver data is present */}
       {standings.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
-            Qualifying result for the {displayRound} round of the {displayYear}{" "}
+            Qualifying result for Round {displayRound} of the {displayYear}{" "}
             season :
           </p>
           <div className="hidden md:flex justify-center py-10 overflow-x-auto">

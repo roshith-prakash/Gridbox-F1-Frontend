@@ -198,6 +198,10 @@ const ConstructorStandings = () => {
     }
   }, [fetchStandings, year]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   return (
     <>
       <div className="flex gap-x-5 p-5">
