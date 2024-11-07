@@ -9,12 +9,16 @@ dayjs.extend(utc);
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+
+// Get URL Params
 import { useParams } from "react-router-dom";
 
+// Year Picker
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { Collapse } from "react-collapse";
 
+// Navigate Programatically
 import { useNavigate } from "react-router-dom";
 
 // Register the locale for the countries constructor
@@ -44,6 +48,7 @@ const Schedule = () => {
     staleTime: Infinity,
   });
 
+  // Scroll to top of the page
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -75,12 +80,13 @@ const Schedule = () => {
     }
   }, [urlYear]);
 
+  // Fetch data for initial load
   useEffect(() => {
-    if (year) {
-      fetchSchedule();
-    }
-  }, [fetchSchedule, year]);
+    fetchSchedule();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchSchedule, !!year]);
 
+  // To change year using Date Picker
   const changeDate = (date) => {
     if (
       new Date(date._d).getFullYear() > 2024 ||
@@ -106,7 +112,7 @@ const Schedule = () => {
           }}
         />
 
-        <button disabled={isLoading} onClick={fetchSchedule}>
+        <button disabled={isLoading || open} onClick={fetchSchedule}>
           Fetch
         </button>
       </div>
@@ -132,7 +138,15 @@ const Schedule = () => {
                 "en"
               );
 
-              let dateTime = dayjs(`${race.date}T${race.time}`);
+              let dateTime;
+              if (race?.time) {
+                dateTime = dayjs(`${race.date}T${race.time}`);
+              } else {
+                dateTime = dayjs(`${race.date}`);
+              }
+
+              console.log(race?.date);
+              console.log(race?.time);
 
               return (
                 <div key={race?.date} className="flex gap-x-5">
@@ -154,8 +168,11 @@ const Schedule = () => {
                           className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
                         ></span>
                       </p>
-                      <p>Date: {dateTime.format("DD MMMM YYYY")}</p>
-                      <p>Time: {dateTime.format("HH:mm:ss")}</p>
+                      {race?.date && (
+                        <p>Date: {dateTime.format("DD MMMM YYYY")}</p>
+                      )}
+
+                      {race?.time && <p>Time: {dateTime.format("HH:mm:ss")}</p>}
 
                       {new Date() > new Date(dateTime) && (
                         <div className="flex gap-x-2">

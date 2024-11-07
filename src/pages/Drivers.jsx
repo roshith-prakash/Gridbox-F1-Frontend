@@ -19,19 +19,25 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+
+// To get URL Params
 import { useParams } from "react-router-dom";
+
+// Year Picker
+import { YearPicker } from "../components";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
-const DriverCard = ({ driver }) => {
+const DriverCard = ({ driver, index }) => {
   const country = nationalityMap[String(driver?.nationality).trim()];
   const countryCode = countries.getAlpha2Code(country, "en");
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
-      <p className="text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100">
+      <p className="text-lg flex px-5 font-medium py-3 gap-x-2 bg-gray-100">
+        <span>{index + 1}.</span>
         {driver?.givenName} {driver?.familyName}
         <span className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}></span>
       </p>
@@ -66,6 +72,7 @@ DriverCard.propTypes = {
     dateOfBirth: PropTypes.string.isRequired,
     url: PropTypes.string,
   }).isRequired,
+  index: PropTypes.number,
 };
 
 // Loading Placeholder Table / Card
@@ -163,6 +170,7 @@ const Drivers = () => {
   const [year, setYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [drivers, setDrivers] = useState([]);
+  const [open, setOpen] = useState(false);
 
   // Query function to fetch drivers for each year
   const {
@@ -179,6 +187,11 @@ const Drivers = () => {
     enabled: false,
     staleTime: Infinity,
   });
+
+  // Scroll to Top
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   // If year is present
   useEffect(() => {
@@ -199,12 +212,11 @@ const Drivers = () => {
     }
   }, [urlYear]);
 
-  // Fetch drivers
+  // Fetch data for initial load
   useEffect(() => {
-    if (year) {
-      fetchDrivers();
-    }
-  }, [fetchDrivers, year]);
+    fetchDrivers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchDrivers, !!year]);
 
   // Set drivers for the current year into the state
   useEffect(() => {
@@ -214,21 +226,11 @@ const Drivers = () => {
     }
   }, [data?.data]);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
   return (
     <>
       <div className="flex gap-x-5 p-5">
-        <input
-          type="number"
-          value={year}
-          disabled={isLoading}
-          onChange={(e) => setYear(e.target.value)}
-          className="border-2 rounded"
-        ></input>
-        <button disabled={isLoading} onClick={fetchDrivers}>
+        <YearPicker setOpen={setOpen} setYear={setYear} />
+        <button disabled={isLoading || open} onClick={fetchDrivers}>
           Fetch
         </button>
       </div>
@@ -304,8 +306,10 @@ const Drivers = () => {
             </table>
           </div>
           <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-            {drivers?.map((driver) => {
-              return <DriverCard driver={driver} key={driver.driverId} />;
+            {drivers?.map((driver, i) => {
+              return (
+                <DriverCard driver={driver} index={i} key={driver.driverId} />
+              );
             })}
           </div>
         </>

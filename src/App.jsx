@@ -79,6 +79,7 @@ function App() {
       {/* Server is ready to be used */}
       {!isLoading && !error && (
         <>
+          {/* Data Availability Dialog box */}
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>
               <DialogHeader>
@@ -94,8 +95,8 @@ function App() {
             </DialogContent>
           </Dialog>
 
-          <Navbar />
           <BrowserRouter>
+            <Navbar />
             <Routes>
               {/* Home page */}
               <Route path="/" element={<Home />} />

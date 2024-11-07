@@ -193,6 +193,11 @@ const QualiResult = () => {
     staleTime: Infinity,
   });
 
+  // Scroll to top
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   // Set standings for the current year into the state
   useEffect(() => {
     if (data?.data?.result) {
@@ -231,10 +236,6 @@ const QualiResult = () => {
       fetchQualiResult();
     }
   }, [fetchQualiResult, year, round]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
 
   return (
     <>

@@ -60,13 +60,16 @@ const DriverPositionCard = ({ item }) => {
           className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
         ></span>
       </p>
-      <p
-        className={`px-5 py-3 ${
-          item?.fastestLap?.rank == 1 && "bg-purple-200"
-        }`}
-      >
-        Fastest Lap : {item?.fastestLap?.time?.time}
-      </p>
+
+      {item?.fastestLap?.time?.time && (
+        <p
+          className={`px-5 py-3 ${
+            item?.fastestLap?.rank == 1 && "bg-purple-200"
+          }`}
+        >
+          Fastest Lap : {item?.fastestLap?.time?.time}
+        </p>
+      )}
 
       <p className="px-5 py-3">
         Time : {item?.time?.time ? item?.time?.time : "---"}
@@ -221,7 +224,12 @@ const RaceResult = () => {
     staleTime: Infinity,
   });
 
-  // Set standings for the current year into the state
+  // Scroll to top
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  // Set result for the current year into the state
   useEffect(() => {
     if (data?.data?.result) {
       setStandings(data?.data?.result?.result?.result);
@@ -232,7 +240,7 @@ const RaceResult = () => {
     }
   }, [data?.data]);
 
-  // If year is present
+  // If year and round is present in URL
   useEffect(() => {
     if (urlYear) {
       // Valid Year in URL param
@@ -254,15 +262,12 @@ const RaceResult = () => {
     }
   }, [urlYear, urlRound]);
 
+  // Fetch result
   useEffect(() => {
     if (!!year && !!round) {
       fetchRaceResult();
     }
   }, [fetchRaceResult, year, round]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
 
   return (
     <>
@@ -283,7 +288,10 @@ const RaceResult = () => {
                   <TableHead>Grid</TableHead>
                   <TableHead>Points</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Fastest Lap</TableHead>
+                  {standings[0]?.fastestLap?.time?.time && (
+                    <TableHead className="text-center">Fastest Lap</TableHead>
+                  )}
+
                   <TableHead className="text-center">Time</TableHead>
                 </TableRow>
               </TableHeader>
@@ -338,9 +346,11 @@ const RaceResult = () => {
                       <TableCell className="px-2 text-nowrap">
                         {item?.status}
                       </TableCell>
-                      <TableCell className="px-2 text-nowrap text-center">
-                        {item?.fastestLap?.time?.time}
-                      </TableCell>
+                      {standings[0]?.fastestLap?.time?.time && (
+                        <TableCell className="px-2 text-nowrap text-center">
+                          {item?.fastestLap?.time?.time}
+                        </TableCell>
+                      )}
                       <TableCell className="px-2 text-nowrap text-center">
                         {item?.time?.time ? item?.time?.time : "---"}
                       </TableCell>

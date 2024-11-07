@@ -20,6 +20,9 @@ import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 import { useParams } from "react-router-dom";
 
+// Year Picker
+import { YearPicker } from "../components";
+
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
 
@@ -133,6 +136,7 @@ const Constructors = () => {
   const [year, setYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [constructors, setConstructors] = useState([]);
+  const [open, setOpen] = useState(false);
 
   // Query function to fetch constructors for each year
   const {
@@ -169,6 +173,11 @@ const Constructors = () => {
     }
   }, [urlYear]);
 
+  // Scroll to Top
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   // Set constructors for the current year into the state
   useEffect(() => {
     if (data?.data?.constructors) {
@@ -179,25 +188,16 @@ const Constructors = () => {
 
   // Fetch constructors
   useEffect(() => {
-    if (year) {
-      fetchConstructors();
-    }
-  }, [fetchConstructors, year]);
+    fetchConstructors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchConstructors, !!year]);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+  console.log(open);
 
   return (
     <>
       <div className="flex gap-x-5 p-5">
-        <input
-          type="number"
-          value={year}
-          disabled={isLoading}
-          onChange={(e) => setYear(e.target.value)}
-          className="border-2 rounded"
-        ></input>
+        <YearPicker setOpen={setOpen} setYear={setYear} />
         <button disabled={isLoading} onClick={fetchConstructors}>
           Fetch
         </button>
