@@ -212,7 +212,10 @@ const ConstructorStandings = () => {
   return (
     <>
       <div className="flex gap-x-5 p-5">
-        <YearPicker setOpen={setInvalidYear} setYear={setUserSelectedYear} />
+        <YearPicker
+          setInvalidYear={setInvalidYear}
+          setYear={setUserSelectedYear}
+        />
         <button
           disabled={isLoading || invalidYear || !userSelectedYear}
           onClick={() => {

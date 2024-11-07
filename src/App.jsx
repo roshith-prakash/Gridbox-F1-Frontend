@@ -26,17 +26,19 @@ import {
 import { useState } from "react";
 
 function App() {
+  const [open, setOpen] = useState(true);
+
   // Check if server is active
   const { isLoading, error } = useQuery({
     queryKey: ["check"],
     queryFn: () => {
       return axiosInstance.get("/");
     },
-    refetchInterval: 10000,
+    refetchInterval: 1000 * 60,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
     retry: 5,
   });
-
-  const [open, setOpen] = useState(true);
 
   return (
     <>

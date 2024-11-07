@@ -25,6 +25,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 // Year Picker
 import { ErrorDiv, YearPicker } from "../components";
+import { SyncLoader } from "react-spinners";
+import CTAButton from "../components/CTAButton";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -79,9 +81,8 @@ DriverCard.propTypes = {
 const LoadingTableCard = () => {
   return (
     <>
-      <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-        {/* Loading Table on Large Screen */}
-        <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
+      <div className="hidden md:flex justify-center pt-10 pb-5 overflow-x-auto">
+        <table className="rounded-lg w-full  overflow-hidden bg-white">
           <TableHeader>
             <TableRow className="text-left bg-gray-100">
               <TableHead className="py-6">Sr. no.</TableHead>
@@ -230,115 +231,145 @@ const Drivers = () => {
   }, [data?.data]);
 
   return (
-    <>
-      <div className="flex gap-x-5 p-5">
-        <YearPicker setOpen={setInvalidYear} setYear={setUserSelectedYear} />
-        <button
-          disabled={isLoading || invalidYear || !userSelectedYear}
-          onClick={() => {
-            navigate(`/drivers/${userSelectedYear}`);
-          }}
-        >
-          Fetch
-        </button>
+    <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
+      <div className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
+          <div className="flex items-center gap-x-5">
+            <span className="text-lg italic">Select Year :</span>
+            <YearPicker
+              setInvalidYear={setInvalidYear}
+              setYear={setUserSelectedYear}
+            />
+          </div>
+          <CTAButton
+            className="w-full md:w-fit py-2 px-6 border-2 rounded"
+            disabled={isLoading || invalidYear || !userSelectedYear}
+            onClick={() => {
+              navigate(`/drivers/${userSelectedYear}`);
+            }}
+            text="Fetch"
+          ></CTAButton>
+
+          {isLoading && (
+            <div className="w-full md:w-fit flex justify-center">
+              <SyncLoader />
+            </div>
+          )}
+        </div>
+
+        {/* Data unavailable */}
+        {error && error?.response?.status == 404 && (
+          <div className="h-[90vh] flex justify-center items-center">
+            <ErrorDiv text="Driver data for the requested year is not available." />
+          </div>
+        )}
+
+        {/* Server error */}
+        {error && error?.response?.status != 404 && (
+          <div className="h-[90vh] flex justify-center items-center">
+            <ErrorDiv />
+          </div>
+        )}
+
+        {/* Show driver name and country when driver data is present */}
+        {!error && drivers.length > 0 && (
+          <>
+            <p className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+              F1 Drivers {displayYear}
+            </p>
+            <div className="hidden md:flex justify-center pt-10 pb-5 overflow-x-auto">
+              <table className="rounded-lg w-full  overflow-hidden bg-white">
+                <TableHeader>
+                  <TableRow className="text-left bg-gray-50">
+                    <TableHead className="font-bold text-black py-6 pl-3">
+                      Sr. no.
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Driver
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Driver Code
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Driver Number
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Nationality
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Date of Birth
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Know More
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {drivers?.map((driver, i) => {
+                    const country =
+                      nationalityMap[String(driver?.nationality).trim()];
+                    const countryCode = countries.getAlpha2Code(country, "en");
+
+                    return (
+                      <TableRow
+                        className="text-left border-b-2 border-gray-100"
+                        key={driver.driverId}
+                      >
+                        <TableCell className="font-medium py-3 px-3 pl-6 md:w-[5em]">
+                          {i + 1}.
+                        </TableCell>
+                        <TableCell className="px-2">
+                          {driver?.givenName} {driver?.familyName}
+                        </TableCell>
+                        <TableCell className="px-2">
+                          {driver?.code ? driver?.code : "-"}
+                        </TableCell>
+                        <TableCell className="px-2">
+                          {driver?.permanentNumber
+                            ? driver?.permanentNumber
+                            : "-"}
+                        </TableCell>
+                        <TableCell className="gap-x-2 px-2 text-nowrap">
+                          <span
+                            className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
+                          ></span>
+                          <span>{driver?.nationality}</span>
+                        </TableCell>
+                        <TableCell className="px-2 text-nowrap">
+                          {dayjs(driver.dateOfBirth).format("DD-MM-YYYY")}
+                        </TableCell>
+                        <TableCell className="px-2">
+                          <a
+                            href={driver?.url}
+                            target="_blank"
+                            className="text-blue-600 flex items-center gap-x-2 w-fit"
+                          >
+                            <FaLink />
+                            <span className="hidden lg:block">
+                              {driver?.url}
+                            </span>
+                          </a>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </table>
+            </div>
+            <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
+              {drivers?.map((driver, i) => {
+                return (
+                  <DriverCard driver={driver} index={i} key={driver.driverId} />
+                );
+              })}
+            </div>
+          </>
+        )}
+
+        {/* Show placeholder table / card when data is not present */}
+        {!error && drivers.length == 0 && <LoadingTableCard />}
       </div>
-
-      {/* Data unavailable */}
-      {error && error?.response?.status == 404 && (
-        <div className="h-[90vh] flex justify-center items-center">
-          <ErrorDiv text="Driver data for the requested year is not available." />
-        </div>
-      )}
-
-      {/* Server error */}
-      {error && error?.response?.status != 404 && (
-        <div className="h-[90vh] flex justify-center items-center">
-          <ErrorDiv />
-        </div>
-      )}
-
-      {/* Show driver name and country when driver data is present */}
-      {!error && drivers.length > 0 && (
-        <>
-          <p className="text-2xl font-semibold px-2">
-            Drivers who drove in {displayYear}
-          </p>
-          <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-            <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
-              <TableHeader>
-                <TableRow className="text-left bg-gray-100">
-                  <TableHead className="py-6">Sr. no.</TableHead>
-                  <TableHead>Driver</TableHead>
-                  <TableHead>Driver Code</TableHead>
-                  <TableHead>Driver Number</TableHead>
-                  <TableHead>Nationality</TableHead>
-                  <TableHead>Date of Birth</TableHead>
-                  <TableHead>Know More</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {drivers?.map((driver, i) => {
-                  const country =
-                    nationalityMap[String(driver?.nationality).trim()];
-                  const countryCode = countries.getAlpha2Code(country, "en");
-
-                  return (
-                    <TableRow
-                      className="text-left border-b-2 border-gray-100"
-                      key={driver.driverId}
-                    >
-                      <TableCell className="font-medium py-3 px-3 md:w-[5em]">
-                        {i + 1}.
-                      </TableCell>
-                      <TableCell className="px-2">
-                        {driver?.givenName} {driver?.familyName}
-                      </TableCell>
-                      <TableCell className="px-2">
-                        {driver?.code ? driver?.code : "-"}
-                      </TableCell>
-                      <TableCell className="px-2">
-                        {driver?.permanentNumber
-                          ? driver?.permanentNumber
-                          : "-"}
-                      </TableCell>
-                      <TableCell className="gap-x-2 px-2 text-nowrap">
-                        <span
-                          className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
-                        ></span>
-                        <span>{driver?.nationality}</span>
-                      </TableCell>
-                      <TableCell className="px-2 text-nowrap">
-                        {dayjs(driver.dateOfBirth).format("DD-MM-YYYY")}
-                      </TableCell>
-                      <TableCell className="px-2">
-                        <a
-                          href={driver?.url}
-                          target="_blank"
-                          className="text-blue-600 flex items-center gap-x-2 w-fit"
-                        >
-                          <FaLink />
-                          <span className="hidden lg:block">{driver?.url}</span>
-                        </a>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </table>
-          </div>
-          <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-            {drivers?.map((driver, i) => {
-              return (
-                <DriverCard driver={driver} index={i} key={driver.driverId} />
-              );
-            })}
-          </div>
-        </>
-      )}
-
-      {/* Show placeholder table / card when data is not present */}
-      {!error && drivers.length == 0 && <LoadingTableCard />}
-    </>
+    </main>
   );
 };
 
