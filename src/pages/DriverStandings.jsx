@@ -266,7 +266,7 @@ const DriverStandings = () => {
             className="w-full md:w-fit py-2 px-6 border-2 rounded"
             disabled={isLoading || invalidYear || !userSelectedYear}
             onClick={() => {
-              navigate(`/drivers/${userSelectedYear}`);
+              navigate(`/drivers-standings/${userSelectedYear}`);
             }}
             text="Fetch"
           ></CTAButton>
