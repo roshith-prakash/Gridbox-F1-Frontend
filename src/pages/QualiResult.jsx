@@ -18,6 +18,7 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 import { useParams } from "react-router-dom";
+import { ErrorDiv } from "../components";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -180,7 +181,7 @@ const QualiResult = () => {
   const {
     data,
     refetch: fetchQualiResult,
-    isLoading,
+    error,
   } = useQuery({
     queryKey: ["qualiResult", year, round],
     queryFn: () => {
@@ -239,9 +240,22 @@ const QualiResult = () => {
 
   return (
     <>
-      {isLoading && <p>Fetching standings...</p>}
+      {/* Data unavailable */}
+      {error && error?.response?.status == 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv text="Qualifying results for the requested session is not available." />
+        </div>
+      )}
+
+      {/* Server error */}
+      {error && error?.response?.status != 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv />
+        </div>
+      )}
+
       {/* Show driver name and country when driver data is present */}
-      {standings.length > 0 && (
+      {!error && standings.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
             Qualifying result for Round {displayRound} of the {displayYear}{" "}
@@ -322,8 +336,9 @@ const QualiResult = () => {
           </div>
         </>
       )}
+
       {/* When quali result is not present */}
-      {standings.length == 0 && <LoadingTableCard />}
+      {!error && standings.length == 0 && <LoadingTableCard />}
     </>
   );
 };

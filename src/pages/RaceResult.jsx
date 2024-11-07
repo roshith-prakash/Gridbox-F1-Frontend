@@ -18,6 +18,7 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 import { useParams } from "react-router-dom";
+import { ErrorDiv } from "../components";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -211,7 +212,7 @@ const RaceResult = () => {
   const {
     data,
     refetch: fetchRaceResult,
-    isLoading,
+    error,
   } = useQuery({
     queryKey: ["raceResult", year, round],
     queryFn: () => {
@@ -271,9 +272,22 @@ const RaceResult = () => {
 
   return (
     <>
-      {isLoading && <p>Fetching standings...</p>}
+      {/* No data available */}
+      {error && error?.response?.status == 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv text="Race results for the requested session is not available." />
+        </div>
+      )}
+
+      {/* Server error */}
+      {error && error?.response?.status != 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv />
+        </div>
+      )}
+
       {/* Show driver name and country when driver data is present */}
-      {standings.length > 0 && (
+      {!error && standings.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
             Race result for Round {displayRound} of the {displayYear} season. :
@@ -367,8 +381,9 @@ const RaceResult = () => {
           </div>
         </>
       )}
+
       {/* When fetching race results */}
-      {standings.length == 0 && <LoadingTableCard />}
+      {!error && standings.length == 0 && <LoadingTableCard />}
     </>
   );
 };

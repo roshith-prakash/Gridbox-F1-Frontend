@@ -21,7 +21,7 @@ import "flag-icons/css/flag-icons.min.css";
 import { useParams } from "react-router-dom";
 
 // Year Picker
-import { YearPicker } from "../components";
+import { ErrorDiv, YearPicker } from "../components";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -143,6 +143,7 @@ const Constructors = () => {
     data,
     refetch: fetchConstructors,
     isLoading,
+    error,
   } = useQuery({
     queryKey: ["constructors", year],
     queryFn: () => {
@@ -203,7 +204,19 @@ const Constructors = () => {
         </button>
       </div>
 
-      {isLoading && <p>Fetching constructors...</p>}
+      {/* Data unavailable */}
+      {error && error?.response?.status == 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv text="Constructor data for the requested year is not available." />
+        </div>
+      )}
+
+      {/* Server error */}
+      {error && error?.response?.status != 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv />
+        </div>
+      )}
 
       {/* Show constructor name and country when constructor data is present */}
       {constructors.length > 0 && (

@@ -24,7 +24,7 @@ import "flag-icons/css/flag-icons.min.css";
 import { useParams } from "react-router-dom";
 
 // Year Picker
-import { YearPicker } from "../components";
+import { ErrorDiv, YearPicker } from "../components";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -177,6 +177,7 @@ const Drivers = () => {
     data,
     refetch: fetchDrivers,
     isLoading,
+    error,
   } = useQuery({
     queryKey: ["drivers", year],
     queryFn: () => {
@@ -235,9 +236,22 @@ const Drivers = () => {
         </button>
       </div>
 
-      {isLoading && <p>Fetching drivers...</p>}
+      {/* Data unavailable */}
+      {error && error?.response?.status == 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv text="Driver data for the requested year is not available." />
+        </div>
+      )}
+
+      {/* Server error */}
+      {error && error?.response?.status != 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv />
+        </div>
+      )}
+
       {/* Show driver name and country when driver data is present */}
-      {drivers.length > 0 && (
+      {!error && drivers.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
             Drivers who drove in {displayYear}
@@ -316,7 +330,7 @@ const Drivers = () => {
       )}
 
       {/* Show placeholder table / card when data is not present */}
-      {drivers.length == 0 && <LoadingTableCard />}
+      {!error && drivers.length == 0 && <LoadingTableCard />}
     </>
   );
 };

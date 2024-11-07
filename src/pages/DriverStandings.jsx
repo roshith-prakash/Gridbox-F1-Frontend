@@ -18,7 +18,7 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 import { useParams } from "react-router-dom";
-import { YearPicker } from "../components";
+import { ErrorDiv, YearPicker } from "../components";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -191,6 +191,7 @@ const DriverStandings = () => {
     data,
     refetch: fetchStandings,
     isLoading,
+    error,
   } = useQuery({
     queryKey: ["driversStandings", year],
     queryFn: () => {
@@ -251,9 +252,22 @@ const DriverStandings = () => {
         </button>
       </div>
 
-      {isLoading && <p>Fetching standings...</p>}
+      {/* Data unavailable */}
+      {error && error?.response?.status == 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv text="Driver standings for the requested year is not available." />
+        </div>
+      )}
+
+      {/* Server error */}
+      {error && error?.response?.status != 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv />
+        </div>
+      )}
+
       {/* Show driver name and country when driver data is present */}
-      {standings.length > 0 && (
+      {!error && standings.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
             Drivers Standings for the {displayYear} season :
@@ -328,8 +342,9 @@ const DriverStandings = () => {
           </div>
         </>
       )}
+
       {/* When loading initial data */}
-      {standings.length == 0 && <LoadingTableCard />}
+      {!error && standings.length == 0 && <LoadingTableCard />}
     </>
   );
 };

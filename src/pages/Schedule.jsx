@@ -20,6 +20,7 @@ import { Collapse } from "react-collapse";
 
 // Navigate Programatically
 import { useNavigate } from "react-router-dom";
+import { ErrorDiv } from "../components";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -37,6 +38,7 @@ const Schedule = () => {
     data,
     refetch: fetchSchedule,
     isLoading,
+    error,
   } = useQuery({
     queryKey: ["schedule", year],
     queryFn: () => {
@@ -117,16 +119,29 @@ const Schedule = () => {
         </button>
       </div>
 
+      {/* Invalid year error  */}
       <Collapse isOpened={open} className="transition-all">
         <div className="text-red-600 font-medium px-5">
           Year must be between 1950 & 2024
         </div>
       </Collapse>
 
-      {isLoading && <p>Fetching drivers...</p>}
-      {/* Show driver name and country when driver data is present */}
+      {/* Data unavailable */}
+      {error && error?.response?.status == 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv text="Season schedule for the requested year is not available." />
+        </div>
+      )}
 
-      {schedule.length > 0 && (
+      {/* Server error */}
+      {error && error?.response?.status != 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv />
+        </div>
+      )}
+
+      {/* Timeline */}
+      {!error && schedule.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
             Schedule for the {displayYear} season
@@ -205,7 +220,9 @@ const Schedule = () => {
         </>
       )}
 
-      {schedule.length == 0 &&
+      {/* Loading placeholder */}
+      {!error &&
+        schedule.length == 0 &&
         Array(10)
           .fill(null)
           ?.map((_, i) => {

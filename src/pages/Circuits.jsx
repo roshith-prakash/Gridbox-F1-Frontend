@@ -16,7 +16,7 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 import { useParams } from "react-router-dom";
-import { YearPicker } from "../components";
+import { ErrorDiv, YearPicker } from "../components";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -214,6 +214,7 @@ const Circuits = () => {
     data,
     refetch: fetchCircuits,
     isLoading,
+    error,
   } = useQuery({
     queryKey: ["circuits", year],
     queryFn: () => {
@@ -274,8 +275,23 @@ const Circuits = () => {
       </div>
 
       {isLoading && <p>Fetching circuits...</p>}
+
+      {/* Data unavailable */}
+      {error && error?.response?.status == 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv text="Constructor data for the requested year is not available." />
+        </div>
+      )}
+
+      {/* Server error */}
+      {error && error?.response?.status != 404 && (
+        <div className="h-[90vh] flex justify-center items-center">
+          <ErrorDiv />
+        </div>
+      )}
+
       {/* Show driver name and country when driver data is present */}
-      {circuits.length > 0 && (
+      {!error && circuits.length > 0 && (
         <>
           <p className="text-2xl font-semibold px-2">
             Circuits in the {displayYear} season
@@ -314,7 +330,7 @@ const Circuits = () => {
       )}
 
       {/*When circuits is empty  */}
-      {circuits.length == 0 && <LoadingTableCard />}
+      {!error && circuits.length == 0 && <LoadingTableCard />}
     </>
   );
 };
