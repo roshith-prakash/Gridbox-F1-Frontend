@@ -88,9 +88,8 @@ DriverStandingCard.propTypes = {
 const LoadingTableCard = () => {
   return (
     <>
-      <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-        {/* Loading Table on Large Screen */}
-        <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
+      <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
+        <table className="rounded-lg w-full overflow-hidden bg-white">
           <TableHeader>
             <TableRow className="text-left bg-gray-100">
               <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
