@@ -17,19 +17,21 @@ import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { ErrorDiv, YearPicker } from "../components";
+import CTAButton from "../components/CTAButton";
+import { SyncLoader } from "react-spinners";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
-const CircuitCard = ({ circuit }) => {
+const CircuitCard = ({ circuit, index }) => {
   const [loading, setLoading] = useState(true);
   const countryCode = countries.getAlpha2Code(circuit?.location?.country, "en");
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
-      <p className="text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100">
-        {circuit?.circuitName}
+      <p className="text-lg px-5 font-medium py-3 flex items-center gap-x-2 bg-gray-100">
+        <span>{index + 1}.</span> {circuit?.circuitName}
       </p>
       <div className="flex px-5 py-3">
         Location :{" "}
@@ -67,6 +69,7 @@ CircuitCard.propTypes = {
     location: PropTypes.object.isRequired,
     url: PropTypes.string,
   }).isRequired,
+  index: PropTypes.number,
 };
 
 const CircuitRow = ({ circuit, i }) => {
@@ -104,7 +107,7 @@ const CircuitRow = ({ circuit, i }) => {
           className="text-blue-600 flex items-center pl gap-x-2 w-fit"
         >
           <FaLink />
-          <span className="hidden lg:block">{circuit?.url}</span>
+          <span className="hidden lg:block">{circuit?.url}</span>=
         </a>
       </TableCell>
     </TableRow>
@@ -125,17 +128,24 @@ CircuitRow.propTypes = {
 const LoadingTableCard = () => {
   return (
     <>
-      <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-        {/* Loading Table on Large Screen */}
-        <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
+      <div className="hidden lg:block py-10 overflow-x-auto">
+        <table className="rounded-lg w-full overflow-hidden bg-white">
           <TableHeader>
-            <TableRow className="text-left bg-gray-100">
-              <TableHead className="py-6">Sr. no.</TableHead>
-              <TableHead>Circuit Name</TableHead>
-              <TableHead>Country</TableHead>
-              <TableHead>Locality</TableHead>
-              <TableHead className="text-center">Map</TableHead>
-              <TableHead className="text-center">Know More</TableHead>
+            <TableRow className="text-left bg-gray-50">
+              <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                Sr. no.
+              </TableHead>
+              <TableHead className="font-bold text-black">
+                Circuit Name
+              </TableHead>
+              <TableHead className="font-bold text-black">Country</TableHead>
+              <TableHead className="font-bold text-black">Locality</TableHead>
+              <TableHead className="font-bold text-black text-center">
+                Map
+              </TableHead>
+              <TableHead className="font-bold text-black text-center">
+                Know More
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -267,80 +277,107 @@ const Circuits = () => {
   }, [fetchCircuits, year]);
 
   return (
-    <>
-      <div className="flex gap-x-5 p-5">
-        <YearPicker
-          setInvalidYear={setInvalidYear}
-          setYear={setUserSelectedYear}
-        />
-        <button
-          disabled={isLoading || invalidYear || !userSelectedYear}
-          onClick={() => {
-            navigate(`/circuits/${userSelectedYear}`);
-          }}
-        >
-          Fetch
-        </button>
-      </div>
-
-      {isLoading && <p>Fetching circuits...</p>}
-
-      {/* Data unavailable */}
-      {error && error?.response?.status == 404 && (
-        <div className="h-[90vh] flex justify-center items-center">
-          <ErrorDiv text="Constructor data for the requested year is not available." />
-        </div>
-      )}
-
-      {/* Server error */}
-      {error && error?.response?.status != 404 && (
-        <div className="h-[90vh] flex justify-center items-center">
-          <ErrorDiv />
-        </div>
-      )}
-
-      {/* Show driver name and country when driver data is present */}
-      {!error && circuits.length > 0 && (
-        <>
-          <p className="text-2xl font-semibold px-2">
-            Circuits in the {displayYear} season
-          </p>
-          <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-            <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
-              <TableHeader>
-                <TableRow className="text-left bg-gray-100">
-                  <TableHead className="py-6">Sr. no.</TableHead>
-                  <TableHead>Circuit Name</TableHead>
-                  <TableHead>Country</TableHead>
-                  <TableHead>Locality</TableHead>
-                  <TableHead className="text-center">Map</TableHead>
-                  <TableHead className="text-center">Know More</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {circuits?.map((circuit, i) => {
-                  return (
-                    <CircuitRow
-                      circuit={circuit}
-                      i={i}
-                      key={circuit?.circuitId}
-                    />
-                  );
-                })}
-              </TableBody>
-            </table>
+    <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
+      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+        <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
+          <div className="flex items-center gap-x-5">
+            <span className="text-lg italic">Select Year :</span>
+            <YearPicker
+              setInvalidYear={setInvalidYear}
+              setYear={setUserSelectedYear}
+            />
           </div>
-          <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-            {circuits?.map((circuit) => {
-              return <CircuitCard circuit={circuit} key={circuit.circuitId} />;
-            })}
-          </div>
-        </>
-      )}
+          <CTAButton
+            className="w-full md:w-fit py-2 px-6 border-2 rounded"
+            disabled={isLoading || invalidYear || !userSelectedYear}
+            onClick={() => {
+              navigate(`/circuits/${userSelectedYear}`);
+            }}
+            text="Fetch"
+          ></CTAButton>
 
-      {/*When circuits is empty  */}
-      {!error && circuits.length == 0 && <LoadingTableCard />}
-    </>
+          {isLoading && (
+            <div className="w-full md:w-fit flex justify-center">
+              <SyncLoader />
+            </div>
+          )}
+        </header>
+
+        {/* Data unavailable */}
+        {error && error?.response?.status == 404 && (
+          <div className="h-[90vh] flex justify-center items-center">
+            <ErrorDiv text="Constructor data for the requested year is not available." />
+          </div>
+        )}
+
+        {/* Server error */}
+        {error && error?.response?.status != 404 && (
+          <div className="h-[90vh] flex justify-center items-center">
+            <ErrorDiv />
+          </div>
+        )}
+
+        {/* Show driver name and country when driver data is present */}
+        {!error && circuits.length > 0 && (
+          <>
+            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+              Circuits {displayYear}
+            </h1>
+            <div className="hidden lg:block py-10 overflow-x-auto">
+              <table className="rounded-lg w-full overflow-hidden bg-white">
+                <TableHeader>
+                  <TableRow className="text-left bg-gray-50">
+                    <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                      Sr. no.
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Circuit Name
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Country
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Locality
+                    </TableHead>
+                    <TableHead className="font-bold text-black text-center">
+                      Map
+                    </TableHead>
+                    <TableHead className="font-bold text-black text-center">
+                      Know More
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {circuits?.map((circuit, i) => {
+                    return (
+                      <CircuitRow
+                        circuit={circuit}
+                        i={i}
+                        key={circuit?.circuitId}
+                      />
+                    );
+                  })}
+                </TableBody>
+              </table>
+            </div>
+            <div className="lg:hidden flex flex-col items-center gap-y-5 py-10">
+              {circuits?.map((circuit, i) => {
+                return (
+                  <CircuitCard
+                    circuit={circuit}
+                    index={i}
+                    key={circuit.circuitId}
+                  />
+                );
+              })}
+            </div>
+          </>
+        )}
+
+        {/*When circuits is empty  */}
+        {!error && circuits.length == 0 && <LoadingTableCard />}
+      </section>
+    </main>
   );
 };
 

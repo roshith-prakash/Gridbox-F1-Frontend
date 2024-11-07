@@ -3,8 +3,6 @@ import { RotateLoader } from "react-spinners";
 import { axiosInstance } from "./utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import { GiCarWheel } from "react-icons/gi";
-import SecurityHeaders from "./components/SecurityHeaders";
-import Navbar from "./components/Navbar";
 import {
   Circuits,
   Constructors,
@@ -24,6 +22,7 @@ import {
   DialogTitle,
 } from "./components/ui/dialog";
 import { useState } from "react";
+import { Navbar, SecurityHeaders } from "./components";
 
 function App() {
   const [open, setOpen] = useState(true);
@@ -137,14 +136,12 @@ function App() {
               <Route path="/circuits/:year" element={<Circuits />} />
 
               {/* Result for a specific race */}
-              <Route path="/race-result" element={<RaceResult />} />
               <Route
                 path="/race-result/:year/:round"
                 element={<RaceResult />}
               />
 
               {/* Result for a specific Qualifying session */}
-              <Route path="/qualifying-result" element={<QualiResult />} />
               <Route
                 path="/qualifying-result/:year/:round"
                 element={<QualiResult />}

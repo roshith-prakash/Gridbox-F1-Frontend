@@ -9,7 +9,7 @@ const CTAButton = ({
   return (
     <button
       disabled={disabled}
-      className={`bg-cta border-cta text-white rounded-lg px-6 py-2 hover:scale-105 transition-all disabled:bg-cta/45 disabled:border-cta/45 ${className}`}
+      className={`bg-cta border-cta min-w-32 text-white rounded-lg px-6 py-2 hover:scale-105 transition-all disabled:bg-cta/45 disabled:border-cta/45 ${className}`}
       onClick={onClick}
     >
       {text}

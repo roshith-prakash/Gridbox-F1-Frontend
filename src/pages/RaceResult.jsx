@@ -96,19 +96,26 @@ DriverPositionCard.propTypes = {
 const LoadingTableCard = () => {
   return (
     <>
-      <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-        {/* Loading Table on Large Screen */}
-        <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
+      <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
+        <table className="rounded-lg w-full overflow-hidden bg-white">
           <TableHeader>
             <TableRow className="text-left bg-gray-100">
-              <TableHead className="py-6">Position</TableHead>
-              <TableHead>Driver</TableHead>
-              <TableHead>Constructor</TableHead>
-              <TableHead>Grid</TableHead>
-              <TableHead>Points</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-left">Fastest Lap</TableHead>
-              <TableHead className="text-left">Time</TableHead>
+              <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                Position
+              </TableHead>
+              <TableHead className="font-bold text-black">Driver</TableHead>
+              <TableHead className="font-bold text-black">
+                Constructor
+              </TableHead>
+              <TableHead className="font-bold text-black">Grid</TableHead>
+              <TableHead className="font-bold text-black">Points</TableHead>
+              <TableHead className="font-bold text-black">Status</TableHead>
+              <TableHead className="font-bold text-black text-center">
+                Fastest Lap
+              </TableHead>
+              <TableHead className="font-bold text-black text-center">
+                Time
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -206,6 +213,7 @@ const RaceResult = () => {
   const [round, setRound] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [displayRound, setDisplayRound] = useState();
+  const [displayRace, setDisplayRace] = useState();
   const [standings, setStandings] = useState([]);
 
   // Query function to fetch standings for each year
@@ -236,6 +244,7 @@ const RaceResult = () => {
       setStandings(data?.data?.result?.result?.result);
       setDisplayYear(data?.data?.result?.year);
       setDisplayRound(data?.data?.result?.round);
+      setDisplayRace(data?.data?.result?.race?.raceName);
     } else {
       console.log("No data received");
     }
@@ -270,121 +279,144 @@ const RaceResult = () => {
     }
   }, [fetchRaceResult, year, round]);
 
+  console.log(data?.data);
+
   return (
-    <>
-      {/* No data available */}
-      {error && error?.response?.status == 404 && (
-        <div className="h-[90vh] flex justify-center items-center">
-          <ErrorDiv text="Race results for the requested session is not available." />
-        </div>
-      )}
+    <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
+      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+        {/* No data available */}
+        {error && error?.response?.status == 404 && (
+          <div className="h-[90vh] flex justify-center items-center">
+            <ErrorDiv text="Race results for the requested session is not available." />
+          </div>
+        )}
 
-      {/* Server error */}
-      {error && error?.response?.status != 404 && (
-        <div className="h-[90vh] flex justify-center items-center">
-          <ErrorDiv />
-        </div>
-      )}
+        {/* Server error */}
+        {error && error?.response?.status != 404 && (
+          <div className="h-[90vh] flex justify-center items-center">
+            <ErrorDiv />
+          </div>
+        )}
 
-      {/* Show driver name and country when driver data is present */}
-      {!error && standings.length > 0 && (
-        <>
-          <p className="text-2xl font-semibold px-2">
-            Race result for Round {displayRound} of the {displayYear} season. :
-          </p>
-          <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-            <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
-              <TableHeader>
-                <TableRow className="text-left bg-gray-100">
-                  <TableHead className="py-6">Position</TableHead>
-                  <TableHead>Driver</TableHead>
-                  <TableHead>Constructor</TableHead>
-                  <TableHead>Grid</TableHead>
-                  <TableHead>Points</TableHead>
-                  <TableHead>Status</TableHead>
-                  {standings[0]?.fastestLap?.time?.time && (
-                    <TableHead className="text-center">Fastest Lap</TableHead>
-                  )}
+        {/* Show driver name and country when driver data is present */}
+        {!error && standings.length > 0 && (
+          <>
+            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+              Race Result for the {displayRace}
+              <p className="my-2">
+                Round {displayRound} of the {displayYear} season
+              </p>
+            </h1>
+            <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
+              <table className="rounded-lg w-full overflow-hidden bg-white">
+                <TableHeader>
+                  <TableRow className="text-left bg-gray-100">
+                    <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                      Position
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Driver
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Constructor
+                    </TableHead>
+                    <TableHead className="font-bold text-black">Grid</TableHead>
+                    <TableHead className="font-bold text-black">
+                      Points
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Status
+                    </TableHead>
 
-                  <TableHead className="text-center">Time</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {standings?.map((item, i) => {
-                  const driverCountry =
-                    nationalityMap[String(item?.driver?.nationality).trim()];
-                  const driverCountryCode = countries.getAlpha2Code(
-                    driverCountry,
-                    "en"
-                  );
+                    {standings[0]?.fastestLap?.time?.time && (
+                      <TableHead className="font-bold text-black text-center">
+                        Fastest Lap
+                      </TableHead>
+                    )}
 
-                  const constructorCountry =
-                    nationalityMap[
-                      String(item?.constructor?.nationality).trim()
-                    ];
-                  const constructorCountryCode = countries.getAlpha2Code(
-                    constructorCountry,
-                    "en"
-                  );
+                    <TableHead className="font-bold text-black text-center">
+                      Time
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {standings?.map((item, i) => {
+                    const driverCountry =
+                      nationalityMap[String(item?.driver?.nationality).trim()];
+                    const driverCountryCode = countries.getAlpha2Code(
+                      driverCountry,
+                      "en"
+                    );
 
-                  return (
-                    <TableRow
-                      className={`text-left border-b-2 border-gray-100 ${
-                        item?.fastestLap?.rank == 1 && "bg-purple-300"
-                      }`}
-                      key={item.position}
-                    >
-                      <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
-                        {i + 1}.
-                      </TableCell>
-                      <TableCell className="px-2 w-fit">
-                        <span
-                          className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
-                        ></span>
-                        {item?.driver?.givenName} {item?.driver?.familyName} (
-                        {item?.number})
-                      </TableCell>
+                    const constructorCountry =
+                      nationalityMap[
+                        String(item?.constructor?.nationality).trim()
+                      ];
+                    const constructorCountryCode = countries.getAlpha2Code(
+                      constructorCountry,
+                      "en"
+                    );
 
-                      <TableCell className="px-2">
-                        <span
-                          className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
-                        ></span>
-                        {item?.constructor?.name}
-                      </TableCell>
-                      <TableCell className="gap-x-2 px-2 text-nowrap">
-                        {item?.grid}
-                      </TableCell>
-                      <TableCell className="gap-x-2 px-2 text-nowrap">
-                        {item?.points}
-                      </TableCell>
-                      <TableCell className="px-2 text-nowrap">
-                        {item?.status}
-                      </TableCell>
-                      {standings[0]?.fastestLap?.time?.time && (
-                        <TableCell className="px-2 text-nowrap text-center">
-                          {item?.fastestLap?.time?.time}
+                    return (
+                      <TableRow
+                        className={`text-left border-b-2 border-gray-100 ${
+                          item?.fastestLap?.rank == 1 &&
+                          "bg-purple-300 hover:bg-purple-400"
+                        }`}
+                        key={item.position}
+                      >
+                        <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
+                          {i + 1}.
                         </TableCell>
-                      )}
-                      <TableCell className="px-2 text-nowrap text-center">
-                        {item?.time?.time ? item?.time?.time : "---"}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </table>
-          </div>
-          <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-            {standings?.map((item) => {
-              return <DriverPositionCard item={item} key={item.driverId} />;
-            })}
-          </div>
-        </>
-      )}
+                        <TableCell className="px-2 w-fit">
+                          <span
+                            className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
+                          ></span>
+                          {item?.driver?.givenName} {item?.driver?.familyName} (
+                          {item?.number})
+                        </TableCell>
 
-      {/* When fetching race results */}
-      {!error && standings.length == 0 && <LoadingTableCard />}
-    </>
+                        <TableCell className="px-2">
+                          <span
+                            className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+                          ></span>
+                          {item?.constructor?.name}
+                        </TableCell>
+                        <TableCell className="gap-x-2 px-2 text-nowrap">
+                          {item?.grid}
+                        </TableCell>
+                        <TableCell className="gap-x-2 px-2 text-nowrap">
+                          {item?.points}
+                        </TableCell>
+                        <TableCell className="px-2 text-nowrap">
+                          {item?.status}
+                        </TableCell>
+                        {standings[0]?.fastestLap?.time?.time && (
+                          <TableCell className="px-2 text-nowrap text-center">
+                            {item?.fastestLap?.time?.time}
+                          </TableCell>
+                        )}
+                        <TableCell className="px-2 text-nowrap text-center">
+                          {item?.time?.time ? item?.time?.time : "---"}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </table>
+            </div>
+            <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
+              {standings?.map((item) => {
+                return <DriverPositionCard item={item} key={item.driverId} />;
+              })}
+            </div>
+          </>
+        )}
+
+        {/* When fetching race results */}
+        {!error && standings.length == 0 && <LoadingTableCard />}
+      </section>
+    </main>
   );
 };
 

@@ -75,17 +75,20 @@ DriverPositionCard.propTypes = {
 const LoadingTableCard = () => {
   return (
     <>
-      <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-        {/* Loading Table on Large Screen */}
-        <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
+      <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
+        <table className="rounded-lg w-full overflow-hidden bg-white">
           <TableHeader>
             <TableRow className="text-left bg-gray-100">
-              <TableHead className="py-6">Position</TableHead>
-              <TableHead>Driver</TableHead>
-              <TableHead>Constructor</TableHead>
-              <TableHead>Q1</TableHead>
-              <TableHead>Q2</TableHead>
-              <TableHead>Q3</TableHead>
+              <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                Position
+              </TableHead>
+              <TableHead className="font-bold text-black">Driver</TableHead>
+              <TableHead className="font-bold text-black">
+                Constructor
+              </TableHead>
+              <TableHead className="font-bold text-black">Q1</TableHead>
+              <TableHead className="font-bold text-black">Q2</TableHead>
+              <TableHead className="font-bold text-black">Q3</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -175,6 +178,7 @@ const QualiResult = () => {
   const [round, setRound] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [displayRound, setDisplayRound] = useState();
+  const [displayRace, setDisplayRace] = useState();
   const [standings, setStandings] = useState([]);
 
   // Query function to fetch standings for each year
@@ -205,6 +209,7 @@ const QualiResult = () => {
       setStandings(data?.data?.result?.result?.result);
       setDisplayYear(data?.data?.result?.year);
       setDisplayRound(data?.data?.result?.round);
+      setDisplayRace(data?.data?.result?.race?.raceName);
     } else {
       console.log("No data received");
     }
@@ -239,107 +244,117 @@ const QualiResult = () => {
   }, [fetchQualiResult, year, round]);
 
   return (
-    <>
-      {/* Data unavailable */}
-      {error && error?.response?.status == 404 && (
-        <div className="h-[90vh] flex justify-center items-center">
-          <ErrorDiv text="Qualifying results for the requested session is not available." />
-        </div>
-      )}
-
-      {/* Server error */}
-      {error && error?.response?.status != 404 && (
-        <div className="h-[90vh] flex justify-center items-center">
-          <ErrorDiv />
-        </div>
-      )}
-
-      {/* Show driver name and country when driver data is present */}
-      {!error && standings.length > 0 && (
-        <>
-          <p className="text-2xl font-semibold px-2">
-            Qualifying result for Round {displayRound} of the {displayYear}{" "}
-            season :
-          </p>
-          <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-            <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
-              <TableHeader>
-                <TableRow className="text-left bg-gray-100">
-                  <TableHead className="py-6">Position</TableHead>
-                  <TableHead>Driver</TableHead>
-                  <TableHead>Constructor</TableHead>
-                  <TableHead>Q1</TableHead>
-                  <TableHead>Q2</TableHead>
-                  <TableHead>Q3</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {standings?.map((item, i) => {
-                  const driverCountry =
-                    nationalityMap[String(item?.driver?.nationality).trim()];
-                  const driverCountryCode = countries.getAlpha2Code(
-                    driverCountry,
-                    "en"
-                  );
-
-                  const constructorCountry =
-                    nationalityMap[
-                      String(item?.constructor?.nationality).trim()
-                    ];
-                  const constructorCountryCode = countries.getAlpha2Code(
-                    constructorCountry,
-                    "en"
-                  );
-
-                  return (
-                    <TableRow
-                      className={`text-left border-b-2 border-gray-100`}
-                      key={item.position}
-                    >
-                      <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
-                        {i + 1}.
-                      </TableCell>
-                      <TableCell className="px-2 w-fit">
-                        <span
-                          className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
-                        ></span>
-                        {item?.driver?.givenName} {item?.driver?.familyName} (
-                        {item?.number})
-                      </TableCell>
-
-                      <TableCell className="px-2">
-                        <span
-                          className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
-                        ></span>
-                        {item?.constructor?.name}
-                      </TableCell>
-
-                      <TableCell className="gap-x-2 px-2 text-nowrap">
-                        {item?.q1 ? item?.q1 : "---"}
-                      </TableCell>
-                      <TableCell className="gap-x-2 px-2 text-nowrap">
-                        {item?.q2 ? item?.q2 : "---"}
-                      </TableCell>
-                      <TableCell className="px-2 text-nowrap">
-                        {item?.q3 ? item?.q3 : "---"}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </table>
+    <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
+      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+        {/* Data unavailable */}
+        {error && error?.response?.status == 404 && (
+          <div className="h-[90vh] flex justify-center items-center">
+            <ErrorDiv text="Qualifying results for the requested session is not available." />
           </div>
-          <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-            {standings?.map((item) => {
-              return <DriverPositionCard item={item} key={item.driverId} />;
-            })}
-          </div>
-        </>
-      )}
+        )}
 
-      {/* When quali result is not present */}
-      {!error && standings.length == 0 && <LoadingTableCard />}
-    </>
+        {/* Server error */}
+        {error && error?.response?.status != 404 && (
+          <div className="h-[90vh] flex justify-center items-center">
+            <ErrorDiv />
+          </div>
+        )}
+
+        {/* Show driver name and country when driver data is present */}
+        {!error && standings.length > 0 && (
+          <>
+            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+              Qualifying Result for the {displayRace}
+              <p className="my-2">
+                Round {displayRound} of the {displayYear} season
+              </p>
+            </h1>
+            <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
+              <table className="rounded-lg w-full overflow-hidden bg-white">
+                <TableHeader>
+                  <TableRow className="text-left bg-gray-100">
+                    <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                      Position
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Driver
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Constructor
+                    </TableHead>
+                    <TableHead className="font-bold text-black">Q1</TableHead>
+                    <TableHead className="font-bold text-black">Q2</TableHead>
+                    <TableHead className="font-bold text-black">Q3</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {standings?.map((item, i) => {
+                    const driverCountry =
+                      nationalityMap[String(item?.driver?.nationality).trim()];
+                    const driverCountryCode = countries.getAlpha2Code(
+                      driverCountry,
+                      "en"
+                    );
+
+                    const constructorCountry =
+                      nationalityMap[
+                        String(item?.constructor?.nationality).trim()
+                      ];
+                    const constructorCountryCode = countries.getAlpha2Code(
+                      constructorCountry,
+                      "en"
+                    );
+
+                    return (
+                      <TableRow
+                        className={`text-left border-b-2 border-gray-100`}
+                        key={item.position}
+                      >
+                        <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
+                          {i + 1}.
+                        </TableCell>
+                        <TableCell className="px-2 w-fit">
+                          <span
+                            className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
+                          ></span>
+                          {item?.driver?.givenName} {item?.driver?.familyName} (
+                          {item?.number})
+                        </TableCell>
+
+                        <TableCell className="px-2">
+                          <span
+                            className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+                          ></span>
+                          {item?.constructor?.name}
+                        </TableCell>
+
+                        <TableCell className="gap-x-2 px-2 text-nowrap">
+                          {item?.q1 ? item?.q1 : "---"}
+                        </TableCell>
+                        <TableCell className="gap-x-2 px-2 text-nowrap">
+                          {item?.q2 ? item?.q2 : "---"}
+                        </TableCell>
+                        <TableCell className="px-2 text-nowrap">
+                          {item?.q3 ? item?.q3 : "---"}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </table>
+            </div>
+            <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
+              {standings?.map((item) => {
+                return <DriverPositionCard item={item} key={item.driverId} />;
+              })}
+            </div>
+          </>
+        )}
+
+        {/* When quali result is not present */}
+        {!error && standings.length == 0 && <LoadingTableCard />}
+      </section>
+    </main>
   );
 };
 

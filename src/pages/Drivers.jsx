@@ -84,14 +84,24 @@ const LoadingTableCard = () => {
       <div className="hidden md:flex justify-center pt-10 pb-5 overflow-x-auto">
         <table className="rounded-lg w-full  overflow-hidden bg-white">
           <TableHeader>
-            <TableRow className="text-left bg-gray-100">
-              <TableHead className="py-6">Sr. no.</TableHead>
-              <TableHead>Driver</TableHead>
-              <TableHead>Driver Code</TableHead>
-              <TableHead>Driver Number</TableHead>
-              <TableHead>Nationality</TableHead>
-              <TableHead>Date of Birth</TableHead>
-              <TableHead>Know More</TableHead>
+            <TableRow className="text-left bg-gray-50">
+              <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                Sr. no.
+              </TableHead>
+              <TableHead className="font-bold text-black">Driver</TableHead>
+              <TableHead className="font-bold text-black">
+                Driver Code
+              </TableHead>
+              <TableHead className="font-bold text-black">
+                Driver Number
+              </TableHead>
+              <TableHead className="font-bold text-black">
+                Nationality
+              </TableHead>
+              <TableHead className="font-bold text-black">
+                Date of Birth
+              </TableHead>
+              <TableHead className="font-bold text-black">Know More</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -232,8 +242,8 @@ const Drivers = () => {
 
   return (
     <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
-      <div className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
+      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+        <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex items-center gap-x-5">
             <span className="text-lg italic">Select Year :</span>
             <YearPicker
@@ -255,7 +265,7 @@ const Drivers = () => {
               <SyncLoader />
             </div>
           )}
-        </div>
+        </header>
 
         {/* Data unavailable */}
         {error && error?.response?.status == 404 && (
@@ -274,14 +284,14 @@ const Drivers = () => {
         {/* Show driver name and country when driver data is present */}
         {!error && drivers.length > 0 && (
           <>
-            <p className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
               F1 Drivers {displayYear}
-            </p>
-            <div className="hidden md:flex justify-center pt-10 pb-5 overflow-x-auto">
-              <table className="rounded-lg w-full  overflow-hidden bg-white">
+            </h1>
+            <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
+              <table className="rounded-lg w-full overflow-hidden bg-white">
                 <TableHeader>
                   <TableRow className="text-left bg-gray-50">
-                    <TableHead className="font-bold text-black py-6 pl-3">
+                    <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
                       Sr. no.
                     </TableHead>
                     <TableHead className="font-bold text-black">
@@ -357,18 +367,16 @@ const Drivers = () => {
               </table>
             </div>
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-              {drivers?.map((driver, i) => {
-                return (
-                  <DriverCard driver={driver} index={i} key={driver.driverId} />
-                );
-              })}
+              {drivers?.map((driver, i) => (
+                <DriverCard driver={driver} index={i} key={driver.driverId} />
+              ))}
             </div>
           </>
         )}
 
         {/* Show placeholder table / card when data is not present */}
         {!error && drivers.length == 0 && <LoadingTableCard />}
-      </div>
+      </section>
     </main>
   );
 };

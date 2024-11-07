@@ -22,6 +22,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 // Year Picker
 import { ErrorDiv, YearPicker } from "../components";
+import CTAButton from "../components/CTAButton";
+import { SyncLoader } from "react-spinners";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -73,10 +75,16 @@ const LoadingTableCard = () => {
         <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
           <TableHeader>
             <TableRow className="text-left bg-gray-100">
-              <TableHead className="py-6">Sr. no.</TableHead>
-              <TableHead>Constructor</TableHead>
-              <TableHead>Nationality</TableHead>
-              <TableHead>Know More</TableHead>
+              <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                Sr. no.
+              </TableHead>
+              <TableHead className="font-bold text-black">
+                Constructor
+              </TableHead>
+              <TableHead className="font-bold text-black">
+                Nationality
+              </TableHead>
+              <TableHead className="font-bold text-black">Know More</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -197,108 +205,125 @@ const Constructors = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchConstructors, year]);
 
-  console.log(open);
-
   return (
-    <>
-      <div className="flex gap-x-5 p-5">
-        <YearPicker
-          setInvalidYear={setInvalidYear}
-          setYear={setUserSelectedYear}
-        />
-        <button
-          disabled={isLoading || invalidYear || !userSelectedYear}
-          onClick={() => {
-            navigate(`/constructors/${userSelectedYear}`);
-          }}
-        >
-          Fetch
-        </button>
-      </div>
-
-      {/* Data unavailable */}
-      {error && error?.response?.status == 404 && (
-        <div className="h-[90vh] flex justify-center items-center">
-          <ErrorDiv text="Constructor data for the requested year is not available." />
-        </div>
-      )}
-
-      {/* Server error */}
-      {error && error?.response?.status != 404 && (
-        <div className="h-[90vh] flex justify-center items-center">
-          <ErrorDiv />
-        </div>
-      )}
-
-      {/* Show constructor name and country when constructor data is present */}
-      {constructors.length > 0 && (
-        <>
-          <p className="text-2xl font-semibold px-2">
-            Constructors in {displayYear}
-          </p>
-          <div className="hidden md:flex justify-center py-10 overflow-x-auto">
-            <table className="rounded-lg w-full lg:max-w-[95%] overflow-hidden bg-white shadow-lg">
-              <TableHeader>
-                <TableRow className="text-left bg-gray-100">
-                  <TableHead className="py-6">Sr. no.</TableHead>
-                  <TableHead>Constructor</TableHead>
-                  <TableHead>Nationality</TableHead>
-                  <TableHead>Know More</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {constructors?.map((constructor, i) => {
-                  const country =
-                    nationalityMap[String(constructor?.nationality).trim()];
-                  const countryCode = countries.getAlpha2Code(country, "en");
-
-                  return (
-                    <TableRow
-                      className="text-left border-b-2 border-gray-100"
-                      key={constructor.constructorId}
-                    >
-                      <TableCell className="font-medium py-3 px-3 md:w-[5em]">
-                        {i + 1}.
-                      </TableCell>
-                      <TableCell>{constructor?.name}</TableCell>
-                      <TableCell className="gap-x-2">
-                        <span
-                          className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
-                        ></span>
-                        <span>{constructor?.nationality}</span>
-                      </TableCell>
-                      <TableCell className="px-5 md:pl-5 lg:pl-10">
-                        <a
-                          href={constructor?.url}
-                          target="_blank"
-                          className="flex items-center gap-x-2 text-blue-600"
-                        >
-                          <FaLink className="" /> {constructor?.url}
-                        </a>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </table>
+    <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
+      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+        <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
+          <div className="flex items-center gap-x-5">
+            <span className="text-lg italic">Select Year :</span>
+            <YearPicker
+              setInvalidYear={setInvalidYear}
+              setYear={setUserSelectedYear}
+            />
           </div>
-          <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-            {constructors?.map((constructor, i) => {
-              return (
-                <ConstructorCard
-                  constructor={constructor}
-                  index={i}
-                  key={constructor.constructorId}
-                />
-              );
-            })}
-          </div>
-        </>
-      )}
+          <CTAButton
+            className="w-full md:w-fit py-2 px-6 border-2 rounded"
+            disabled={isLoading || invalidYear || !userSelectedYear}
+            onClick={() => {
+              navigate(`/constructors/${userSelectedYear}`);
+            }}
+            text="Fetch"
+          ></CTAButton>
 
-      {/* Show placeholder table when constructors are not present */}
-      {constructors.length == 0 && <LoadingTableCard />}
-    </>
+          {isLoading && (
+            <div className="w-full md:w-fit flex justify-center">
+              <SyncLoader />
+            </div>
+          )}
+        </header>
+
+        {/* Data unavailable */}
+        {error && error?.response?.status == 404 && (
+          <div className="h-[90vh] flex justify-center items-center">
+            <ErrorDiv text="Constructor data for the requested year is not available." />
+          </div>
+        )}
+
+        {/* Server error */}
+        {error && error?.response?.status != 404 && (
+          <div className="h-[90vh] flex justify-center items-center">
+            <ErrorDiv />
+          </div>
+        )}
+
+        {/* Show constructor name and country when constructor data is present */}
+        {constructors.length > 0 && (
+          <>
+            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+              Constructors {displayYear}
+            </h1>
+            <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
+              <table className="rounded-lg w-full overflow-hidden bg-white">
+                <TableHeader>
+                  <TableRow className="text-left bg-gray-100">
+                    <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                      Sr. no.
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Constructor
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Nationality
+                    </TableHead>
+                    <TableHead className="font-bold text-black">
+                      Know More
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {constructors?.map((constructor, i) => {
+                    const country =
+                      nationalityMap[String(constructor?.nationality).trim()];
+                    const countryCode = countries.getAlpha2Code(country, "en");
+
+                    return (
+                      <TableRow
+                        className="text-left border-b-2 border-gray-100"
+                        key={constructor.constructorId}
+                      >
+                        <TableCell className="font-medium py-3 px-3 md:w-[5em]">
+                          {i + 1}.
+                        </TableCell>
+                        <TableCell>{constructor?.name}</TableCell>
+                        <TableCell className="gap-x-2 text-nowrap">
+                          <span
+                            className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
+                          ></span>
+                          <span>{constructor?.nationality}</span>
+                        </TableCell>
+                        <TableCell className="px-5 md:pl-5 lg:pl-10">
+                          <a
+                            href={constructor?.url}
+                            target="_blank"
+                            className="flex items-center gap-x-2 text-blue-600"
+                          >
+                            <FaLink className="" /> {constructor?.url}
+                          </a>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </table>
+            </div>
+            <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
+              {constructors?.map((constructor, i) => {
+                return (
+                  <ConstructorCard
+                    constructor={constructor}
+                    index={i}
+                    key={constructor.constructorId}
+                  />
+                );
+              })}
+            </div>
+          </>
+        )}
+
+        {/* Show placeholder table when constructors are not present */}
+        {constructors.length == 0 && <LoadingTableCard />}
+      </section>
+    </main>
   );
 };
 
