@@ -21,7 +21,7 @@ import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 
 // To get URL Params
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Year Picker
 import { ErrorDiv, YearPicker } from "../components";
@@ -166,11 +166,13 @@ const LoadingTableCard = () => {
 };
 
 const Drivers = () => {
+  const navigate = useNavigate();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState();
+  const [userSelectedYear, setUserSelectedYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [drivers, setDrivers] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [invalidYear, setInvalidYear] = useState(false);
 
   // Query function to fetch drivers for each year
   const {
@@ -217,7 +219,7 @@ const Drivers = () => {
   useEffect(() => {
     fetchDrivers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchDrivers, !!year]);
+  }, [fetchDrivers, year]);
 
   // Set drivers for the current year into the state
   useEffect(() => {
@@ -230,8 +232,13 @@ const Drivers = () => {
   return (
     <>
       <div className="flex gap-x-5 p-5">
-        <YearPicker setOpen={setOpen} setYear={setYear} />
-        <button disabled={isLoading || open} onClick={fetchDrivers}>
+        <YearPicker setOpen={setInvalidYear} setYear={setUserSelectedYear} />
+        <button
+          disabled={isLoading || invalidYear || !userSelectedYear}
+          onClick={() => {
+            navigate(`/drivers/${userSelectedYear}`);
+          }}
+        >
           Fetch
         </button>
       </div>

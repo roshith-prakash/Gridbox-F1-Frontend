@@ -12,15 +12,11 @@ import "flag-icons/css/flag-icons.min.css";
 
 // Get URL Params
 import { useParams } from "react-router-dom";
-
-// Year Picker
-import Datetime from "react-datetime";
-import "react-datetime/css/react-datetime.css";
 import { Collapse } from "react-collapse";
 
 // Navigate Programatically
 import { useNavigate } from "react-router-dom";
-import { ErrorDiv } from "../components";
+import { ErrorDiv, YearPicker } from "../components";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -29,9 +25,10 @@ const Schedule = () => {
   const navigate = useNavigate();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState();
+  const [userSelectedYear, setUserSelectedYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [schedule, setSchedule] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [invalidYear, setInvalidYear] = useState(false);
 
   // Query function to fetch drivers for each year
   const {
@@ -86,41 +83,25 @@ const Schedule = () => {
   useEffect(() => {
     fetchSchedule();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchSchedule, !!year]);
-
-  // To change year using Date Picker
-  const changeDate = (date) => {
-    if (
-      new Date(date._d).getFullYear() > 2024 ||
-      new Date(date._d).getFullYear() < 1950
-    ) {
-      console.log("Invalid Year");
-      setOpen(true);
-    } else {
-      setYear(new Date(date._d).getFullYear());
-      setOpen(false);
-    }
-  };
+  }, [fetchSchedule, year]);
 
   return (
     <>
       <div className="flex gap-x-5 p-5">
-        <Datetime
-          dateFormat="YYYY"
-          timeFormat={false}
-          inputProps={{ placeholder: 2024 }}
-          onChange={(date) => {
-            changeDate(date);
-          }}
-        />
+        <YearPicker setOpen={setInvalidYear} setYear={setUserSelectedYear} />
 
-        <button disabled={isLoading || open} onClick={fetchSchedule}>
+        <button
+          disabled={isLoading || invalidYear || !userSelectedYear}
+          onClick={() => {
+            navigate(`/schedule/${userSelectedYear}`);
+          }}
+        >
           Fetch
         </button>
       </div>
 
       {/* Invalid year error  */}
-      <Collapse isOpened={open} className="transition-all">
+      <Collapse isOpened={invalidYear} className="transition-all">
         <div className="text-red-600 font-medium px-5">
           Year must be between 1950 & 2024
         </div>

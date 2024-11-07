@@ -18,7 +18,7 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Year Picker
 import { ErrorDiv, YearPicker } from "../components";
@@ -27,13 +27,14 @@ import { ErrorDiv, YearPicker } from "../components";
 countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
-const ConstructorCard = ({ constructor }) => {
+const ConstructorCard = ({ constructor, index }) => {
   const country = nationalityMap[String(constructor?.nationality).trim()];
   const countryCode = countries.getAlpha2Code(country, "en");
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
-      <p className="text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100">
+      <p className="text-lg flex gap-x-2 px-5 font-medium py-3 bg-gray-100">
+        <span>{index + 1}.</span>
         {constructor?.name}
       </p>
       <div className="px-5 py-3">
@@ -60,6 +61,7 @@ ConstructorCard.propTypes = {
     nationality: PropTypes.string.isRequired,
     url: PropTypes.string,
   }).isRequired,
+  index: PropTypes.number,
 };
 
 // Loading Placeholder Table / Card
@@ -132,11 +134,13 @@ const LoadingTableCard = () => {
 };
 
 const Constructors = () => {
+  const navigate = useNavigate();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState();
+  const [userSelectedYear, setUserSelectedYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [constructors, setConstructors] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [invalidYear, setInvalidYear] = useState(false);
 
   // Query function to fetch constructors for each year
   const {
@@ -187,19 +191,24 @@ const Constructors = () => {
     }
   }, [data?.data]);
 
-  // Fetch constructors
+  // Fetch Constructors
   useEffect(() => {
     fetchConstructors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchConstructors, !!year]);
+  }, [fetchConstructors, year]);
 
   console.log(open);
 
   return (
     <>
       <div className="flex gap-x-5 p-5">
-        <YearPicker setOpen={setOpen} setYear={setYear} />
-        <button disabled={isLoading} onClick={fetchConstructors}>
+        <YearPicker setOpen={setInvalidYear} setYear={setUserSelectedYear} />
+        <button
+          disabled={isLoading || invalidYear || !userSelectedYear}
+          onClick={() => {
+            navigate(`/constructors/${userSelectedYear}`);
+          }}
+        >
           Fetch
         </button>
       </div>
@@ -271,10 +280,11 @@ const Constructors = () => {
             </table>
           </div>
           <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-            {constructors?.map((constructor) => {
+            {constructors?.map((constructor, i) => {
               return (
                 <ConstructorCard
                   constructor={constructor}
+                  index={i}
                   key={constructor.constructorId}
                 />
               );

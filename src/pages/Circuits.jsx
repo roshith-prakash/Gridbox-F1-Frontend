@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ErrorDiv, YearPicker } from "../components";
 
 // Register the locale for the countries constructor
@@ -203,11 +203,13 @@ const LoadingTableCard = () => {
 };
 
 const Circuits = () => {
+  const navigate = useNavigate();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState();
+  const [userSelectedYear, setUserSelectedYear] = useState();
   const [displayYear, setDisplayYear] = useState();
   const [circuits, setCircuits] = useState([]);
-  const [open, setOpen] = useState();
+  const [invalidYear, setInvalidYear] = useState();
 
   // Query function to fetch circuits for each year
   const {
@@ -258,18 +260,25 @@ const Circuits = () => {
     }
   }, [urlYear]);
 
+  // Fetch Circuits
   useEffect(() => {
     fetchCircuits();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchCircuits, !!year]);
-
-  console.log(open);
+  }, [fetchCircuits, year]);
 
   return (
     <>
       <div className="flex gap-x-5 p-5">
-        <YearPicker setOpen={setOpen} setYear={setYear} />
-        <button disabled={isLoading} onClick={fetchCircuits}>
+        <YearPicker
+          setInvalidYear={setInvalidYear}
+          setYear={setUserSelectedYear}
+        />
+        <button
+          disabled={isLoading || invalidYear || !userSelectedYear}
+          onClick={() => {
+            navigate(`/circuits/${userSelectedYear}`);
+          }}
+        >
           Fetch
         </button>
       </div>
