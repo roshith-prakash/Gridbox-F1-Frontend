@@ -54,7 +54,7 @@ const Navbar = () => {
         to="/"
         className="font-mono font-bold italian flex gap-x-2 items-center text-2xl hover:text-cta transition-all"
       >
-        GridBox <SiF1 className="text-[3rem] translate-y-0.5" />
+        GridBox <SiF1 className="text-[3rem] translate-y-0.5 " />
       </Link>
 
       <div className="hidden md:flex gap-x-5  pt-1 text-lg font-medium">
@@ -105,12 +105,14 @@ const Navbar = () => {
           <DrawerContent className="top-0 min-h-screen">
             <div>
               <div className="flex justify-between w-full">
-                <Link
-                  to="/"
-                  className="font-mono font-bold italian flex gap-x-2 items-center text-2xl "
-                >
-                  GridBox <SiF1 className="text-[3rem] translate-y-0.5" />
-                </Link>
+                <DrawerClose asChild>
+                  <Link
+                    to="/"
+                    className="font-mono font-bold italian flex gap-x-2 items-center text-2xl "
+                  >
+                    GridBox <SiF1 className="text-[3rem] translate-y-0.5" />
+                  </Link>
+                </DrawerClose>
                 <DrawerClose asChild>
                   <button>
                     <RxCross2 className="text-2xl" />
@@ -119,6 +121,11 @@ const Navbar = () => {
               </div>
 
               <div className="pt-20 flex flex-col text-lg items-center gap-y-10">
+                <DrawerClose asChild>
+                  <Link to="/" className="hover:text-cta transition-all">
+                    Home
+                  </Link>
+                </DrawerClose>
                 <DrawerClose asChild>
                   <Link to="/drivers" className="hover:text-cta transition-all">
                     Drivers
