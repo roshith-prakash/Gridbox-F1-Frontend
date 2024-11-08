@@ -28,7 +28,7 @@ const YearPicker = ({ setYear, setInvalidYear }) => {
       inputProps={{
         placeholder: "YYYY",
         className:
-          "bg-transparent text-center placeholder:text-center outline-none w-full py-2 ",
+          "bg-transparent text-center placeholder:text-center outline-none w-full py-2",
       }}
       onChange={(date) => {
         changeDate(date);

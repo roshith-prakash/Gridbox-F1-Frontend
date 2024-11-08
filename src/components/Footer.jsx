@@ -11,13 +11,13 @@ const Footer = () => {
         </p>
       </div>
 
-      <div className="pt-36 font-medium flex flex-col lg:flex-row">
+      <div className="pt-24 md:pt-36 font-medium flex flex-col lg:flex-row">
         <div className="flex-1">
           <p className="flex justify-center items-center gap-x-2 text-3xl text-center">
             GridBox <SiF1 className="translate-y-1 text-5xl" />
           </p>
 
-          <div className="hidden md:flex justify-center gap-x-8 mt-10">
+          <div className="flex justify-center gap-x-8 mt-10">
             <a
               href="https://github.com/roshith-prakash"
               target="_blank"

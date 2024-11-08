@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { SiF1 } from "react-icons/si";
+import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,6 +13,8 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import PropTypes from "prop-types";
 
+import { Drawer, DrawerClose, DrawerContent, DrawerTrigger } from "./ui/drawer";
+
 const ListItem = React.forwardRef(
   ({ className, title, children, ...props }, ref) => {
     return (
@@ -19,7 +22,7 @@ const ListItem = React.forwardRef(
         <Link
           ref={ref}
           className={cn(
-            "block w-full select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "block w-full select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors  focus:bg-accent focus:text-accent-foreground",
             className
           )}
           {...props}
@@ -46,17 +49,21 @@ ListItem.propTypes = {
 
 const Navbar = () => {
   return (
-    <div className="px-10 py-3 flex justify-between items-center shadow-md relative z-2">
+    <div className="px-5 md:px-10 py-3 flex justify-between items-center shadow-md relative z-2">
       <Link
         to="/"
-        className="font-mono font-bold italian flex gap-x-2 items-center text-2xl "
+        className="font-mono font-bold italian flex gap-x-2 items-center text-2xl hover:text-cta transition-all"
       >
         GridBox <SiF1 className="text-[3rem] translate-y-0.5" />
       </Link>
 
       <div className="hidden md:flex gap-x-5  pt-1 text-lg font-medium">
-        <Link to="/drivers">Drivers</Link>
-        <Link to="/constructors">Constructors</Link>
+        <Link to="/drivers" className="hover:text-cta transition-all">
+          Drivers
+        </Link>
+        <Link to="/constructors" className="hover:text-cta transition-all">
+          Constructors
+        </Link>
 
         <NavigationMenu>
           <NavigationMenuList>
@@ -68,19 +75,110 @@ const Navbar = () => {
                 <ListItem
                   to="/drivers-standings"
                   title="Drivers Standings"
-                  className="text-lg"
+                  className="text-lg text-center hover:text-cta transition-all"
                 ></ListItem>
                 <ListItem
                   to="/constructors-standings"
                   title="Constructors Standings"
+                  className="text-lg text-center hover:text-cta transition-all"
                 ></ListItem>
               </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 
-        <Link to="/schedule">Schedule</Link>
-        <Link to="/circuits">Circuits</Link>
+        <Link to="/schedule" className="hover:text-cta transition-all">
+          Schedule
+        </Link>
+        <Link to="/circuits" className="hover:text-cta transition-all">
+          Circuits
+        </Link>
+      </div>
+
+      <div className="md:hidden">
+        <Drawer direction="right">
+          <DrawerTrigger asChild>
+            <button>
+              <RxHamburgerMenu className="text-2xl translate-y-0.5" />
+            </button>
+          </DrawerTrigger>
+          <DrawerContent className="top-0 min-h-screen">
+            <div>
+              <div className="flex justify-between w-full">
+                <Link
+                  to="/"
+                  className="font-mono font-bold italian flex gap-x-2 items-center text-2xl "
+                >
+                  GridBox <SiF1 className="text-[3rem] translate-y-0.5" />
+                </Link>
+                <DrawerClose asChild>
+                  <button>
+                    <RxCross2 className="text-2xl" />
+                  </button>
+                </DrawerClose>
+              </div>
+
+              <div className="pt-20 flex flex-col text-lg items-center gap-y-10">
+                <DrawerClose asChild>
+                  <Link to="/drivers" className="hover:text-cta transition-all">
+                    Drivers
+                  </Link>
+                </DrawerClose>
+                <DrawerClose asChild>
+                  <Link
+                    to="/constructors"
+                    className="hover:text-cta transition-all"
+                  >
+                    Constructors
+                  </Link>
+                </DrawerClose>
+
+                <NavigationMenu>
+                  <NavigationMenuList>
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger className="text-lg bg-transparent font-normal -translate-y-1">
+                        Standings
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent className="p-2">
+                        <DrawerClose asChild>
+                          <ListItem
+                            to="/drivers-standings"
+                            title="Drivers Standings"
+                            className="text-lg text-center hover:text-cta transition-all"
+                          ></ListItem>
+                        </DrawerClose>
+                        <DrawerClose asChild>
+                          <ListItem
+                            to="/constructors-standings"
+                            title="Constructors Standings"
+                            className="text-lg text-center hover:text-cta transition-all"
+                          ></ListItem>
+                        </DrawerClose>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
+
+                <DrawerClose asChild>
+                  <Link
+                    to="/schedule"
+                    className="hover:text-cta transition-all"
+                  >
+                    Schedule
+                  </Link>
+                </DrawerClose>
+                <DrawerClose asChild>
+                  <Link
+                    to="/circuits"
+                    className="hover:text-cta transition-all"
+                  >
+                    Circuits
+                  </Link>
+                </DrawerClose>
+              </div>
+            </div>
+          </DrawerContent>
+        </Drawer>
       </div>
     </div>
   );

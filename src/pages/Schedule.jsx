@@ -172,7 +172,7 @@ const Schedule = () => {
                     </div>
                     <div>
                       <p className="font-medium text-2xl">{race?.raceName}</p>
-                      <div className="mt-2 flex flex-col gap-y-2">
+                      <div className="mt-2 flex flex-col gap-y-4">
                         <p className="text-lg">Round : {race?.round}</p>
                         <p>
                           {" "}
@@ -192,7 +192,7 @@ const Schedule = () => {
 
                         {new Date() > new Date(dateTime) && (
                           <>
-                            <div className="flex gap-x-2">
+                            <div className="flex flex-wrap gap-x-2 gap-y-4">
                               <CTAButton
                                 onClick={() => {
                                   navigate(
@@ -201,6 +201,7 @@ const Schedule = () => {
                                 }}
                                 text="
                               Qualifying"
+                                className="w-full md:w-fit"
                               ></CTAButton>
                               <CTAButton
                                 onClick={() => {
@@ -210,6 +211,7 @@ const Schedule = () => {
                                 }}
                                 text="
                               Race"
+                                className="w-full md:w-fit"
                               ></CTAButton>
                             </div>
                           </>
