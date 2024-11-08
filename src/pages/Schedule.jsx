@@ -89,7 +89,7 @@ const Schedule = () => {
   }, [fetchSchedule, year]);
 
   return (
-    <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
+    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex items-center gap-x-5">
@@ -191,26 +191,28 @@ const Schedule = () => {
                         )}
 
                         {new Date() > new Date(dateTime) && (
-                          <div className="flex gap-x-2">
-                            <CTAButton
-                              onClick={() => {
-                                navigate(
-                                  `/qualifying-result/${displayYear}/${race?.round}`
-                                );
-                              }}
-                              text="
+                          <>
+                            <div className="flex gap-x-2">
+                              <CTAButton
+                                onClick={() => {
+                                  navigate(
+                                    `/qualifying-result/${displayYear}/${race?.round}`
+                                  );
+                                }}
+                                text="
                               Qualifying"
-                            ></CTAButton>
-                            <CTAButton
-                              onClick={() => {
-                                navigate(
-                                  `/race-result/${displayYear}/${race?.round}`
-                                );
-                              }}
-                              text="
+                              ></CTAButton>
+                              <CTAButton
+                                onClick={() => {
+                                  navigate(
+                                    `/race-result/${displayYear}/${race?.round}`
+                                  );
+                                }}
+                                text="
                               Race"
-                            ></CTAButton>
-                          </div>
+                              ></CTAButton>
+                            </div>
+                          </>
                         )}
                       </div>
                     </div>
@@ -248,7 +250,7 @@ const Schedule = () => {
                       </div>
                     </div>
                     <div className="w-40 h-5 bg-gray-300 animate-pulse rounded" />
-                    <div className="w-40 h-5 bg-gray-300 animate-pulse" />
+                    <div className="w-40 h-5 bg-gray-300 animate-pulse rounded" />
                   </div>
                 </div>
               );

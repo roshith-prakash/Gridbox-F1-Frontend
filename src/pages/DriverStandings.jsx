@@ -154,27 +154,27 @@ const LoadingTableCard = () => {
                 className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
               >
                 <div className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
-                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
 
-                  <div className="h-5 w-[10%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[10%] bg-gray-300 animate-pulse rounded"></div>
                 </div>
                 <p className="px-5 py-3 text-lg font-medium">
-                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
                 </p>
                 <div className="flex px-5 py-3">
                   <div className="flex-1">
-                    <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                    <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
                   </div>
                   <div className="flex-1">
-                    <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                    <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
                   </div>
                 </div>
                 <div className="px-5 py-3 flex gap-x-3">
-                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
-                  <div className="h-5 w-[10%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
+                  <div className="h-5 w-[10%] bg-gray-300 animate-pulse rounded"></div>
                 </div>
                 <div className="px-5 py-3">
-                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
                 </div>
               </div>
             );
@@ -251,7 +251,7 @@ const DriverStandings = () => {
   console.log(open);
 
   return (
-    <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
+    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex items-center gap-x-5">

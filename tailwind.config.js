@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+// eslint-disable-next-line no-undef
 module.exports = {
   darkMode: ["class"],
   content: ["./src/**/*.{html,js,jsx,tsx}"],
@@ -10,7 +11,10 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)'
       },
       colors: {
-        cta: "#2c5364",
+        // cta: "#2c5364",
+        "cta": "#9b0ced",
+        "hovercta": "#7123b0",
+        "greyBG": "#F5F5F5",
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -54,5 +58,6 @@ module.exports = {
       }
     }
   },
+  // eslint-disable-next-line no-undef
   plugins: [require("tailwindcss-animate")],
 }

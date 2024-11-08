@@ -282,7 +282,7 @@ const RaceResult = () => {
   console.log(data?.data);
 
   return (
-    <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
+    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
         {/* No data available */}
         {error && error?.response?.status == 404 && (

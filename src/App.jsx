@@ -22,7 +22,7 @@ import {
   DialogTitle,
 } from "./components/ui/dialog";
 import { useState } from "react";
-import { Navbar, SecurityHeaders } from "./components";
+import { Footer, Navbar, SecurityHeaders } from "./components";
 
 function App() {
   const [open, setOpen] = useState(true);
@@ -97,56 +97,65 @@ function App() {
           </Dialog>
 
           <BrowserRouter>
-            <Navbar />
-            <Routes>
-              {/* Home page */}
-              <Route path="/" element={<Home />} />
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <Routes>
+                {/* Home page */}
+                <Route path="/" element={<Home />} />
 
-              {/* Drivers who drove in a particular year */}
-              <Route path="/drivers" element={<Drivers />} />
-              <Route path="/drivers/:year" element={<Drivers />} />
+                {/* Drivers who drove in a particular year */}
+                <Route path="/drivers" element={<Drivers />} />
+                <Route path="/drivers/:year" element={<Drivers />} />
 
-              {/* Constructors who raced in a particular year */}
-              <Route path="/constructors" element={<Constructors />} />
-              <Route path="/constructors/:year" element={<Constructors />} />
+                {/* Constructors who raced in a particular year */}
+                <Route path="/constructors" element={<Constructors />} />
+                <Route path="/constructors/:year" element={<Constructors />} />
 
-              {/* World Drivers standings for a particular year*/}
-              <Route path="/drivers-standings" element={<DriverStandings />} />
-              <Route
-                path="/drivers-standings/:year"
-                element={<DriverStandings />}
-              />
+                {/* World Drivers standings for a particular year*/}
+                <Route
+                  path="/drivers-standings"
+                  element={<DriverStandings />}
+                />
+                <Route
+                  path="/drivers-standings/:year"
+                  element={<DriverStandings />}
+                />
 
-              {/* World Constructors standings for a particular year*/}
-              <Route
-                path="/constructors-standings"
-                element={<ConstructorStandings />}
-              />
-              <Route
-                path="/constructors-standings/:year"
-                element={<ConstructorStandings />}
-              />
+                {/* World Constructors standings for a particular year*/}
+                <Route
+                  path="/constructors-standings"
+                  element={<ConstructorStandings />}
+                />
+                <Route
+                  path="/constructors-standings/:year"
+                  element={<ConstructorStandings />}
+                />
 
-              {/* The Season Schedule  */}
-              <Route path="/schedule" element={<Schedule />} />
-              <Route path="/schedule/:year" element={<Schedule />} />
+                {/* The Season Schedule  */}
+                <Route path="/schedule" element={<Schedule />} />
+                <Route path="/schedule/:year" element={<Schedule />} />
 
-              {/* The Circuits used in a specific year */}
-              <Route path="/circuits" element={<Circuits />} />
-              <Route path="/circuits/:year" element={<Circuits />} />
+                {/* The Circuits used in a specific year */}
+                <Route path="/circuits" element={<Circuits />} />
+                <Route path="/circuits/:year" element={<Circuits />} />
 
-              {/* Result for a specific race */}
-              <Route
-                path="/race-result/:year/:round"
-                element={<RaceResult />}
-              />
+                {/* Result for a specific race */}
+                <Route
+                  path="/race-result/:year/:round"
+                  element={<RaceResult />}
+                />
 
-              {/* Result for a specific Qualifying session */}
-              <Route
-                path="/qualifying-result/:year/:round"
-                element={<QualiResult />}
-              />
-            </Routes>
+                {/* Result for a specific Qualifying session */}
+                <Route
+                  path="/qualifying-result/:year/:round"
+                  element={<QualiResult />}
+                />
+              </Routes>
+
+              <section className="flex-1 bg-greyBG pt-20">
+                <Footer />
+              </section>
+            </div>
           </BrowserRouter>
         </>
       )}

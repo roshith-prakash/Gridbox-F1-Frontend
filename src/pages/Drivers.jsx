@@ -152,21 +152,23 @@ const LoadingTableCard = () => {
               >
                 <p className="flex text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100">
                   <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
-                  <div className={`w-[10%] h-5 bg-gray-300 rounded`}></div>
+                  <div
+                    className={`w-[10%] h-5 bg-gray-300 animate-pulse rounded`}
+                  ></div>
                 </p>
                 <div className="flex px-5 py-3">
                   <p className="flex-1">
-                    <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                    <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
                   </p>
                   <p className="flex-1">
-                    <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                    <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
                   </p>
                 </div>
                 <p className="px-5 py-3">
-                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
                 </p>
                 <div className="flex justify-center gap-x-2 py-5 items-center text-blue-600">
-                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
                 </div>
               </div>
             );
@@ -241,7 +243,7 @@ const Drivers = () => {
   }, [data?.data]);
 
   return (
-    <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
+    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex items-center gap-x-5">

@@ -192,17 +192,17 @@ const LoadingTableCard = () => {
                 className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
               >
                 <div className="text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100">
-                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
                 </div>
                 <div className="flex px-5 gap-x-2 py-3">
-                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
-                  <div className="h-5 w-[10%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
+                  <div className="h-5 w-[10%] bg-gray-300 animate-pulse rounded"></div>
                 </div>
                 <div className="px-5 py-3 flex justify-center">
-                  <div className="h-80 w-full bg-gray-300 rounded" />
+                  <div className="h-80 w-full bg-gray-300 animate-pulse rounded" />
                 </div>
                 <div className="flex justify-center gap-x-2 py-5 items-center">
-                  <div className="h-5 w-[30%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[30%] bg-gray-300 animate-pulse rounded"></div>
                 </div>
               </div>
             );
@@ -277,7 +277,7 @@ const Circuits = () => {
   }, [fetchCircuits, year]);
 
   return (
-    <main className="bg-[#F5F5F5] flex justify-center py-10 rounded-lg">
+    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex items-center gap-x-5">
