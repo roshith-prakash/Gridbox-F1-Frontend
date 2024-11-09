@@ -7,5 +7,8 @@ import Schedule from "./Schedule"
 import Circuits from "./Circuits";
 import RaceResult from "./RaceResult";
 import QualiResult from "./QualiResult";
+import Post from "./Post"
+import CreatePost from "./CreatePost";
+import AllPosts from "./AllPosts";
 
-export { Home, Drivers, Constructors, DriverStandings, ConstructorStandings, Schedule, Circuits, RaceResult, QualiResult }
+export { Home, Drivers, Constructors, DriverStandings, ConstructorStandings, Schedule, Circuits, RaceResult, QualiResult, Post, CreatePost, AllPosts }

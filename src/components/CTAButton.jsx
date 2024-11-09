@@ -4,15 +4,16 @@ const CTAButton = ({
   disabled = false,
   className = "",
   text = "Click Me",
+  disabledText = "",
   onClick,
 }) => {
   return (
     <button
       disabled={disabled}
-      className={`bg-cta border-cta min-w-32 text-white rounded-lg px-6 py-2 hover:scale-105 hover:bg-hovercta hover:border-hovercta transition-all disabled:bg-cta/65 disabled:border-cta/45 ${className}`}
+      className={`bg-cta border-cta text-white min-w-14 py-2 px-5 shadow rounded-xl w-full hover:bg-hovercta hover:scale-105 hover:border-hovercta disabled:bg-cta/70 transition-all ${className}`}
       onClick={onClick}
     >
-      {text}
+      {disabled ? (disabledText.length > 0 ? disabledText : text) : text}
     </button>
   );
 };
@@ -21,6 +22,7 @@ CTAButton.propTypes = {
   disabled: PropTypes.bool,
   className: PropTypes.string,
   text: PropTypes.string,
+  disabledText: PropTypes.string,
   onClick: PropTypes.func,
 };
 

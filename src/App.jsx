@@ -13,6 +13,9 @@ import {
   QualiResult,
   RaceResult,
   Schedule,
+  Post,
+  CreatePost,
+  AllPosts,
 } from "./pages";
 import {
   Dialog,
@@ -150,6 +153,15 @@ function App() {
                   path="/qualifying-result/:year/:round"
                   element={<QualiResult />}
                 />
+
+                {/* View specific post */}
+                <Route path="/article/:postId" element={<Post />} />
+
+                {/* Create an article - locked for admin */}
+                <Route path="/create-article" element={<CreatePost />} />
+
+                {/* View All articles */}
+                <Route path="/articles" element={<AllPosts />}></Route>
               </Routes>
 
               <section className="flex-1 bg-greyBG pt-20">

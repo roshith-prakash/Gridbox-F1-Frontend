@@ -17,7 +17,19 @@ const Footer = () => {
             GridBox <SiF1 className="translate-y-1 text-5xl" />
           </p>
           {/* Links on Medium & Large Screens */}
-          <div className="hidden md:grid md:grid-cols-3 gap-x-5 gap-y-5 mt-10 text-center">
+          <div className="hidden md:grid md:grid-cols-2 gap-x-5 gap-y-5 mt-10 text-center">
+            <div className="flex justify-center">
+              <Link to="/" className="hover:scale-110 transition-all">
+                Home
+              </Link>
+            </div>
+
+            <div className="flex justify-center">
+              <Link to="/circuits" className="hover:scale-110 transition-all">
+                Circuits
+              </Link>
+            </div>
+
             <div className="flex justify-center">
               <Link to="/drivers" className="hover:scale-110 transition-all">
                 Drivers
@@ -25,11 +37,17 @@ const Footer = () => {
             </div>
 
             <div className="flex justify-center">
+              <Link to="/articles" className="hover:scale-110 transition-all">
+                Articles
+              </Link>
+            </div>
+
+            <div className="flex justify-center">
               <Link
-                to="/drivers-standings"
+                to="/constructors"
                 className="hover:scale-110 transition-all"
               >
-                Drivers Standings
+                Constructors
               </Link>
             </div>
 
@@ -41,10 +59,10 @@ const Footer = () => {
 
             <div className="flex justify-center">
               <Link
-                to="/constructors"
+                to="/drivers-standings"
                 className="hover:scale-110 transition-all"
               >
-                Constructors
+                Drivers Standings
               </Link>
             </div>
 
@@ -56,16 +74,16 @@ const Footer = () => {
                 Constructors Standings
               </Link>
             </div>
-
-            <div className="flex justify-center">
-              <Link to="/circuits" className="hover:scale-110 transition-all">
-                Circuits
-              </Link>
-            </div>
           </div>
 
           {/* Links on Small Screens */}
           <div className="md:hidden grid grid-cols-1 gap-x-5 gap-y-5 mt-10 text-center">
+            <div className="flex justify-center">
+              <Link to="/" className="hover:scale-110 transition-all">
+                Home
+              </Link>
+            </div>
+
             <div className="flex justify-center">
               <Link to="/drivers" className="hover:scale-110 transition-all">
                 Drivers
@@ -96,6 +114,12 @@ const Footer = () => {
                 className="hover:scale-110 transition-all"
               >
                 Constructors Standings
+              </Link>
+            </div>
+
+            <div className="flex justify-center">
+              <Link to="/articles" className="hover:scale-110 transition-all">
+                Articles
               </Link>
             </div>
 

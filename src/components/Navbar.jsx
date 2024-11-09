@@ -87,6 +87,9 @@ const Navbar = () => {
           </NavigationMenuList>
         </NavigationMenu>
 
+        <Link to="/articles" className="hover:text-cta transition-all">
+          Articles
+        </Link>
         <Link to="/schedule" className="hover:text-cta transition-all">
           Schedule
         </Link>
@@ -165,6 +168,15 @@ const Navbar = () => {
                     </NavigationMenuItem>
                   </NavigationMenuList>
                 </NavigationMenu>
+
+                <DrawerClose asChild>
+                  <Link
+                    to="/articles"
+                    className="hover:text-cta transition-all"
+                  >
+                    Articles
+                  </Link>
+                </DrawerClose>
 
                 <DrawerClose asChild>
                   <Link
