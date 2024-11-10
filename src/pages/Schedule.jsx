@@ -32,6 +32,7 @@ const Schedule = () => {
   const [displayYear, setDisplayYear] = useState();
   const [schedule, setSchedule] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
+  const [invalidURL, setInvalidURL] = useState(false);
 
   // Query function to fetch drivers for each year
   const {
@@ -74,8 +75,10 @@ const Schedule = () => {
         parseInt(urlYear) <= 2024
       ) {
         setYear(parseInt(urlYear));
+        setInvalidURL(false);
       } else {
         console.log("Invalid year specified");
+        setInvalidURL(true);
       }
     } else {
       setYear(2024);
@@ -84,13 +87,16 @@ const Schedule = () => {
 
   // Fetch data for initial load
   useEffect(() => {
-    fetchSchedule();
+    if (year) {
+      fetchSchedule();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchSchedule, year]);
 
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+        {/* Input section */}
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex items-center gap-x-5">
             <span className="text-lg italic">Select Year :</span>
@@ -124,15 +130,22 @@ const Schedule = () => {
 
         {/* Data unavailable */}
         {error && error?.response?.status == 404 && (
-          <div className="h-[90vh] flex justify-center items-center">
-            <ErrorDiv text="Season schedule for the requested year is not available." />
+          <div className="py-20 flex justify-center items-center">
+            <ErrorDiv text="Schedule data for the requested year is not available." />
           </div>
         )}
 
         {/* Server error */}
         {error && error?.response?.status != 404 && (
-          <div className="h-[90vh] flex justify-center items-center">
+          <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
+          </div>
+        )}
+
+        {/* Invalid param in URL */}
+        {!year && invalidURL && (
+          <div className="py-20 flex justify-center items-center">
+            <ErrorDiv text="Invalid Year specified in URL." />
           </div>
         )}
 
@@ -226,7 +239,8 @@ const Schedule = () => {
         )}
 
         {/* Loading placeholder */}
-        {!error &&
+        {!invalidURL &&
+          !error &&
           schedule.length == 0 &&
           Array(10)
             .fill(null)

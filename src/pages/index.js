@@ -10,5 +10,6 @@ import QualiResult from "./QualiResult";
 import Post from "./Post"
 import CreatePost from "./CreatePost";
 import AllPosts from "./AllPosts";
+import NotFound from "./404";
 
-export { Home, Drivers, Constructors, DriverStandings, ConstructorStandings, Schedule, Circuits, RaceResult, QualiResult, Post, CreatePost, AllPosts }
+export { Home, Drivers, Constructors, DriverStandings, ConstructorStandings, Schedule, Circuits, RaceResult, QualiResult, Post, CreatePost, AllPosts, NotFound }

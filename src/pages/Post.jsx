@@ -6,6 +6,7 @@ import { getMinsToRead } from "../functions/mathFunctions";
 import dayjs from "dayjs";
 import { ErrorDiv } from "../components";
 import { SyncLoader } from "react-spinners";
+import { useEffect } from "react";
 
 const Post = () => {
   let { postId } = useParams();
@@ -19,11 +20,14 @@ const Post = () => {
     staleTime: Infinity,
   });
 
-  console.log(error);
-  console.log(data);
+  // Scroll to top
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
+      {/* Post is available */}
       {!isLoading && !error && (
         <div className="pb-10 w-full mx-2 md:mx-5 lg:mx-10 bg-white shadow-xl rounded-xl">
           {/* Thumbnail Image */}
@@ -62,8 +66,10 @@ const Post = () => {
         </div>
       )}
 
+      {/* Loader */}
       {isLoading && <SyncLoader className="py-20" size={50} />}
 
+      {/* Post is unavailable */}
       {error && (
         <ErrorDiv text="Could not retrieve the requested article."></ErrorDiv>
       )}

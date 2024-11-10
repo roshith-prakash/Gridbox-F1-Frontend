@@ -215,6 +215,7 @@ const RaceResult = () => {
   const [displayRound, setDisplayRound] = useState();
   const [displayRace, setDisplayRace] = useState();
   const [standings, setStandings] = useState([]);
+  const [invalidURL, setInvalidURL] = useState(false);
 
   // Query function to fetch standings for each year
   const {
@@ -264,8 +265,10 @@ const RaceResult = () => {
       ) {
         setYear(parseInt(urlYear));
         setRound(parseInt(urlRound));
+        setInvalidURL(false);
       } else {
-        console.log("Invalid year / round specified");
+        console.log("Invalid year specified");
+        setInvalidURL(true);
       }
     } else {
       console.log("Year and round not provided");
@@ -274,7 +277,7 @@ const RaceResult = () => {
 
   // Fetch result
   useEffect(() => {
-    if (!!year && !!round) {
+    if (year && round) {
       fetchRaceResult();
     }
   }, [fetchRaceResult, year, round]);
@@ -284,17 +287,24 @@ const RaceResult = () => {
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
-        {/* No data available */}
+        {/* Data unavailable */}
         {error && error?.response?.status == 404 && (
-          <div className="h-[90vh] flex justify-center items-center">
-            <ErrorDiv text="Race results for the requested session is not available." />
+          <div className="py-20 flex justify-center items-center">
+            <ErrorDiv text="Race data for the requested year is not available." />
           </div>
         )}
 
         {/* Server error */}
         {error && error?.response?.status != 404 && (
-          <div className="h-[90vh] flex justify-center items-center">
+          <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
+          </div>
+        )}
+
+        {/* Invalid param in URL */}
+        {!year && invalidURL && (
+          <div className="py-20 flex justify-center items-center">
+            <ErrorDiv text="Invalid Year or Round specified in URL." />
           </div>
         )}
 
@@ -414,7 +424,7 @@ const RaceResult = () => {
         )}
 
         {/* When fetching race results */}
-        {!error && standings.length == 0 && <LoadingTableCard />}
+        {!invalidURL && !error && standings.length == 0 && <LoadingTableCard />}
       </section>
     </main>
   );

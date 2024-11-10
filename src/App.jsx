@@ -16,6 +16,7 @@ import {
   Post,
   CreatePost,
   AllPosts,
+  NotFound,
 } from "./pages";
 import {
   Dialog,
@@ -161,7 +162,10 @@ function App() {
                 <Route path="/create-article" element={<CreatePost />} />
 
                 {/* View All articles */}
-                <Route path="/articles" element={<AllPosts />}></Route>
+                <Route path="/articles" element={<AllPosts />} />
+
+                {/* View All articles */}
+                <Route path="*" element={<NotFound />} />
               </Routes>
 
               <section className="flex-1 bg-greyBG pt-20">

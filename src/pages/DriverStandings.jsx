@@ -192,6 +192,7 @@ const DriverStandings = () => {
   const [displayYear, setDisplayYear] = useState();
   const [standings, setStandings] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
+  const [invalidURL, setInvalidURL] = useState(false);
 
   // Query function to fetch standings for each year
   const {
@@ -234,8 +235,10 @@ const DriverStandings = () => {
         parseInt(urlYear) <= 2024
       ) {
         setYear(parseInt(urlYear));
+        setInvalidURL(false);
       } else {
         console.log("Invalid year specified");
+        setInvalidURL(true);
       }
     } else {
       setYear(2024);
@@ -244,7 +247,9 @@ const DriverStandings = () => {
 
   // Fetch drivers
   useEffect(() => {
-    fetchStandings();
+    if (year) {
+      fetchStandings();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchStandings, year]);
 
@@ -253,6 +258,7 @@ const DriverStandings = () => {
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+        {/* Input Section */}
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex items-center gap-x-5">
             <span className="text-lg italic">Select Year :</span>
@@ -279,15 +285,22 @@ const DriverStandings = () => {
 
         {/* Data unavailable */}
         {error && error?.response?.status == 404 && (
-          <div className="h-[90vh] flex justify-center items-center">
-            <ErrorDiv text="Driver standings for the requested year is not available." />
+          <div className="py-20 flex justify-center items-center">
+            <ErrorDiv text="Drivers Standings data for the requested year is not available." />
           </div>
         )}
 
         {/* Server error */}
         {error && error?.response?.status != 404 && (
-          <div className="h-[90vh] flex justify-center items-center">
+          <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
+          </div>
+        )}
+
+        {/* Invalid param in URL */}
+        {!year && invalidURL && (
+          <div className="py-20 flex justify-center items-center">
+            <ErrorDiv text="Invalid Year specified in URL." />
           </div>
         )}
 
@@ -377,7 +390,7 @@ const DriverStandings = () => {
         )}
 
         {/* When loading initial data */}
-        {!error && standings.length == 0 && <LoadingTableCard />}
+        {!invalidURL && !error && standings.length == 0 && <LoadingTableCard />}
       </section>
     </main>
   );
