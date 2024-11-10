@@ -57,7 +57,7 @@ const Navbar = () => {
         GridBox <SiF1 className="text-[3rem] translate-y-0.5 " />
       </Link>
 
-      <div className="hidden md:flex gap-x-5  pt-1 text-lg font-medium">
+      <div className="hidden lg:flex gap-x-5  pt-1 text-lg font-medium">
         <Link to="/drivers" className="hover:text-cta transition-all">
           Drivers
         </Link>
@@ -101,7 +101,7 @@ const Navbar = () => {
         </Link>
       </div>
 
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <Drawer direction="right">
           <DrawerTrigger asChild>
             <button>

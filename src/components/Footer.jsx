@@ -42,15 +42,6 @@ const Footer = () => {
 
             <div className="flex justify-center">
               <Link
-                to="/the-paddock-report"
-                className="hover:scale-110 transition-all"
-              >
-                The Paddock Report
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link
                 to="/constructors"
                 className="hover:scale-110 transition-all"
               >
@@ -61,6 +52,15 @@ const Footer = () => {
             <div className="flex justify-center">
               <Link to="/schedule" className="hover:scale-110 transition-all">
                 Schedule
+              </Link>
+            </div>
+
+            <div className="flex justify-center">
+              <Link
+                to="/the-paddock-report"
+                className="hover:scale-110 transition-all"
+              >
+                The Paddock Report
               </Link>
             </div>
 
@@ -134,14 +134,14 @@ const Footer = () => {
             </div>
 
             <div className="flex justify-center">
-              <Link to="/schedule" className="hover:scale-110 transition-all">
-                Schedule
+              <Link to="/circuits" className="hover:scale-110 transition-all">
+                Circuits
               </Link>
             </div>
 
             <div className="flex justify-center">
-              <Link to="/circuits" className="hover:scale-110 transition-all">
-                Circuits
+              <Link to="/schedule" className="hover:scale-110 transition-all">
+                Schedule
               </Link>
             </div>
           </div>

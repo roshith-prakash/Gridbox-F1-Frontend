@@ -29,7 +29,7 @@ export default function Model(props) {
       ref={groupRef}
       dispose={null}
       position={[-0.5, -1.5, -3]}
-      scale={4}
+      scale={3.5}
     >
       <group position={[-0.921, 0.274, 0.909]} scale={2.182}>
         <mesh

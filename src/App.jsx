@@ -28,6 +28,7 @@ import {
 import { useEffect, useState } from "react";
 import { Footer, Navbar, SecurityHeaders } from "./components";
 import AOS from "aos";
+import "aos/dist/aos.css";
 
 function App() {
   const [open, setOpen] = useState(true);
@@ -94,7 +95,7 @@ function App() {
         <>
           {/* Data Availability Dialog box */}
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent>
+            <DialogContent className="max-w-[90%] w-80 md:w-96">
               <DialogHeader>
                 <DialogTitle>
                   GridBox F1: Data Availability Limitation
