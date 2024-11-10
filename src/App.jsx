@@ -25,8 +25,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./components/ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Footer, Navbar, SecurityHeaders } from "./components";
+import AOS from "aos";
 
 function App() {
   const [open, setOpen] = useState(true);
@@ -42,6 +43,13 @@ function App() {
     refetchOnMount: true,
     retry: 5,
   });
+
+  useEffect(() => {
+    AOS.init({
+      easing: "ease-in-sine",
+      delay: 100,
+    });
+  }, []);
 
   return (
     <>
@@ -103,6 +111,7 @@ function App() {
           <BrowserRouter>
             <div className="min-h-screen flex flex-col">
               <Navbar />
+
               <Routes>
                 {/* Home page */}
                 <Route path="/" element={<Home />} />

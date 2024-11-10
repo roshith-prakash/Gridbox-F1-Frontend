@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import { axiosInstance } from "../utils/axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { ErrorDiv, YearPicker } from "../components";
+import CTAButton from "../components/CTAButton";
+import { SyncLoader } from "react-spinners";
+import { FaCaretDown } from "react-icons/fa6";
 dayjs.extend(utc);
 
 // To show flags for the drivers
@@ -10,19 +14,14 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 
+// Register the locale for the countries constructor
+countries.registerLocale(enLocale);
+
 // Get URL Params
 import { useParams } from "react-router-dom";
-import { Collapse } from "react-collapse";
 
 // Navigate Programatically
 import { useNavigate } from "react-router-dom";
-import { ErrorDiv, YearPicker } from "../components";
-import CTAButton from "../components/CTAButton";
-import { SyncLoader } from "react-spinners";
-import { FaCaretDown } from "react-icons/fa6";
-
-// Register the locale for the countries constructor
-countries.registerLocale(enLocale);
 
 const Schedule = () => {
   const navigate = useNavigate();
@@ -122,11 +121,17 @@ const Schedule = () => {
         </header>
 
         {/* Invalid year error  */}
-        <Collapse isOpened={invalidYear} className="transition-all">
-          <div className="text-red-600 font-medium px-5">
-            Year must be between 1950 & 2024
-          </div>
-        </Collapse>
+        <div
+          className={`text-red-600 font-medium px-5 overflow-hidden  ${
+            invalidYear ? "h-14" : "h-0"
+          } transition-all`}
+        >
+          Year must be between 1950 & 2024
+        </div>
+
+        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+          F1 Schedule {displayYear}
+        </h1>
 
         {/* Data unavailable */}
         {error && error?.response?.status == 404 && (
@@ -152,9 +157,6 @@ const Schedule = () => {
         {/* Timeline */}
         {!error && schedule.length > 0 && (
           <>
-            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
-              F1 Schedule {displayYear}
-            </h1>
             <div className="flex flex-col px-5 gap-y-5 py-10 overflow-x-auto">
               {schedule?.map((race, i) => {
                 const countryCode = countries.getAlpha2Code(

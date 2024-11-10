@@ -8,7 +8,7 @@ dayjs.extend(relativeTime);
 const PostCard = ({ post, index }) => {
   return (
     // Card container
-    <div key={index} className="flex justify-center">
+    <div data-aos="fade-up" key={index} className="flex justify-center">
       {/* Entire card is a link to post page to view the post */}
       <Link
         to={`/article/${post?.uid}`}

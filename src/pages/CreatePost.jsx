@@ -110,8 +110,6 @@ const CreatePost = () => {
     fileRef.current.value = null;
   };
 
-  console.log(value);
-
   return (
     <div className="bg-greyBG">
       <Toaster />

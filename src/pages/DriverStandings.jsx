@@ -9,6 +9,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PropTypes from "prop-types";
+import { useNavigate, useParams } from "react-router-dom";
+import { ErrorDiv, YearPicker } from "../components";
+import CTAButton from "../components/CTAButton";
+import { SyncLoader } from "react-spinners";
 
 // To get country from nationality
 import { nationalityMap } from "../data/nationalityToCountry";
@@ -17,10 +21,6 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
-import { useNavigate, useParams } from "react-router-dom";
-import { ErrorDiv, YearPicker } from "../components";
-import CTAButton from "../components/CTAButton";
-import { SyncLoader } from "react-spinners";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -283,6 +283,19 @@ const DriverStandings = () => {
           )}
         </header>
 
+        {/* Invalid year error  */}
+        <div
+          className={`text-red-600 font-medium px-5 overflow-hidden  ${
+            invalidYear ? "h-14" : "h-0"
+          } transition-all`}
+        >
+          Year must be between 1950 & 2024
+        </div>
+
+        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+          Drivers Standings {displayYear}
+        </h1>
+
         {/* Data unavailable */}
         {error && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
@@ -307,9 +320,6 @@ const DriverStandings = () => {
         {/* Show driver name and country when driver data is present */}
         {!error && standings.length > 0 && (
           <>
-            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
-              Drivers Standings {displayYear}
-            </h1>
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
               <table className="rounded-lg w-full overflow-hidden bg-white">
                 <TableHeader>

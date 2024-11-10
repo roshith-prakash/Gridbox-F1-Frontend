@@ -55,6 +55,9 @@ module.exports = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))'
         }
+      },
+      backgroundImage: {
+        hero: "url('https://res.cloudinary.com/do8rpl9l4/image/upload/v1731252270/ai-generated-8185136_1920_nnaenr.webp')"
       }
     }
   },

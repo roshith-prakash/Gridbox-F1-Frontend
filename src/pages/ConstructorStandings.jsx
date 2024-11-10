@@ -9,6 +9,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PropTypes from "prop-types";
+import { ErrorDiv, YearPicker } from "../components";
+import CTAButton from "../components/CTAButton";
+import { SyncLoader } from "react-spinners";
+
+// Get URL Params
+import { useNavigate, useParams } from "react-router-dom";
 
 // To get country from nationality
 import { nationalityMap } from "../data/nationalityToCountry";
@@ -17,11 +23,6 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
-import { useNavigate, useParams } from "react-router-dom";
-import { ErrorDiv, YearPicker } from "../components";
-import CTAButton from "../components/CTAButton";
-import { SyncLoader } from "react-spinners";
-
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
 
@@ -72,7 +73,7 @@ ConstructorStandingCard.propTypes = {
 const LoadingTableCard = () => {
   return (
     <>
-      <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
+      <div className="hidden md:block pt-10 pb-5 w-full overflow-x-auto">
         <table className="rounded-lg w-full overflow-hidden bg-white">
           <TableHeader>
             <TableRow className="text-left bg-gray-100">
@@ -247,6 +248,19 @@ const ConstructorStandings = () => {
           )}
         </header>
 
+        {/* Invalid year error  */}
+        <div
+          className={`text-red-600 font-medium px-5 overflow-hidden  ${
+            invalidYear ? "h-14" : "h-0"
+          } transition-all`}
+        >
+          Year must be between 1950 & 2024
+        </div>
+
+        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+          Constructors Standings {displayYear}
+        </h1>
+
         {/* Data unavailable */}
         {error && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
@@ -271,9 +285,6 @@ const ConstructorStandings = () => {
         {/* Show driver name and country when driver data is present */}
         {!error && standings.length > 0 && (
           <>
-            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
-              Constructors Standings {displayYear}
-            </h1>
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
               <table className="rounded-lg w-full overflow-hidden bg-white">
                 <TableHeader>

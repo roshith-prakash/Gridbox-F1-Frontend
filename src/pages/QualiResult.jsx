@@ -9,6 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PropTypes from "prop-types";
+import { useParams } from "react-router-dom";
+import { ErrorDiv } from "../components";
 
 // To get country from nationality
 import { nationalityMap } from "../data/nationalityToCountry";
@@ -17,8 +19,6 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
-import { useParams } from "react-router-dom";
-import { ErrorDiv } from "../components";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);

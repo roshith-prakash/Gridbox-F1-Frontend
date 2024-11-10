@@ -8,5 +8,6 @@ import CTAButton from "./CTAButton";
 import OutlineButton from "./OutlineButton";
 import Input from "./Input";
 import PostCard from "./PostCard";
+import TyreModel from "./TyreModel";
 
-export { SecurityHeaders, Navbar, YearPicker, ErrorDiv, Footer, ErrorStatement, CTAButton, Input, OutlineButton, PostCard }
+export { SecurityHeaders, Navbar, YearPicker, ErrorDiv, Footer, ErrorStatement, CTAButton, Input, OutlineButton, PostCard, TyreModel }
