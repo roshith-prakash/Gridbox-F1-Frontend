@@ -133,7 +133,7 @@ const Home = () => {
             className="[transform:rotateY(180deg)]"
           />
         </div>
-        <section className="flex-1 flex flex-col justify-center gap-y-12 px-10">
+        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-12 px-10">
           <p className="text-5xl font-medium md:text-right font-mono ">
             The Battle of Constructors
           </p>
