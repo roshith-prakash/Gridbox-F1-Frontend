@@ -41,8 +41,11 @@ const Footer = () => {
             </div>
 
             <div className="flex justify-center">
-              <Link to="/articles" className="hover:scale-110 transition-all">
-                Articles
+              <Link
+                to="/the-paddock-report"
+                className="hover:scale-110 transition-all"
+              >
+                The Paddock Report
               </Link>
             </div>
 
@@ -122,8 +125,11 @@ const Footer = () => {
             </div>
 
             <div className="flex justify-center">
-              <Link to="/articles" className="hover:scale-110 transition-all">
-                Articles
+              <Link
+                to="/the-paddock-report"
+                className="hover:scale-110 transition-all"
+              >
+                The Paddock Report
               </Link>
             </div>
 

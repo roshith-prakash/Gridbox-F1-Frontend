@@ -35,9 +35,18 @@ const AllPosts = () => {
   }, [inView, fetchNextPage]);
 
   return (
-    <div className="pb-32">
-      <h1 className="text-4xl font-medium px-6 py-5">Articles</h1>
-      <div>
+    <div className="pb-32 bg-greyBG">
+      <h1 className="text-4xl font-medium px-6 pt-5 italic">
+        The Paddock Report
+      </h1>
+      <h2 className="mt-4 text-lg px-6">
+        Stay up-to-date with the latest in Formula 1 on the GridBox F1&apos;s
+        Paddock Report! From breaking news and race recaps to in-depth analysis
+        of team strategies and driver performances, our articles keep you
+        connected to the pulse of the F1 world. The Paddock Report is your
+        source for all things F1, beyond the track!
+      </h2>
+      <div className="pt-5">
         {/* Loading indicator */}
         {isLoading && (
           <div className="h-96 flex justify-center items-center">

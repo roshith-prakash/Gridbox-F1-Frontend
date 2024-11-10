@@ -11,8 +11,8 @@ const PostCard = ({ post, index }) => {
     <div data-aos="fade-up" key={index} className="flex justify-center">
       {/* Entire card is a link to post page to view the post */}
       <Link
-        to={`/article/${post?.uid}`}
-        className="my-5 mx-5  w-full md:w-96 lg:w-80 overflow-hidden rounded-lg cursor-pointer shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+        to={`/the-paddock-report/${post?.uid}`}
+        className="my-5 mx-5 bg-white w-full md:w-96 lg:w-80 overflow-hidden rounded-lg cursor-pointer shadow-lg hover:shadow-xl hover:scale-105 transition-all"
       >
         {/* Thumbnail for post card. */}
         <img

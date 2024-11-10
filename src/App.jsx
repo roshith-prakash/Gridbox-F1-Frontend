@@ -110,8 +110,10 @@ function App() {
 
           <BrowserRouter>
             <div className="min-h-screen flex flex-col">
+              {/* Navbar */}
               <Navbar />
 
+              {/* Actual Pages */}
               <Routes>
                 {/* Home page */}
                 <Route path="/" element={<Home />} />
@@ -164,19 +166,20 @@ function App() {
                   element={<QualiResult />}
                 />
 
+                {/* View All articles */}
+                <Route path="/the-paddock-report" element={<AllPosts />} />
+
                 {/* View specific post */}
-                <Route path="/article/:postId" element={<Post />} />
+                <Route path="/the-paddock-report/:postId" element={<Post />} />
 
                 {/* Create an article - locked for admin */}
                 <Route path="/create-article" element={<CreatePost />} />
 
                 {/* View All articles */}
-                <Route path="/articles" element={<AllPosts />} />
-
-                {/* View All articles */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
 
+              {/* Footer */}
               <section className="flex-1 bg-greyBG pt-20">
                 <Footer />
               </section>
