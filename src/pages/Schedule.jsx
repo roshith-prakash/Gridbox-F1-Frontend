@@ -97,13 +97,17 @@ const Schedule = () => {
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
         {/* Input section */}
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
-          <div className="flex items-center gap-x-5">
-            <span className="text-lg italic">Select Year :</span>
+          <div className="flex flex-wrap w-full md:w-fit items-center gap-x-2 md:gap-x-5 gap-y-5">
+            <span className="w-full md:w-fit text-lg italic">
+              Select Year :
+            </span>
             <YearPicker
+              className="w-full md:w-fit"
               setInvalidYear={setInvalidYear}
               setYear={setUserSelectedYear}
             />
           </div>
+
           <CTAButton
             className="w-full md:w-fit py-2 px-6 border-2 rounded"
             disabled={isLoading || invalidYear || !userSelectedYear}
@@ -176,7 +180,7 @@ const Schedule = () => {
 
                 return (
                   <div key={race?.date} className="flex gap-x-5">
-                    <div className="flex flex-col  items-center">
+                    <div className="flex flex-col items-center">
                       <div className="p-4 border-cta rounded-full border-4" />
                       {i + 1 != schedule.length && (
                         <>
@@ -185,7 +189,7 @@ const Schedule = () => {
                         </>
                       )}
                     </div>
-                    <div>
+                    <div className="flex-1 md:flex-none">
                       <p className="font-medium text-2xl">{race?.raceName}</p>
                       <div className="mt-2 flex flex-col gap-y-4">
                         <p className="text-lg">Round : {race?.round}</p>
@@ -216,7 +220,6 @@ const Schedule = () => {
                                 }}
                                 text="
                               Qualifying"
-                                className="w-full md:w-fit"
                               ></CTAButton>
                               <CTAButton
                                 onClick={() => {
@@ -226,7 +229,6 @@ const Schedule = () => {
                                 }}
                                 text="
                               Race"
-                                className="w-full md:w-fit"
                               ></CTAButton>
                             </div>
                           </>

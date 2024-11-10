@@ -213,9 +213,12 @@ const Constructors = () => {
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
         {/* Input Section */}
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
-          <div className="flex items-center gap-x-5">
-            <span className="text-lg italic">Select Year :</span>
+          <div className="flex flex-wrap w-full md:w-fit items-center gap-x-2 md:gap-x-5 gap-y-5">
+            <span className="w-full md:w-fit text-lg italic">
+              Select Year :
+            </span>
             <YearPicker
+              className="w-full md:w-fit"
               setInvalidYear={setInvalidYear}
               setYear={setUserSelectedYear}
             />

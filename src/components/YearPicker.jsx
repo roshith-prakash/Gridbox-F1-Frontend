@@ -3,7 +3,7 @@ import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import PropTypes from "prop-types";
 
-const YearPicker = ({ setYear, setInvalidYear }) => {
+const YearPicker = ({ setYear, setInvalidYear, className = "" }) => {
   // To set the year using DatePicker
   const changeDate = (date) => {
     // Invalid date (first season is 1950 and last maintained season is 2024)
@@ -34,7 +34,7 @@ const YearPicker = ({ setYear, setInvalidYear }) => {
         changeDate(date);
       }}
       closeOnSelect
-      className="text-center border-2 border-black/50 rounded outline-none"
+      className={`w-fit text-center border-2 border-black/50 rounded outline-none ${className}`}
     />
   );
 };
@@ -42,6 +42,7 @@ const YearPicker = ({ setYear, setInvalidYear }) => {
 YearPicker.propTypes = {
   setYear: PropTypes.func,
   setInvalidYear: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default YearPicker;
