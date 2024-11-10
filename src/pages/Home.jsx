@@ -50,7 +50,7 @@ const Home = () => {
         data-aos="fade-up"
         className="py-20 flex flex-wrap-reverse gap-y-10 min-h-[70vh]"
       >
-        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-12 px-10">
+        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-12 px-5 md:px-10">
           <p className="text-5xl font-mono font-medium">
             Champions & Contenders
           </p>
@@ -80,7 +80,7 @@ const Home = () => {
             className="[transform:rotateY(180deg)]"
           />
         </div>
-        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-12 px-10">
+        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-12 px-5 md:px-10">
           <p className="text-5xl font-medium md:text-right font-mono ">
             The Power Behind the Cars
           </p>
@@ -104,7 +104,7 @@ const Home = () => {
         data-aos="fade-up"
         className="py-20 flex flex-wrap-reverse gap-y-10 min-h-[70vh]"
       >
-        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-8 px-10">
+        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-8 px-5 md:px-10">
           <p className="text-5xl font-mono font-medium">
             Race to the Championship
           </p>
@@ -133,7 +133,7 @@ const Home = () => {
             className="[transform:rotateY(180deg)]"
           />
         </div>
-        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-12 px-10">
+        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-12 px-5 md:px-10">
           <p className="text-5xl font-medium md:text-right font-mono ">
             The Battle of Constructors
           </p>
@@ -157,7 +157,7 @@ const Home = () => {
         data-aos="fade-up"
         className="py-20 flex flex-wrap-reverse gap-y-10 min-h-[70vh]"
       >
-        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-8 px-10">
+        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-8 px-5 md:px-10">
           <p className="text-5xl font-mono font-medium">The Paddock Report</p>
           <p className="text-xl italic leading-7 drop-shadow-lg">
             Stay up-to-date with the latest in Formula 1 on the GridBox
@@ -183,7 +183,7 @@ const Home = () => {
         <div className="w-full md:flex-1 flex justify-center items-center">
           <img src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1731261225/f1_s04v3f.png" />
         </div>
-        <section className="flex-1 flex flex-col justify-center gap-y-12 px-10">
+        <section className="flex-1 flex flex-col justify-center gap-y-12 px-5 md:px-10">
           <p className="text-5xl font-medium md:text-right font-mono ">
             Grand Prix Calendar
           </p>
@@ -208,7 +208,7 @@ const Home = () => {
         data-aos="fade-up"
         className="py-20 flex flex-wrap-reverse gap-y-10 min-h-[70vh]"
       >
-        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-8 px-10">
+        <section className="w-full md:flex-1 flex flex-col justify-center gap-y-8 px-5 md:px-10">
           <p className="text-5xl font-mono font-medium">Iconic F1 Tracks</p>
           <p className="text-xl italic leading-7 drop-shadow-lg">
             Explore the iconic circuits that make up each Formula 1 season on
