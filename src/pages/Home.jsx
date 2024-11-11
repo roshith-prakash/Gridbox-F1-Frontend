@@ -171,7 +171,7 @@ const Home = () => {
           </Link>
         </section>
         <div className="w-full md:flex-1  flex justify-center items-center">
-          <img src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1731259507/max_t8vzkt.png" />
+          <img src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1731298745/paddock_zjyucn.png" />
         </div>
       </div>
 
