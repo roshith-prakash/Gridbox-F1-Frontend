@@ -1,0 +1,37 @@
+GridBox F1 Frontend Client
+
+This is the Vite + React client for the user facing frontend aspect of the GridBox F1 project.
+
+Features : 
+- View Drivers for a specific year
+- View Constructors for a specific year
+- View Season Schedule for a specific year
+- View Grand Prix Circuits for a specific year
+- View Drivers Standings for a specific year
+- View Constructors Standings for a specific year
+- View Race results
+- View Qualifying results
+- Create Articles for The Paddock Report (Admin Only - Password locked)
+- Read Articles on The Paddock Report
+
+(Refer to image in folder to see how pages can be traversed)
+
+Tanstack query is used to cache data and reduce API calls. 
+The project makes use of ShadCN + tailwind CSS for styling. AOS Package is used for minor animations while the site is being traversed.
+The dayjs package is used to convert dates to human readable format.
+The i18n-iso-countries package along with flag-icons is used to display flags according to country / nationality. (Need to use a hashmap to convert nationality to country).
+React Three Drei + React Three Fiber + 'Three' packages are used to load in 3d models. gltfjsx (used in command line) package is used to convert a gltf model to a React component.
+React Helmet is used to add security.
+
+Paths:
+
+- `/drivers/:year` - To view drivers for a certain year. 
+- `/constructors/:year` - To view constructors for a certain year. 
+- `/drivers-standings/:year` - To view driver standings for a certain year. 
+- `/constructors-standings/:year` - To view constructor standings for a certain year. 
+- `/circuits/:year` - To view circuits for a certain year. 
+- `/schedule/:year` - To view race schedule for a certain year. 
+- `/race-result/:year/:round` - To view the race result for a certain round.
+- `/qualifying-result/:year/:round` - To view the qualifying result for a certain round. .
+- `/the-paddock-report` - To view recently posted articles. 
+- `/the-paddock-report/:postId` - To view a specific post. 
