@@ -147,9 +147,7 @@ const Footer = () => {
           </div>
 
           {/* Developed by Roshith */}
-          <p className="mt-14 text-center">
-            Powered by Ergast. Developed by Roshith.
-          </p>
+          <p className="mt-14 text-center">Developed by Roshith.</p>
 
           {/* Year of Development */}
           <p className="mt-3 text-center">2024.</p>
