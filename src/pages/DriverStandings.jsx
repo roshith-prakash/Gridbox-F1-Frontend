@@ -22,31 +22,24 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 
-// Register the locale for the countries constructor
+// Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
 const DriverStandingCard = ({ item }) => {
-  const driverCountry =
-    nationalityMap[String(item?.driver?.nationality).trim()];
-  const driverCountryCode = countries.getAlpha2Code(driverCountry, "en");
-
-  const constructorCountry =
-    nationalityMap[String(item?.constructor?.nationality).trim()];
-  const constructorCountryCode = countries.getAlpha2Code(
-    constructorCountry,
-    "en"
-  );
+  const DriverCountry =
+    nationalityMap[String(item?.Driver?.nationality).trim()];
+  const DriverCountryCode = countries.getAlpha2Code(DriverCountry, "en");
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
       <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
         {item?.position}.{" "}
         <span>
-          {item?.driver?.givenName} {item?.driver?.familyName}
+          {item?.Driver?.givenName} {item?.Driver?.familyName}
         </span>
         <span
-          className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
+          className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
         ></span>
       </p>
       <p className="px-5 py-3 text-lg font-medium">
@@ -54,19 +47,33 @@ const DriverStandingCard = ({ item }) => {
       </p>
       <div className="flex px-5 py-3">
         <p className="flex-1">
-          Code : {item?.driver?.code ? item?.driver?.code : "-"}
+          Code : {item?.Driver?.code ? item?.Driver?.code : "-"}
         </p>
         <p className="flex-1">
           Number :{" "}
-          {item?.driver?.permanentNumber ? item?.driver?.permanentNumber : "-"}
+          {item?.Driver?.permanentNumber ? item?.Driver?.permanentNumber : "-"}
         </p>
       </div>
-      <p className="px-5 py-3">
-        Constructor : {item?.constructor?.name}{" "}
-        <span
-          className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
-        ></span>
-      </p>
+      <div className="px-5 flex gap-x-2 py-3">
+        Constructor:{" "}
+        {item?.Constructors?.map((constructor, j) => {
+          const ConstructorCountry =
+            nationalityMap[String(constructor?.nationality).trim()];
+          const ConstructorCountryCode = countries.getAlpha2Code(
+            ConstructorCountry,
+            "en"
+          );
+
+          return (
+            <div key={j} className="flex">
+              <span
+                className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
+              ></span>
+              {constructor?.name}{" "}
+            </div>
+          );
+        })}
+      </div>
       <p className="px-5 py-3">
         Grand Prix Wins : <span>{item?.wins}</span>
       </p>
@@ -76,8 +83,8 @@ const DriverStandingCard = ({ item }) => {
 
 DriverStandingCard.propTypes = {
   item: PropTypes.shape({
-    driver: PropTypes.object,
-    constructor: PropTypes.object,
+    Driver: PropTypes.object,
+    Constructors: PropTypes.object,
     position: PropTypes.number.isRequired,
     points: PropTypes.number,
     wins: PropTypes.number,
@@ -106,7 +113,7 @@ const LoadingTableCard = () => {
           <TableBody>
             {Array(20)
               .fill(null)
-              ?.map((driver, i) => {
+              ?.map((Driver, i) => {
                 return (
                   <TableRow
                     className="text-left border-b-2 border-gray-100"
@@ -201,7 +208,7 @@ const DriverStandings = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["driversStandings", year],
+    queryKey: ["DriversStandings", year],
     queryFn: () => {
       return axiosInstance.post("/getDriverStandings", {
         year: year,
@@ -245,7 +252,7 @@ const DriverStandings = () => {
     }
   }, [urlYear]);
 
-  // Fetch drivers
+  // Fetch Drivers
   useEffect(() => {
     if (year) {
       fetchStandings();
@@ -253,7 +260,7 @@ const DriverStandings = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchStandings, year]);
 
-  console.log(open);
+  console.log(standings);
 
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
@@ -320,7 +327,7 @@ const DriverStandings = () => {
           </div>
         )}
 
-        {/* Show driver name and country when driver data is present */}
+        {/* Show Driver name and country when Driver data is present */}
         {!error && standings.length > 0 && (
           <>
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
@@ -344,19 +351,10 @@ const DriverStandings = () => {
                 </TableHeader>
                 <TableBody>
                   {standings?.map((item, i) => {
-                    const driverCountry =
-                      nationalityMap[String(item?.driver?.nationality).trim()];
-                    const driverCountryCode = countries.getAlpha2Code(
-                      driverCountry,
-                      "en"
-                    );
-
-                    const constructorCountry =
-                      nationalityMap[
-                        String(item?.constructor?.nationality).trim()
-                      ];
-                    const constructorCountryCode = countries.getAlpha2Code(
-                      constructorCountry,
+                    const DriverCountry =
+                      nationalityMap[String(item?.Driver?.nationality).trim()];
+                    const DriverCountryCode = countries.getAlpha2Code(
+                      DriverCountry,
                       "en"
                     );
 
@@ -370,18 +368,30 @@ const DriverStandings = () => {
                         </TableCell>
                         <TableCell className="px-2">
                           <span
-                            className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
+                            className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
                           ></span>
-                          {item?.driver?.givenName} {item?.driver?.familyName}
+                          {item?.Driver?.givenName} {item?.Driver?.familyName}
                         </TableCell>
 
-                        <TableCell className="px-2">
-                          <span
-                            className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
-                          ></span>
-                          {item?.constructor?.name}
-                        </TableCell>
+                        <TableCell className="px-2 flex gap-x-2">
+                          {item?.Constructors?.map((constructor, j) => {
+                            const ConstructorCountry =
+                              nationalityMap[
+                                String(constructor?.nationality).trim()
+                              ];
+                            const ConstructorCountryCode =
+                              countries.getAlpha2Code(ConstructorCountry, "en");
 
+                            return (
+                              <div key={j} className="flex">
+                                <span
+                                  className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
+                                ></span>
+                                {constructor?.name}{" "}
+                              </div>
+                            );
+                          })}
+                        </TableCell>
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           {item?.points}
                         </TableCell>
@@ -396,7 +406,7 @@ const DriverStandings = () => {
             </div>
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
               {standings?.map((item) => {
-                return <DriverStandingCard item={item} key={item.driverId} />;
+                return <DriverStandingCard item={item} key={item.DriverId} />;
               })}
             </div>
           </>

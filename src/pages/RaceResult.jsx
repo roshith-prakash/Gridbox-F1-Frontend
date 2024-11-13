@@ -26,11 +26,11 @@ countries.registerLocale(enLocale);
 // To be displayed on Mobile screens
 const DriverPositionCard = ({ item }) => {
   const driverCountry =
-    nationalityMap[String(item?.driver?.nationality).trim()];
+    nationalityMap[String(item?.Driver?.nationality).trim()];
   const driverCountryCode = countries.getAlpha2Code(driverCountry, "en");
 
   const constructorCountry =
-    nationalityMap[String(item?.constructor?.nationality).trim()];
+    nationalityMap[String(item?.Constructor?.nationality).trim()];
   const constructorCountryCode = countries.getAlpha2Code(
     constructorCountry,
     "en"
@@ -41,7 +41,7 @@ const DriverPositionCard = ({ item }) => {
       <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
         {item?.position}.{" "}
         <span>
-          {item?.driver?.givenName} {item?.driver?.familyName}
+          {item?.Driver?.givenName} {item?.Driver?.familyName}
         </span>
         <span
           className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
@@ -56,24 +56,24 @@ const DriverPositionCard = ({ item }) => {
         </p>
       </div>
       <p className="px-5 py-3">
-        Constructor : {item?.constructor?.name}{" "}
+        Constructor : {item?.Constructor?.name}{" "}
         <span
           className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
         ></span>
       </p>
 
-      {item?.fastestLap?.time?.time && (
+      {item?.FastestLap?.Time?.time && (
         <p
           className={`px-5 py-3 ${
-            item?.fastestLap?.rank == 1 && "bg-purple-200"
+            item?.FastestLap?.rank == 1 && "bg-purple-200"
           }`}
         >
-          Fastest Lap : {item?.fastestLap?.time?.time}
+          Fastest Lap : {item?.FastestLap?.Time?.time}
         </p>
       )}
 
       <p className="px-5 py-3">
-        Time : {item?.time?.time ? item?.time?.time : "---"}
+        Time : {item?.Time?.time ? item?.Time?.time : "---"}
       </p>
     </div>
   );
@@ -81,10 +81,10 @@ const DriverPositionCard = ({ item }) => {
 
 DriverPositionCard.propTypes = {
   item: PropTypes.shape({
-    driver: PropTypes.object,
-    constructor: PropTypes.object,
-    fastestLap: PropTypes.object,
-    time: PropTypes.object,
+    Driver: PropTypes.object,
+    Constructor: PropTypes.object,
+    FastestLap: PropTypes.object,
+    Time: PropTypes.object,
     status: PropTypes.string,
     position: PropTypes.number,
     points: PropTypes.number,
@@ -242,10 +242,10 @@ const RaceResult = () => {
   // Set result for the current year into the state
   useEffect(() => {
     if (data?.data?.result) {
-      setStandings(data?.data?.result?.result?.result);
-      setDisplayYear(data?.data?.result?.year);
-      setDisplayRound(data?.data?.result?.round);
-      setDisplayRace(data?.data?.result?.race?.raceName);
+      setStandings(data?.data?.result?.result?.result?.Results);
+      setDisplayYear(data?.data?.result?.result?.result?.season);
+      setDisplayRound(data?.data?.result?.result?.result?.round);
+      setDisplayRace(data?.data?.result?.result?.result?.raceName);
     } else {
       console.log("No data received");
     }
@@ -281,8 +281,6 @@ const RaceResult = () => {
       fetchRaceResult();
     }
   }, [fetchRaceResult, year, round]);
-
-  console.log(data?.data);
 
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
@@ -338,7 +336,7 @@ const RaceResult = () => {
                       Status
                     </TableHead>
 
-                    {standings[0]?.fastestLap?.time?.time && (
+                    {standings[0]?.FastestLap?.Time?.time && (
                       <TableHead className="font-bold text-black text-center">
                         Fastest Lap
                       </TableHead>
@@ -350,9 +348,9 @@ const RaceResult = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {standings?.map((item, i) => {
+                  {standings?.map((item) => {
                     const driverCountry =
-                      nationalityMap[String(item?.driver?.nationality).trim()];
+                      nationalityMap[String(item?.Driver?.nationality).trim()];
                     const driverCountryCode = countries.getAlpha2Code(
                       driverCountry,
                       "en"
@@ -360,7 +358,7 @@ const RaceResult = () => {
 
                     const constructorCountry =
                       nationalityMap[
-                        String(item?.constructor?.nationality).trim()
+                        String(item?.Constructor?.nationality).trim()
                       ];
                     const constructorCountryCode = countries.getAlpha2Code(
                       constructorCountry,
@@ -370,19 +368,19 @@ const RaceResult = () => {
                     return (
                       <TableRow
                         className={`text-left border-b-2 border-gray-100 ${
-                          item?.fastestLap?.rank == 1 &&
+                          item?.FastestLap?.rank == 1 &&
                           "bg-purple-300 hover:bg-purple-400"
                         }`}
                         key={item.position}
                       >
                         <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
-                          {i + 1}.
+                          {item?.position}.
                         </TableCell>
                         <TableCell className="px-2 w-fit">
                           <span
                             className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
                           ></span>
-                          {item?.driver?.givenName} {item?.driver?.familyName} (
+                          {item?.Driver?.givenName} {item?.Driver?.familyName} (
                           {item?.number})
                         </TableCell>
 
@@ -390,7 +388,7 @@ const RaceResult = () => {
                           <span
                             className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
                           ></span>
-                          {item?.constructor?.name}
+                          {item?.Constructor?.name}
                         </TableCell>
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           {item?.grid}
@@ -401,13 +399,13 @@ const RaceResult = () => {
                         <TableCell className="px-2 text-nowrap">
                           {item?.status}
                         </TableCell>
-                        {standings[0]?.fastestLap?.time?.time && (
+                        {standings[0]?.FastestLap?.Time?.time && (
                           <TableCell className="px-2 text-nowrap text-center">
-                            {item?.fastestLap?.time?.time}
+                            {item?.FastestLap?.Time?.time}
                           </TableCell>
                         )}
                         <TableCell className="px-2 text-nowrap text-center">
-                          {item?.time?.time ? item?.time?.time : "---"}
+                          {item?.Time?.time ? item?.Time?.time : "---"}
                         </TableCell>
                       </TableRow>
                     );

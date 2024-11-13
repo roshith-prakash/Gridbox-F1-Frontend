@@ -23,22 +23,22 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
-// Register the locale for the countries constructor
+// Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
 const ConstructorStandingCard = ({ item }) => {
-  const constructorCountry =
-    nationalityMap[String(item?.constructor?.nationality).trim()];
-  const constructorCountryCode = countries.getAlpha2Code(
-    constructorCountry,
+  const ConstructorCountry =
+    nationalityMap[String(item?.Constructor?.nationality).trim()];
+  const ConstructorCountryCode = countries.getAlpha2Code(
+    ConstructorCountry,
     "en"
   );
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
       <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
-        {item?.position}. <span>{item?.constructor?.name}</span>
+        {item?.position}. <span>{item?.Constructor?.name}</span>
       </p>
       <div className="flex justify-between">
         <p className="px-5 py-3 text-lg font-medium">
@@ -50,9 +50,9 @@ const ConstructorStandingCard = ({ item }) => {
       </div>
 
       <p className="px-5 py-3">
-        Nationality : {item?.constructor?.nationality}{" "}
+        Nationality : {item?.Constructor?.nationality}{" "}
         <span
-          className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+          className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
         ></span>
       </p>
     </div>
@@ -62,7 +62,7 @@ const ConstructorStandingCard = ({ item }) => {
 ConstructorStandingCard.propTypes = {
   item: PropTypes.shape({
     driver: PropTypes.object,
-    constructor: PropTypes.object,
+    Constructor: PropTypes.object,
     position: PropTypes.number.isRequired,
     points: PropTypes.number,
     wins: PropTypes.number,
@@ -168,7 +168,7 @@ const ConstructorStandings = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["constructorsStandings", year],
+    queryKey: ["ConstructorsStandings", year],
     queryFn: () => {
       return axiosInstance.post("/getConstructorStandings", {
         year: year,
@@ -219,6 +219,8 @@ const ConstructorStandings = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchStandings, year]);
+
+  console.log(standings);
 
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
@@ -309,12 +311,12 @@ const ConstructorStandings = () => {
                 </TableHeader>
                 <TableBody>
                   {standings?.map((item, i) => {
-                    const constructorCountry =
+                    const ConstructorCountry =
                       nationalityMap[
-                        String(item?.constructor?.nationality).trim()
+                        String(item?.Constructor?.nationality).trim()
                       ];
-                    const constructorCountryCode = countries.getAlpha2Code(
-                      constructorCountry,
+                    const ConstructorCountryCode = countries.getAlpha2Code(
+                      ConstructorCountry,
                       "en"
                     );
 
@@ -327,14 +329,14 @@ const ConstructorStandings = () => {
                           {i + 1}.
                         </TableCell>
                         <TableCell className="px-2">
-                          {item?.constructor?.name}
+                          {item?.Constructor?.name}
                         </TableCell>
 
                         <TableCell className="px-2">
                           <span
-                            className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+                            className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
                           ></span>
-                          {item?.constructor?.nationality}
+                          {item?.Constructor?.nationality}
                         </TableCell>
 
                         <TableCell className="gap-x-2 px-2 text-nowrap">

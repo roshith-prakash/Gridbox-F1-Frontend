@@ -20,19 +20,19 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 
-// Register the locale for the countries constructor
+// Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
 const DriverPositionCard = ({ item }) => {
-  const driverCountry =
-    nationalityMap[String(item?.driver?.nationality).trim()];
-  const driverCountryCode = countries.getAlpha2Code(driverCountry, "en");
+  const DriverCountry =
+    nationalityMap[String(item?.Driver?.nationality).trim()];
+  const DriverCountryCode = countries.getAlpha2Code(DriverCountry, "en");
 
-  const constructorCountry =
-    nationalityMap[String(item?.constructor?.nationality).trim()];
-  const constructorCountryCode = countries.getAlpha2Code(
-    constructorCountry,
+  const ConstructorCountry =
+    nationalityMap[String(item?.Constructor?.nationality).trim()];
+  const ConstructorCountryCode = countries.getAlpha2Code(
+    ConstructorCountry,
     "en"
   );
 
@@ -41,21 +41,21 @@ const DriverPositionCard = ({ item }) => {
       <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
         {item?.position}.{" "}
         <span>
-          {item?.driver?.givenName} {item?.driver?.familyName}
+          {item?.Driver?.givenName} {item?.Driver?.familyName}
         </span>
         <span
-          className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
+          className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
         ></span>
       </p>
       <p className="px-5 py-3">
-        Constructor : {item?.constructor?.name}{" "}
+        Constructor : {item?.Constructor?.name}{" "}
         <span
-          className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+          className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
         ></span>
       </p>
-      <p className={`px-5 py-3`}>Q1 : {item?.q1 ? item?.q1 : "---"}</p>
-      <p className={`px-5 py-3`}>Q2 : {item?.q2 ? item?.q2 : "---"}</p>
-      <p className={`px-5 py-3`}>Q3 : {item?.q3 ? item?.q3 : "---"}</p>
+      <p className={`px-5 py-3`}>Q1 : {item?.Q1 ? item?.Q1 : "---"}</p>
+      <p className={`px-5 py-3`}>Q2 : {item?.Q2 ? item?.Q2 : "---"}</p>
+      <p className={`px-5 py-3`}>Q3 : {item?.Q3 ? item?.Q3 : "---"}</p>
     </div>
   );
 };
@@ -63,11 +63,11 @@ const DriverPositionCard = ({ item }) => {
 DriverPositionCard.propTypes = {
   item: PropTypes.shape({
     position: PropTypes.number,
-    driver: PropTypes.object,
-    constructor: PropTypes.object,
-    q1: PropTypes.string,
-    q2: PropTypes.string,
-    q3: PropTypes.string,
+    Driver: PropTypes.object,
+    Constructor: PropTypes.object,
+    Q1: PropTypes.string,
+    Q2: PropTypes.string,
+    Q3: PropTypes.string,
   }).isRequired,
 };
 
@@ -94,7 +94,7 @@ const LoadingTableCard = () => {
           <TableBody>
             {Array(20)
               .fill(null)
-              ?.map((driver, i) => {
+              ?.map((Driver, i) => {
                 return (
                   <TableRow
                     className="text-left border-b-2 border-gray-100"
@@ -207,10 +207,10 @@ const QualiResult = () => {
   // Set standings for the current year into the state
   useEffect(() => {
     if (data?.data?.result) {
-      setStandings(data?.data?.result?.result?.result);
-      setDisplayYear(data?.data?.result?.year);
-      setDisplayRound(data?.data?.result?.round);
-      setDisplayRace(data?.data?.result?.race?.raceName);
+      setStandings(data?.data?.result?.result?.result?.QualifyingResults);
+      setDisplayYear(data?.data?.result?.result?.result?.season);
+      setDisplayRound(data?.data?.result?.result?.result?.round);
+      setDisplayRace(data?.data?.result?.result?.result?.raceName);
     } else {
       console.log("No data received");
     }
@@ -246,6 +246,8 @@ const QualiResult = () => {
     }
   }, [fetchQualiResult, year, round]);
 
+  console.log(standings);
+
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
@@ -270,7 +272,7 @@ const QualiResult = () => {
           </div>
         )}
 
-        {/* Show driver name and country when driver data is present */}
+        {/* Show Driver name and country when Driver data is present */}
         {!error && standings.length > 0 && (
           <>
             <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
@@ -298,20 +300,20 @@ const QualiResult = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {standings?.map((item, i) => {
-                    const driverCountry =
-                      nationalityMap[String(item?.driver?.nationality).trim()];
-                    const driverCountryCode = countries.getAlpha2Code(
-                      driverCountry,
+                  {standings?.map((item) => {
+                    const DriverCountry =
+                      nationalityMap[String(item?.Driver?.nationality).trim()];
+                    const DriverCountryCode = countries.getAlpha2Code(
+                      DriverCountry,
                       "en"
                     );
 
-                    const constructorCountry =
+                    const ConstructorCountry =
                       nationalityMap[
-                        String(item?.constructor?.nationality).trim()
+                        String(item?.Constructor?.nationality).trim()
                       ];
-                    const constructorCountryCode = countries.getAlpha2Code(
-                      constructorCountry,
+                    const ConstructorCountryCode = countries.getAlpha2Code(
+                      ConstructorCountry,
                       "en"
                     );
 
@@ -321,31 +323,31 @@ const QualiResult = () => {
                         key={item.position}
                       >
                         <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
-                          {i + 1}.
+                          {item?.position}.
                         </TableCell>
                         <TableCell className="px-2 w-fit">
                           <span
-                            className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
+                            className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
                           ></span>
-                          {item?.driver?.givenName} {item?.driver?.familyName} (
+                          {item?.Driver?.givenName} {item?.Driver?.familyName} (
                           {item?.number})
                         </TableCell>
 
                         <TableCell className="px-2">
                           <span
-                            className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+                            className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
                           ></span>
-                          {item?.constructor?.name}
+                          {item?.Constructor?.name}
                         </TableCell>
 
                         <TableCell className="gap-x-2 px-2 text-nowrap">
-                          {item?.q1 ? item?.q1 : "---"}
+                          {item?.Q1 ? item?.Q1 : "---"}
                         </TableCell>
                         <TableCell className="gap-x-2 px-2 text-nowrap">
-                          {item?.q2 ? item?.q2 : "---"}
+                          {item?.Q2 ? item?.Q2 : "---"}
                         </TableCell>
                         <TableCell className="px-2 text-nowrap">
-                          {item?.q3 ? item?.q3 : "---"}
+                          {item?.Q3 ? item?.Q3 : "---"}
                         </TableCell>
                       </TableRow>
                     );
@@ -355,7 +357,7 @@ const QualiResult = () => {
             </div>
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
               {standings?.map((item) => {
-                return <DriverPositionCard item={item} key={item.driverId} />;
+                return <DriverPositionCard item={item} key={item.DriverId} />;
               })}
             </div>
           </>

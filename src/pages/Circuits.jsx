@@ -26,7 +26,7 @@ countries.registerLocale(enLocale);
 // To be displayed on Mobile screens
 const CircuitCard = ({ circuit, index }) => {
   const [loading, setLoading] = useState(true);
-  const countryCode = countries.getAlpha2Code(circuit?.location?.country, "en");
+  const countryCode = countries.getAlpha2Code(circuit?.Location?.country, "en");
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
@@ -35,8 +35,8 @@ const CircuitCard = ({ circuit, index }) => {
       </p>
       <div className="flex px-5 py-3">
         Location :{" "}
-        {circuit?.location?.locality ? circuit?.location?.locality : "-"},{" "}
-        {circuit?.location?.country ? circuit?.location?.country : "-"}
+        {circuit?.Location?.locality ? circuit?.Location?.locality : "-"},{" "}
+        {circuit?.Location?.country ? circuit?.Location?.country : "-"}
         <span className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}></span>
       </div>
       <div className={`px-5 py-3 flex justify-center `}>
@@ -48,7 +48,7 @@ const CircuitCard = ({ circuit, index }) => {
           <iframe
             onLoad={() => setLoading(false)}
             className="w-full h-full"
-            src={`https://maps.google.com/maps?q=${circuit?.location?.lat},${circuit?.location?.long}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+            src={`https://maps.google.com/maps?q=${circuit?.Location?.lat},${circuit?.Location?.long}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
           />
         </div>
       </div>
@@ -66,7 +66,7 @@ const CircuitCard = ({ circuit, index }) => {
 CircuitCard.propTypes = {
   circuit: PropTypes.shape({
     circuitName: PropTypes.string.isRequired,
-    location: PropTypes.object.isRequired,
+    Location: PropTypes.object.isRequired,
     url: PropTypes.string,
   }).isRequired,
   index: PropTypes.number,
@@ -75,7 +75,7 @@ CircuitCard.propTypes = {
 const CircuitRow = ({ circuit, i }) => {
   const [loading, setLoading] = useState(true);
 
-  const countryCode = countries.getAlpha2Code(circuit?.location?.country, "en");
+  const countryCode = countries.getAlpha2Code(circuit?.Location?.country, "en");
 
   return (
     <TableRow
@@ -88,15 +88,15 @@ const CircuitRow = ({ circuit, i }) => {
       <TableCell className="px-2">{circuit?.circuitName}</TableCell>
       <TableCell className="gap-x-2 px-2 text-nowrap">
         <span className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}></span>
-        <span>{circuit?.location?.country}</span>
+        <span>{circuit?.Location?.country}</span>
       </TableCell>
-      <TableCell>{circuit?.location?.locality}</TableCell>
+      <TableCell>{circuit?.Location?.locality}</TableCell>
       <TableCell className="py-2 text-nowrap">
         <div className={`h-52 ${loading && "bg-gray-200 animate-pulse"}`}>
           <iframe
             onLoad={() => setLoading(false)}
             className="h-full"
-            src={`https://maps.google.com/maps?q=${circuit?.location?.lat},${circuit?.location?.long}&t=&z=15&ie=UTF8&iwloc=&output=embed&z=14`}
+            src={`https://maps.google.com/maps?q=${circuit?.Location?.lat},${circuit?.Location?.long}&t=&z=15&ie=UTF8&iwloc=&output=embed&z=14`}
           />
         </div>
       </TableCell>
@@ -107,7 +107,7 @@ const CircuitRow = ({ circuit, i }) => {
           className="text-blue-600 flex items-center pl gap-x-2 w-fit"
         >
           <FaLink />
-          <span className="hidden lg:block">{circuit?.url}</span>=
+          <span className="hidden lg:block">{circuit?.url}</span>
         </a>
       </TableCell>
     </TableRow>
@@ -118,7 +118,7 @@ CircuitRow.propTypes = {
   circuit: PropTypes.shape({
     circuitId: PropTypes.string,
     circuitName: PropTypes.string.isRequired,
-    location: PropTypes.object.isRequired,
+    Location: PropTypes.object.isRequired,
     url: PropTypes.string,
   }).isRequired,
   i: PropTypes.number,

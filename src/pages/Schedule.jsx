@@ -92,6 +92,8 @@ const Schedule = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchSchedule, year]);
 
+  console.log(schedule);
+
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
@@ -164,7 +166,7 @@ const Schedule = () => {
             <div className="flex flex-col px-5 gap-y-5 py-10 overflow-x-auto">
               {schedule?.map((race, i) => {
                 const countryCode = countries.getAlpha2Code(
-                  race?.circuit?.location?.country,
+                  race?.Circuit?.Location?.country,
                   "en"
                 );
 
@@ -174,9 +176,6 @@ const Schedule = () => {
                 } else {
                   dateTime = dayjs(`${race.date}`);
                 }
-
-                console.log(race?.date);
-                console.log(race?.time);
 
                 return (
                   <div key={race?.date} className="flex gap-x-5">
@@ -195,18 +194,28 @@ const Schedule = () => {
                         <p className="text-lg">Round : {race?.round}</p>
                         <p>
                           {" "}
-                          Location : {race?.circuit?.location?.locality},{" "}
-                          {race?.circuit?.location?.country}
+                          Location : {race?.Circuit?.Location?.locality},{" "}
+                          {race?.Circuit?.Location?.country}
                           <span
                             className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
                           ></span>
                         </p>
                         {race?.date && (
-                          <p>Date: {dateTime.format("DD MMMM YYYY")}</p>
+                          <p>Race Date: {dateTime.format("DD MMMM YYYY")}</p>
                         )}
 
                         {race?.time && (
-                          <p>Time: {dateTime.format("HH:mm:ss")}</p>
+                          <p>Race Time: {dateTime.format("HH:mm:ss")}</p>
+                        )}
+
+                        {race?.url && (
+                          <a
+                            href={race?.url}
+                            target="_blank"
+                            className="text-blue-500"
+                          >
+                            Read More
+                          </a>
                         )}
 
                         {new Date() > new Date(dateTime) && (
