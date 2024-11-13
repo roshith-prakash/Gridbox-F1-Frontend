@@ -17,6 +17,7 @@ import {
   CreatePost,
   AllPosts,
   NotFound,
+  SprintResult,
 } from "./pages";
 import {
   Dialog,
@@ -165,6 +166,12 @@ function App() {
                 <Route
                   path="/qualifying-result/:year/:round"
                   element={<QualiResult />}
+                />
+
+                {/* Result for a specific sprint race */}
+                <Route
+                  path="/sprint-result/:year/:round"
+                  element={<SprintResult />}
                 />
 
                 {/* View All articles */}

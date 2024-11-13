@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { axiosInstance } from "../utils/axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import advancedFormat from "dayjs/plugin/advancedFormat";
 import { ErrorDiv, YearPicker } from "../components";
 import CTAButton from "../components/CTAButton";
 import { SyncLoader } from "react-spinners";
 import { FaCaretDown } from "react-icons/fa6";
+import { FaLink } from "react-icons/fa6";
 dayjs.extend(utc);
+dayjs.extend(advancedFormat);
 
 // To show flags for the drivers
 import countries from "i18n-iso-countries";
@@ -163,7 +166,7 @@ const Schedule = () => {
         {/* Timeline */}
         {!error && schedule.length > 0 && (
           <>
-            <div className="flex flex-col px-5 gap-y-5 py-10 overflow-x-auto">
+            <div className="flex flex-col px-5 py-10 overflow-x-auto w-fit">
               {schedule?.map((race, i) => {
                 const countryCode = countries.getAlpha2Code(
                   race?.Circuit?.Location?.country,
@@ -179,6 +182,7 @@ const Schedule = () => {
 
                 return (
                   <div key={race?.date} className="flex gap-x-5">
+                    {/* Timeline element */}
                     <div className="flex flex-col items-center">
                       <div className="p-4 border-cta rounded-full border-4" />
                       {i + 1 != schedule.length && (
@@ -188,39 +192,170 @@ const Schedule = () => {
                         </>
                       )}
                     </div>
-                    <div className="flex-1 md:flex-none">
-                      <p className="font-medium text-2xl">{race?.raceName}</p>
-                      <div className="mt-2 flex flex-col gap-y-4">
-                        <p className="text-lg">Round : {race?.round}</p>
+                    {/* Content Div */}
+                    <div className="flex-1 md:flex-none pb-16">
+                      {/* Race Name */}
+                      <p className="font-medium text-3xl -mt-0.5 flex gap-x-2">
+                        {race?.raceName}
+                        <span
+                          className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
+                        ></span>
+                      </p>
+                      {/* Info Div */}
+                      <div className="mt-6 flex flex-col gap-y-4">
+                        {/* Round */}
+                        <p>Round : {race?.round}</p>
+
+                        {/* Location */}
                         <p>
                           {" "}
                           Location : {race?.Circuit?.Location?.locality},{" "}
                           {race?.Circuit?.Location?.country}
-                          <span
-                            className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
-                          ></span>
                         </p>
-                        {race?.date && (
-                          <p>Race Date: {dateTime.format("DD MMMM YYYY")}</p>
-                        )}
 
-                        {race?.time && (
-                          <p>Race Time: {dateTime.format("HH:mm:ss")}</p>
-                        )}
+                        {/* Schedule Div */}
+                        <div className="flex flex-col w-full bg-greyBG gap-y-4 py-3 px-4 rounded-lg">
+                          <p className="font-medium text-lg">
+                            Weekend Schedule:
+                          </p>
 
+                          {/* FP1 Date */}
+                          {race?.FirstPractice && (
+                            <p>
+                              FP1 :{" "}
+                              <span className="text-nowrap">
+                                {dayjs(
+                                  `${race?.FirstPractice?.date}T${race?.FirstPractice?.time}`
+                                ).format("Do MMMM YYYY")}
+                                ,{" "}
+                                {dayjs(
+                                  `${race?.FirstPractice?.date}T${race?.FirstPractice?.time}`
+                                ).format("HH:mm")}
+                              </span>
+                            </p>
+                          )}
+
+                          {/* FP2 Date */}
+                          {race?.SecondPractice && (
+                            <p>
+                              FP2 :{" "}
+                              <span className="text-nowrap">
+                                {dayjs(
+                                  `${race?.SecondPractice?.date}T${race?.SecondPractice?.time}`
+                                ).format("Do MMMM YYYY")}
+                                ,{" "}
+                                {dayjs(
+                                  `${race?.SecondPractice?.date}T${race?.SecondPractice?.time}`
+                                ).format("HH:mm")}
+                              </span>
+                            </p>
+                          )}
+
+                          {/* FP3 Date */}
+                          {race?.ThirdPractice && (
+                            <p>
+                              FP3 :{" "}
+                              <span className="text-nowrap">
+                                {dayjs(
+                                  `${race?.ThirdPractice?.date}T${race?.ThirdPractice?.time}`
+                                ).format("Do MMMM YYYY")}
+                                ,{" "}
+                                {dayjs(
+                                  `${race?.ThirdPractice?.date}T${race?.ThirdPractice?.time}`
+                                ).format("HH:mm")}
+                              </span>
+                            </p>
+                          )}
+
+                          {/* Sprint Qualifying Date */}
+                          {race?.SprintQualifying && (
+                            <p>
+                              Sprint Qualifying :{" "}
+                              <span className="text-nowrap">
+                                {dayjs(
+                                  `${race?.SprintQualifying?.date}T${race?.SprintQualifying?.time}`
+                                ).format("Do MMMM YYYY")}
+                                ,{" "}
+                                {dayjs(
+                                  `${race?.SprintQualifying?.date}T${race?.SprintQualifying?.time}`
+                                ).format("HH:mm")}
+                              </span>
+                            </p>
+                          )}
+
+                          {/* Sprint Date */}
+                          {race?.Sprint && (
+                            <p>
+                              Sprint :{" "}
+                              <span className="text-nowrap">
+                                {dayjs(
+                                  `${race?.Sprint?.date}T${race?.Sprint?.time}`
+                                ).format("Do MMMM YYYY")}
+                                ,{" "}
+                                {dayjs(
+                                  `${race?.Sprint?.date}T${race?.Sprint?.time}`
+                                ).format("HH:mm")}
+                              </span>
+                            </p>
+                          )}
+
+                          {/* Qualifying Date */}
+                          {race?.Qualifying && (
+                            <p>
+                              Qualifying :{" "}
+                              <span className="text-nowrap">
+                                {dayjs(
+                                  `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
+                                ).format("Do MMMM YYYY")}
+                                ,{" "}
+                                {dayjs(
+                                  `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
+                                ).format("HH:mm")}
+                              </span>
+                            </p>
+                          )}
+
+                          {/* Grand Prix Date */}
+                          <p>
+                            Grand Prix :{" "}
+                            <span className="text-nowrap">
+                              {dateTime.format("Do MMMM YYYY")},{" "}
+                              {dateTime.format("HH:mm")}
+                            </span>
+                          </p>
+                        </div>
+
+                        {/* URL to Wikipedia */}
                         {race?.url && (
                           <a
                             href={race?.url}
                             target="_blank"
-                            className="text-blue-500"
+                            className="text-blue-500 py-2 flex gap-x-2 items-center"
                           >
-                            Read More
+                            Read More <FaLink />
                           </a>
                         )}
 
+                        {/* Results Navigator - displayed only for grand prixs that have completed */}
                         {new Date() > new Date(dateTime) && (
                           <>
-                            <div className="flex flex-wrap gap-x-2 gap-y-4">
+                            <div className="flex items-center flex-wrap gap-x-2 gap-y-4">
+                              <p className="text-lg font-medium pr-2">
+                                Results:
+                              </p>
+
+                              {!!race?.Sprint && (
+                                <CTAButton
+                                  onClick={() => {
+                                    navigate(
+                                      `/sprint-result/${displayYear}/${race?.round}`
+                                    );
+                                  }}
+                                  text="
+                              Sprint"
+                                ></CTAButton>
+                              )}
+
                               <CTAButton
                                 onClick={() => {
                                   navigate(
@@ -252,38 +387,40 @@ const Schedule = () => {
         )}
 
         {/* Loading placeholder */}
-        {!invalidURL &&
-          !error &&
-          schedule.length == 0 &&
-          Array(10)
-            .fill(null)
-            ?.map((_, i) => {
-              return (
-                <div key={i} className="flex gap-x-5 mt-3">
-                  <div className="flex flex-col  items-center">
-                    <div className="p-4 border-cta rounded-full border-4" />
-                    {i + 1 != schedule.length && (
-                      <>
-                        <div className="h-full w-[1px] border-2 border-cta" />
-                        <FaCaretDown className="h-10" />
-                      </>
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-y-2">
-                    <div className="w-40 h-8 bg-gray-300 animate-pulse rounded font-medium text-2xl"></div>
-                    <div className="mt-2 flex flex-col gap-y-2">
-                      <div className="w-40 h-5 bg-gray-300 animate-pulse rounded"></div>
-                      <div className="flex gap-x-3">
-                        <div className="w-40 h-5 bg-gray-300 animate-pulse rounded" />
-                        <div className="w-10 h-5 bg-gray-300 animate-pulse rounded" />
-                      </div>
+        {!invalidURL && !error && schedule.length == 0 && (
+          <div className="px-5 ">
+            {Array(10)
+              .fill(null)
+              ?.map((_, i) => {
+                return (
+                  <div key={i} className="flex gap-x-5">
+                    <div className="flex flex-col  items-center">
+                      <div className="p-4 border-cta rounded-full border-4" />
+                      {i + 1 != schedule.length && (
+                        <>
+                          <div className="h-full w-[1px] border-2 border-cta" />
+                          <FaCaretDown className="h-10" />
+                        </>
+                      )}
                     </div>
-                    <div className="w-40 h-5 bg-gray-300 animate-pulse rounded" />
-                    <div className="w-40 h-5 bg-gray-300 animate-pulse rounded" />
+                    <div className="flex flex-col gap-y-2 pb-16">
+                      <div className="w-full md:w-52 h-12 bg-gray-300 animate-pulse rounded font-medium text-2xl"></div>
+                      <div className="mt-2 flex flex-col gap-y-2">
+                        <div className="w-full md:w-52 h-8 bg-gray-300 animate-pulse rounded"></div>
+                        <div className="flex gap-x-3">
+                          <div className="w-40 h-8 bg-gray-300 animate-pulse rounded" />
+                          <div className="w-9 h-8 bg-gray-300 animate-pulse rounded" />
+                        </div>
+                      </div>
+                      <div className="w-full md:w-52 h-8 bg-gray-300 animate-pulse rounded" />
+                      <div className="w-full md:w-52 h-8 bg-gray-300 animate-pulse rounded" />
+                      <div className="w-full md:w-52 h-8 bg-gray-300 animate-pulse rounded" />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+          </div>
+        )}
       </section>
     </main>
   );

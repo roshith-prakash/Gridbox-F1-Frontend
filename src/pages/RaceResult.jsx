@@ -288,7 +288,7 @@ const RaceResult = () => {
         {/* Data unavailable */}
         {error && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
-            <ErrorDiv text="Race data for the requested year is not available." />
+            <ErrorDiv text="Race data for the requested round is not available." />
           </div>
         )}
 
