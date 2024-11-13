@@ -22,7 +22,9 @@ const YearPicker = ({ setYear, setInvalidYear, className = "" }) => {
   };
 
   return (
+    // DatePicker component
     <Datetime
+      // Format to allow only years as input
       dateFormat="YYYY"
       timeFormat={false}
       inputProps={{
@@ -33,6 +35,7 @@ const YearPicker = ({ setYear, setInvalidYear, className = "" }) => {
       onChange={(date) => {
         changeDate(date);
       }}
+      // To close pop-out menu when a year is selected
       closeOnSelect
       className={`w-fit text-center border-2 border-black/50 rounded outline-none ${className}`}
     />

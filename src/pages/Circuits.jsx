@@ -30,21 +30,25 @@ const CircuitCard = ({ circuit, index }) => {
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
+      {/* Display sr.no and Circuit Name */}
       <p className="text-lg px-5 font-medium py-3 flex items-center gap-x-2 bg-gray-100">
         <span>{index + 1}.</span> {circuit?.circuitName}
       </p>
+      {/* Location of Circuit */}
       <div className="flex px-5 py-3">
         Location :{" "}
         {circuit?.Location?.locality ? circuit?.Location?.locality : "-"},{" "}
         {circuit?.Location?.country ? circuit?.Location?.country : "-"}
         <span className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}></span>
       </div>
+      {/* Map Container */}
       <div className={`px-5 py-3 flex justify-center `}>
         <div
           className={`h-80 w-full rounded ${
             loading && "bg-gray-200 animate-pulse"
           }`}
         >
+          {/* Map element - uses Google Maps */}
           <iframe
             onLoad={() => setLoading(false)}
             className="w-full h-full"
@@ -52,6 +56,7 @@ const CircuitCard = ({ circuit, index }) => {
           />
         </div>
       </div>
+      {/* Link to Wikipedia Page */}
       <a
         href={circuit?.url}
         target="_blank"
@@ -82,15 +87,20 @@ const CircuitRow = ({ circuit, i }) => {
       className="text-left border-b-2 border-gray-100"
       key={circuit.circuitId}
     >
+      {/* Sr. No  */}
       <TableCell className="font-medium text-center py-3 px-3 md:w-[5em]">
         {i + 1}.
       </TableCell>
+      {/* Circuit Name */}
       <TableCell className="px-2">{circuit?.circuitName}</TableCell>
+      {/* Location of Circuit */}
       <TableCell className="gap-x-2 px-2 text-nowrap">
         <span className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}></span>
         <span>{circuit?.Location?.country}</span>
       </TableCell>
+      {/* Locality */}
       <TableCell>{circuit?.Location?.locality}</TableCell>
+      {/* Map Container */}
       <TableCell className="py-2 text-nowrap">
         <div className={`h-52 ${loading && "bg-gray-200 animate-pulse"}`}>
           <iframe
@@ -100,6 +110,7 @@ const CircuitRow = ({ circuit, i }) => {
           />
         </div>
       </TableCell>
+      {/* Link to wikipedia page */}
       <TableCell className="px-2">
         <a
           href={circuit?.url}
@@ -296,6 +307,7 @@ const Circuits = () => {
               setYear={setUserSelectedYear}
             />
           </div>
+          {/* Change the URL to fetch data */}
           <CTAButton
             className="w-full md:w-fit py-2 px-6 border-2 rounded"
             disabled={isLoading || invalidYear || !userSelectedYear}
@@ -305,6 +317,7 @@ const Circuits = () => {
             text="Fetch"
           ></CTAButton>
 
+          {/* Loader */}
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
               <SyncLoader />
@@ -321,6 +334,7 @@ const Circuits = () => {
           Year must be between 1950 & 2024
         </div>
 
+        {/* Title */}
         <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
           Circuits {displayYear}
         </h1>
@@ -349,6 +363,7 @@ const Circuits = () => {
         {/* Show driver name and country when driver data is present */}
         {!error && circuits.length > 0 && (
           <>
+            {/* Table to be displayed on Large Screens */}
             <div className="hidden lg:block py-10 overflow-x-auto">
               <table className="rounded-lg w-full overflow-hidden bg-white">
                 <TableHeader>
@@ -386,6 +401,7 @@ const Circuits = () => {
                 </TableBody>
               </table>
             </div>
+            {/* Cards to be displayed on smaller screens */}
             <div className="lg:hidden flex flex-col items-center gap-y-5 py-10">
               {circuits?.map((circuit, i) => {
                 return (

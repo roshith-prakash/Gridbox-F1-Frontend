@@ -36,9 +36,11 @@ const AllPosts = () => {
 
   return (
     <div className="pb-32 bg-greyBG">
+      {/* Title */}
       <h1 className="text-4xl font-medium px-6 pt-5 italic">
         The Paddock Report
       </h1>
+      {/* Subtitle */}
       <h2 className="mt-4 text-lg px-6">
         Stay up-to-date with the latest in Formula 1 on the GridBox F1&apos;s
         Paddock Report! From breaking news and race recaps to in-depth analysis

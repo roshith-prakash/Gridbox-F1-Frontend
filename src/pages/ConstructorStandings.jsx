@@ -37,9 +37,11 @@ const ConstructorStandingCard = ({ item }) => {
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
+      {/* Position + Constructor Name */}
       <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
         {item?.position}. <span>{item?.Constructor?.name}</span>
       </p>
+      {/* Display Points and Grand Prix wins */}
       <div className="flex justify-between">
         <p className="px-5 py-3 text-lg font-medium">
           Points : <span>{item?.points}</span>
@@ -49,6 +51,7 @@ const ConstructorStandingCard = ({ item }) => {
         </p>
       </div>
 
+      {/* Display Constructor Nationality */}
       <p className="px-5 py-3">
         Nationality : {item?.Constructor?.nationality}{" "}
         <span
@@ -220,8 +223,6 @@ const ConstructorStandings = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchStandings, year]);
 
-  console.log(standings);
-
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
@@ -237,6 +238,8 @@ const ConstructorStandings = () => {
               setYear={setUserSelectedYear}
             />
           </div>
+
+          {/* Change URL to fetch data */}
           <CTAButton
             className="w-full md:w-fit py-2 px-6 border-2 rounded"
             disabled={isLoading || invalidYear || !userSelectedYear}
@@ -246,6 +249,7 @@ const ConstructorStandings = () => {
             text="Fetch"
           ></CTAButton>
 
+          {/* Loader */}
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
               <SyncLoader />
@@ -262,6 +266,7 @@ const ConstructorStandings = () => {
           Year must be between 1950 & 2024
         </div>
 
+        {/* Title */}
         <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
           Constructors Standings {displayYear}
         </h1>
@@ -290,6 +295,7 @@ const ConstructorStandings = () => {
         {/* Show driver name and country when driver data is present */}
         {!error && standings.length > 0 && (
           <>
+            {/* Table to be displayd on larger screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
               <table className="rounded-lg w-full overflow-hidden bg-white">
                 <TableHeader>
@@ -325,23 +331,26 @@ const ConstructorStandings = () => {
                         className="text-left border-b-2 border-gray-100"
                         key={item.position}
                       >
+                        {/* Position */}
                         <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
                           {i + 1}.
                         </TableCell>
+                        {/* Constructor Name */}
                         <TableCell className="px-2">
                           {item?.Constructor?.name}
                         </TableCell>
-
+                        {/* Constructor Nationality */}
                         <TableCell className="px-2">
                           <span
                             className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
                           ></span>
                           {item?.Constructor?.nationality}
                         </TableCell>
-
+                        {/* Points Scored */}
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           {item?.points}
                         </TableCell>
+                        {/* Grand Prix Wins */}
                         <TableCell className="px-2 text-nowrap">
                           {item?.wins}
                         </TableCell>
@@ -351,6 +360,7 @@ const ConstructorStandings = () => {
                 </TableBody>
               </table>
             </div>
+            {/* Cards to be displayed on smaller screens */}
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
               {standings?.map((item) => {
                 return (

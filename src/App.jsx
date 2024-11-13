@@ -46,6 +46,7 @@ function App() {
     retry: 5,
   });
 
+  // To initialize AOS animations
   useEffect(() => {
     AOS.init({
       easing: "ease-in-sine",

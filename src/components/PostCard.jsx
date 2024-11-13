@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 dayjs.extend(relativeTime);
 
+// Article Card to display on Paddock report page
 const PostCard = ({ post, index }) => {
   return (
     // Card container

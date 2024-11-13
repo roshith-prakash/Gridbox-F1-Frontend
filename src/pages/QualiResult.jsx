@@ -38,6 +38,7 @@ const DriverPositionCard = ({ item }) => {
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
+      {/* Position + Driver Name + Flag */}
       <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
         {item?.position}.{" "}
         <span>
@@ -47,14 +48,18 @@ const DriverPositionCard = ({ item }) => {
           className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
         ></span>
       </p>
+      {/* Constructor name + Flag */}
       <p className="px-5 py-3">
         Constructor : {item?.Constructor?.name}{" "}
         <span
           className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
         ></span>
       </p>
+      {/* Q1 time */}
       <p className={`px-5 py-3`}>Q1 : {item?.Q1 ? item?.Q1 : "---"}</p>
+      {/* Q2 time */}
       <p className={`px-5 py-3`}>Q2 : {item?.Q2 ? item?.Q2 : "---"}</p>
+      {/* Q3 time */}
       <p className={`px-5 py-3`}>Q3 : {item?.Q3 ? item?.Q3 : "---"}</p>
     </div>
   );
@@ -246,8 +251,6 @@ const QualiResult = () => {
     }
   }, [fetchQualiResult, year, round]);
 
-  console.log(standings);
-
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
@@ -275,12 +278,14 @@ const QualiResult = () => {
         {/* Show Driver name and country when Driver data is present */}
         {!error && standings.length > 0 && (
           <>
+            {/* Title */}
             <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
               Qualifying Result for the {displayRace}
               <p className="my-2">
                 Round {displayRound} of the {displayYear} season
               </p>
             </h1>
+            {/* Table to be displayed on Large screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
               <table className="rounded-lg w-full overflow-hidden bg-white">
                 <TableHeader>
@@ -322,9 +327,11 @@ const QualiResult = () => {
                         className={`text-left border-b-2 border-gray-100`}
                         key={item.position}
                       >
+                        {/* Position */}
                         <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
                           {item?.position}.
                         </TableCell>
+                        {/* Driver name + flag + number */}
                         <TableCell className="px-2 w-fit">
                           <span
                             className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
@@ -333,6 +340,7 @@ const QualiResult = () => {
                           {item?.number})
                         </TableCell>
 
+                        {/* Constructor name + flag */}
                         <TableCell className="px-2">
                           <span
                             className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
@@ -340,12 +348,15 @@ const QualiResult = () => {
                           {item?.Constructor?.name}
                         </TableCell>
 
+                        {/* Q1 time */}
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           {item?.Q1 ? item?.Q1 : "---"}
                         </TableCell>
+                        {/* Q2 time */}
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           {item?.Q2 ? item?.Q2 : "---"}
                         </TableCell>
+                        {/* Q3 time */}
                         <TableCell className="px-2 text-nowrap">
                           {item?.Q3 ? item?.Q3 : "---"}
                         </TableCell>
@@ -355,6 +366,8 @@ const QualiResult = () => {
                 </TableBody>
               </table>
             </div>
+
+            {/* Cards to be displayed on smaller screens */}
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
               {standings?.map((item) => {
                 return <DriverPositionCard item={item} key={item.DriverId} />;

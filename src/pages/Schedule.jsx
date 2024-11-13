@@ -95,8 +95,6 @@ const Schedule = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchSchedule, year]);
 
-  console.log(schedule);
-
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
@@ -113,6 +111,7 @@ const Schedule = () => {
             />
           </div>
 
+          {/* Change URL to fetch data */}
           <CTAButton
             className="w-full md:w-fit py-2 px-6 border-2 rounded"
             disabled={isLoading || invalidYear || !userSelectedYear}
@@ -122,6 +121,7 @@ const Schedule = () => {
             text="Fetch"
           ></CTAButton>
 
+          {/* Loader */}
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
               <SyncLoader />
@@ -138,6 +138,7 @@ const Schedule = () => {
           Year must be between 1950 & 2024
         </div>
 
+        {/* Title */}
         <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
           F1 Schedule {displayYear}
         </h1>
@@ -166,6 +167,7 @@ const Schedule = () => {
         {/* Timeline */}
         {!error && schedule.length > 0 && (
           <>
+            {/* Timeline */}
             <div className="flex flex-col px-5 py-10 overflow-x-auto w-fit">
               {schedule?.map((race, i) => {
                 const countryCode = countries.getAlpha2Code(
@@ -336,7 +338,7 @@ const Schedule = () => {
                           </a>
                         )}
 
-                        {/* Results Navigator - displayed only for grand prixs that have completed */}
+                        {/* Results Navigator - Displayed only if grand prix weekend is completed */}
                         {new Date() > new Date(dateTime) && (
                           <>
                             <div className="flex items-center flex-wrap gap-x-2 gap-y-4">

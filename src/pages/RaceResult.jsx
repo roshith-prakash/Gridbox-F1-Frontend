@@ -38,6 +38,7 @@ const DriverPositionCard = ({ item }) => {
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
+      {/* Position + driver name + flag */}
       <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
         {item?.position}.{" "}
         <span>
@@ -47,6 +48,7 @@ const DriverPositionCard = ({ item }) => {
           className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
         ></span>
       </p>
+      {/* FInishing status + points */}
       <div className="flex justify-between px-5 py-3 font-medium">
         <p>
           Status : <span>{item?.status}</span>
@@ -55,6 +57,7 @@ const DriverPositionCard = ({ item }) => {
           Points : <span>{item?.points}</span>
         </p>
       </div>
+      {/* Constructor name + flag */}
       <p className="px-5 py-3">
         Constructor : {item?.Constructor?.name}{" "}
         <span
@@ -62,6 +65,7 @@ const DriverPositionCard = ({ item }) => {
         ></span>
       </p>
 
+      {/* Fastest lap */}
       {item?.FastestLap?.Time?.time && (
         <p
           className={`px-5 py-3 ${
@@ -72,6 +76,7 @@ const DriverPositionCard = ({ item }) => {
         </p>
       )}
 
+      {/* Race time */}
       <p className="px-5 py-3">
         Time : {item?.Time?.time ? item?.Time?.time : "---"}
       </p>
@@ -309,12 +314,14 @@ const RaceResult = () => {
         {/* Show driver name and country when driver data is present */}
         {!error && standings.length > 0 && (
           <>
+            {/* Title */}
             <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
               Race Result for the {displayRace}
               <p className="my-2">
                 Round {displayRound} of the {displayYear} season
               </p>
             </h1>
+            {/* Table to be displayed on larger screen */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
               <table className="rounded-lg w-full overflow-hidden bg-white">
                 <TableHeader>
@@ -366,6 +373,7 @@ const RaceResult = () => {
                     );
 
                     return (
+                      // Row will be purple if driver had fastest lap
                       <TableRow
                         className={`text-left border-b-2 border-gray-100 ${
                           item?.FastestLap?.rank == 1 &&
@@ -373,9 +381,12 @@ const RaceResult = () => {
                         }`}
                         key={item.position}
                       >
+                        {/* Position */}
                         <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
                           {item?.position}.
                         </TableCell>
+
+                        {/* Driver name + flag */}
                         <TableCell className="px-2 w-fit">
                           <span
                             className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
@@ -384,26 +395,35 @@ const RaceResult = () => {
                           {item?.number})
                         </TableCell>
 
+                        {/* Constructor name + flag */}
                         <TableCell className="px-2">
                           <span
                             className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
                           ></span>
                           {item?.Constructor?.name}
                         </TableCell>
+
+                        {/* start Grid position */}
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           {item?.grid}
                         </TableCell>
+                        {/* Points scored */}
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           {item?.points}
                         </TableCell>
+                        {/* Status */}
                         <TableCell className="px-2 text-nowrap">
                           {item?.status}
                         </TableCell>
+
+                        {/* Display fastest lap if it exists */}
                         {standings[0]?.FastestLap?.Time?.time && (
                           <TableCell className="px-2 text-nowrap text-center">
                             {item?.FastestLap?.Time?.time}
                           </TableCell>
                         )}
+
+                        {/* Race time */}
                         <TableCell className="px-2 text-nowrap text-center">
                           {item?.Time?.time ? item?.Time?.time : "---"}
                         </TableCell>
@@ -413,6 +433,8 @@ const RaceResult = () => {
                 </TableBody>
               </table>
             </div>
+
+            {/* Card to be displayed on smaller screens */}
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
               {standings?.map((item) => {
                 return <DriverPositionCard item={item} key={item.driverId} />;

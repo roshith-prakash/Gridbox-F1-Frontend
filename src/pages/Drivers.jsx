@@ -36,20 +36,24 @@ const DriverCard = ({ driver, index }) => {
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
+      {/* Sr no + Driver Name + Flag */}
       <p className="text-lg flex px-5 font-medium py-3 gap-x-2 bg-gray-100">
         <span>{index + 1}.</span>
         {driver?.givenName} {driver?.familyName}
         <span className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}></span>
       </p>
+      {/* Driver Code + Number */}
       <div className="flex px-5 py-3">
         <p className="flex-1">Code : {driver?.code ? driver?.code : "-"}</p>
         <p className="flex-1">
           Number : {driver?.permanentNumber ? driver?.permanentNumber : "-"}
         </p>
       </div>
+      {/* Driver birth date */}
       <p className="px-5 py-3">
         Date of Birth : {dayjs(driver.dateOfBirth).format("DD-MM-YYYY")}
       </p>
+      {/* Wikipedia link */}
       <a
         href={driver?.url}
         target="_blank"
@@ -260,6 +264,8 @@ const Drivers = () => {
               setYear={setUserSelectedYear}
             />
           </div>
+
+          {/* Change URL to fetch data */}
           <CTAButton
             className="w-full md:w-fit py-2 px-6 border-2 rounded"
             disabled={isLoading || invalidYear || !userSelectedYear}
@@ -269,6 +275,7 @@ const Drivers = () => {
             text="Fetch"
           ></CTAButton>
 
+          {/* Loader */}
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
               <SyncLoader />
@@ -285,6 +292,7 @@ const Drivers = () => {
           Year must be between 1950 & 2024
         </div>
 
+        {/* Title */}
         <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
           F1 Drivers {displayYear}
         </h1>
@@ -313,6 +321,7 @@ const Drivers = () => {
         {/* Show driver name and country when driver data is present */}
         {!error && drivers.length > 0 && (
           <>
+            {/* Table to be displayed on larger screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
               <table className="rounded-lg w-full overflow-hidden bg-white">
                 <TableHeader>
@@ -351,29 +360,36 @@ const Drivers = () => {
                         className="text-left border-b-2 border-gray-100"
                         key={driver.driverId}
                       >
+                        {/* Sr no */}
                         <TableCell className="font-medium py-3 px-3 pl-6 md:w-[5em]">
                           {i + 1}.
                         </TableCell>
+                        {/* Driver name */}
                         <TableCell className="px-2">
                           {driver?.givenName} {driver?.familyName}
                         </TableCell>
+                        {/* Driver Code */}
                         <TableCell className="px-2">
                           {driver?.code ? driver?.code : "-"}
                         </TableCell>
+                        {/* Driver Number */}
                         <TableCell className="px-2">
                           {driver?.permanentNumber
                             ? driver?.permanentNumber
                             : "-"}
                         </TableCell>
+                        {/* Driver Nationality */}
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           <span
                             className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
                           ></span>
                           <span>{driver?.nationality}</span>
                         </TableCell>
+                        {/* Driver Date of birth */}
                         <TableCell className="px-2 text-nowrap">
                           {dayjs(driver.dateOfBirth).format("DD-MM-YYYY")}
                         </TableCell>
+                        {/* Wikipedia link */}
                         <TableCell className="px-2">
                           <a
                             href={driver?.url}
@@ -392,6 +408,7 @@ const Drivers = () => {
                 </TableBody>
               </table>
             </div>
+            {/* Cards to be displayed on smaller screens */}
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
               {drivers?.map((driver, i) => (
                 <DriverCard driver={driver} index={i} key={driver.driverId} />

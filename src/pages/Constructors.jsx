@@ -33,10 +33,12 @@ const ConstructorCard = ({ constructor, index }) => {
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
+      {/* Sr. No + Constructor Name */}
       <p className="text-lg flex gap-x-2 px-5 font-medium py-3 bg-gray-100">
         <span>{index + 1}.</span>
         {constructor?.name}
       </p>
+      {/* Constructor Nationality */}
       <div className="px-5 py-3">
         <span>
           Nationality:{" "}
@@ -44,6 +46,7 @@ const ConstructorCard = ({ constructor, index }) => {
           {constructor?.nationality}
         </span>
       </div>
+      {/* Link to Wikipedia Page */}
       <a
         href={constructor?.url}
         target="_blank"
@@ -223,6 +226,7 @@ const Constructors = () => {
               setYear={setUserSelectedYear}
             />
           </div>
+          {/* Change the URL to fetch data */}
           <CTAButton
             className="w-full md:w-fit py-2 px-6 border-2 rounded"
             disabled={isLoading || invalidYear || !userSelectedYear}
@@ -232,6 +236,7 @@ const Constructors = () => {
             text="Fetch"
           ></CTAButton>
 
+          {/* Loader */}
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
               <SyncLoader />
@@ -248,6 +253,7 @@ const Constructors = () => {
           Year must be between 1950 & 2024
         </div>
 
+        {/* Title */}
         <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
           Constructors {displayYear}
         </h1>
@@ -276,6 +282,7 @@ const Constructors = () => {
         {/* Show constructor name and country when constructor data is present */}
         {constructors.length > 0 && (
           <>
+            {/* Table to be displayed on larger screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
               <table className="rounded-lg w-full overflow-hidden bg-white">
                 <TableHeader>
@@ -305,16 +312,20 @@ const Constructors = () => {
                         className="text-left border-b-2 border-gray-100"
                         key={constructor.constructorId}
                       >
+                        {/* Sr no */}
                         <TableCell className="font-medium py-3 px-3 md:w-[5em]">
                           {i + 1}.
                         </TableCell>
+                        {/* Constructor */}
                         <TableCell>{constructor?.name}</TableCell>
+                        {/* Nationality */}
                         <TableCell className="gap-x-2 text-nowrap">
                           <span
                             className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
                           ></span>
                           <span>{constructor?.nationality}</span>
                         </TableCell>
+                        {/* Wikipedia link */}
                         <TableCell className="px-5 md:pl-5 lg:pl-10">
                           <a
                             href={constructor?.url}
@@ -330,6 +341,7 @@ const Constructors = () => {
                 </TableBody>
               </table>
             </div>
+            {/* Cards to be displayed on smaller screens */}
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
               {constructors?.map((constructor, i) => {
                 return (
