@@ -214,8 +214,8 @@ const Constructors = () => {
   // Set window title.
   useEffect(() => {
     document.title = displayYear
-      ? `Constructors | GridBox F1`
-      : `Constructors ${displayYear} | GridBox F1`;
+      ? `Constructors ${displayYear} | GridBox F1`
+      : `Constructors | GridBox F1`;
   }, [displayYear]);
 
   return (

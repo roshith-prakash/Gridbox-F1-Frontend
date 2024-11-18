@@ -98,8 +98,8 @@ const Schedule = () => {
   // Set window title.
   useEffect(() => {
     document.title = displayYear
-      ? `Schedule | GridBox F1`
-      : `Schedule ${displayYear} | GridBox F1`;
+      ? `Schedule ${displayYear} | GridBox F1`
+      : `Schedule | GridBox F1`;
   }, [displayYear]);
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
