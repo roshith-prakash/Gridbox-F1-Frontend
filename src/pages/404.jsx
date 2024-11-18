@@ -9,6 +9,11 @@ const NotFound = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  // Set window title.
+  useEffect(() => {
+    document.title = "404 | GridBox F1";
+  }, []);
+
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] flex flex-col py-10 justify-center items-center gap-y-5 rounded px-2 shadow bg-white">

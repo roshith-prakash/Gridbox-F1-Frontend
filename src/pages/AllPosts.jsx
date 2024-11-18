@@ -34,6 +34,11 @@ const AllPosts = () => {
     }
   }, [inView, fetchNextPage]);
 
+  // Set window title.
+  useEffect(() => {
+    document.title = "The Paddock Report | GridBox F1";
+  }, []);
+
   return (
     <div className="pb-32 bg-greyBG">
       {/* Title */}

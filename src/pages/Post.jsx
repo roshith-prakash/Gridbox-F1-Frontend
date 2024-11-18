@@ -25,6 +25,13 @@ const Post = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  // Set window title.
+  useEffect(() => {
+    if (data?.data?.post?.title) {
+      document.title = `${data?.data?.post?.title} | GridBox F1`;
+    }
+  }, [data?.data]);
+
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       {/* Post is available */}

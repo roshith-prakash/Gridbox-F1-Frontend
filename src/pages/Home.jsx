@@ -9,6 +9,11 @@ const Home = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  // Set window title.
+  useEffect(() => {
+    document.title = "Home | GridBox F1";
+  }, []);
+
   return (
     <div className="bg-greyBG pb-10">
       {/* Hero Section */}

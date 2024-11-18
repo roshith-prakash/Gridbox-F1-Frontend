@@ -287,6 +287,11 @@ const RaceResult = () => {
     }
   }, [fetchRaceResult, year, round]);
 
+  // Set window title.
+  useEffect(() => {
+    document.title = `Race - ${displayRace} | GridBox F1`;
+  }, [displayRace]);
+
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
