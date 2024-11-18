@@ -182,11 +182,14 @@ const Schedule = () => {
                 );
 
                 let dateTime;
+
                 if (race?.time) {
                   dateTime = dayjs(`${race.date}T${race.time}`);
                 } else {
                   dateTime = dayjs(`${race.date}`);
                 }
+
+                console.log(race);
 
                 return (
                   <div key={race?.date} className="flex gap-x-5">
@@ -232,13 +235,17 @@ const Schedule = () => {
                             <p>
                               FP1 :{" "}
                               <span className="text-nowrap">
-                                {dayjs(
-                                  `${race?.FirstPractice?.date}T${race?.FirstPractice?.time}`
-                                ).format("Do MMMM YYYY")}
-                                ,{" "}
-                                {dayjs(
-                                  `${race?.FirstPractice?.date}T${race?.FirstPractice?.time}`
-                                ).format("HH:mm")}
+                                {race?.FirstPractice?.time
+                                  ? dayjs(
+                                      `${race?.FirstPractice?.date}T${race?.FirstPractice?.time}`
+                                    ).format("Do MMMM YYYY") +
+                                    ", " +
+                                    dayjs(
+                                      `${race?.FirstPractice?.date}T${race?.FirstPractice?.time}`
+                                    ).format("HH:mm")
+                                  : dayjs(
+                                      `${race?.FirstPractice?.date}`
+                                    ).format("Do MMMM YYYY")}
                               </span>
                             </p>
                           )}
@@ -248,13 +255,17 @@ const Schedule = () => {
                             <p>
                               FP2 :{" "}
                               <span className="text-nowrap">
-                                {dayjs(
-                                  `${race?.SecondPractice?.date}T${race?.SecondPractice?.time}`
-                                ).format("Do MMMM YYYY")}
-                                ,{" "}
-                                {dayjs(
-                                  `${race?.SecondPractice?.date}T${race?.SecondPractice?.time}`
-                                ).format("HH:mm")}
+                                {race?.SecondPractice?.time
+                                  ? dayjs(
+                                      `${race?.SecondPractice?.date}T${race?.SecondPractice?.time}`
+                                    ).format("Do MMMM YYYY") +
+                                    ", " +
+                                    dayjs(
+                                      `${race?.SecondPractice?.date}T${race?.SecondPractice?.time}`
+                                    ).format("HH:mm")
+                                  : dayjs(
+                                      `${race?.SecondPractice?.date}`
+                                    ).format("Do MMMM YYYY")}
                               </span>
                             </p>
                           )}
@@ -264,13 +275,17 @@ const Schedule = () => {
                             <p>
                               FP3 :{" "}
                               <span className="text-nowrap">
-                                {dayjs(
-                                  `${race?.ThirdPractice?.date}T${race?.ThirdPractice?.time}`
-                                ).format("Do MMMM YYYY")}
-                                ,{" "}
-                                {dayjs(
-                                  `${race?.ThirdPractice?.date}T${race?.ThirdPractice?.time}`
-                                ).format("HH:mm")}
+                                {race?.ThirdPractice?.time
+                                  ? dayjs(
+                                      `${race?.ThirdPractice?.date}T${race?.ThirdPractice?.time}`
+                                    ).format("Do MMMM YYYY") +
+                                    ", " +
+                                    dayjs(
+                                      `${race?.ThirdPractice?.date}T${race?.ThirdPractice?.time}`
+                                    ).format("HH:mm")
+                                  : dayjs(
+                                      `${race?.ThirdPractice?.date}`
+                                    ).format("Do MMMM YYYY")}
                               </span>
                             </p>
                           )}
@@ -280,13 +295,17 @@ const Schedule = () => {
                             <p>
                               Sprint Qualifying :{" "}
                               <span className="text-nowrap">
-                                {dayjs(
-                                  `${race?.SprintQualifying?.date}T${race?.SprintQualifying?.time}`
-                                ).format("Do MMMM YYYY")}
-                                ,{" "}
-                                {dayjs(
-                                  `${race?.SprintQualifying?.date}T${race?.SprintQualifying?.time}`
-                                ).format("HH:mm")}
+                                {race?.SprintQualifying?.time
+                                  ? dayjs(
+                                      `${race?.SprintQualifying?.date}T${race?.SprintQualifying?.time}`
+                                    ).format("Do MMMM YYYY") +
+                                    ", " +
+                                    dayjs(
+                                      `${race?.SprintQualifying?.date}T${race?.SprintQualifying?.time}`
+                                    ).format("HH:mm")
+                                  : dayjs(
+                                      `${race?.SprintQualifying?.date}`
+                                    ).format("Do MMMM YYYY")}
                               </span>
                             </p>
                           )}
@@ -296,13 +315,17 @@ const Schedule = () => {
                             <p>
                               Sprint :{" "}
                               <span className="text-nowrap">
-                                {dayjs(
-                                  `${race?.Sprint?.date}T${race?.Sprint?.time}`
-                                ).format("Do MMMM YYYY")}
-                                ,{" "}
-                                {dayjs(
-                                  `${race?.Sprint?.date}T${race?.Sprint?.time}`
-                                ).format("HH:mm")}
+                                {race?.Sprint?.time
+                                  ? dayjs(
+                                      `${race?.Sprint?.date}T${race?.Sprint?.time}`
+                                    ).format("Do MMMM YYYY") +
+                                    ", " +
+                                    dayjs(
+                                      `${race?.Sprint?.date}T${race?.Sprint?.time}`
+                                    ).format("HH:mm")
+                                  : dayjs(`${race?.Sprint?.date}`).format(
+                                      "Do MMMM YYYY"
+                                    )}
                               </span>
                             </p>
                           )}
@@ -312,13 +335,17 @@ const Schedule = () => {
                             <p>
                               Qualifying :{" "}
                               <span className="text-nowrap">
-                                {dayjs(
-                                  `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
-                                ).format("Do MMMM YYYY")}
-                                ,{" "}
-                                {dayjs(
-                                  `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
-                                ).format("HH:mm")}
+                                {race?.Qualifying?.time
+                                  ? dayjs(
+                                      `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
+                                    ).format("Do MMMM YYYY") +
+                                    ", " +
+                                    dayjs(
+                                      `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
+                                    ).format("HH:mm")
+                                  : dayjs(`${race?.Qualifying?.date}`).format(
+                                      "Do MMMM YYYY"
+                                    )}
                               </span>
                             </p>
                           )}
@@ -327,8 +354,11 @@ const Schedule = () => {
                           <p>
                             Grand Prix :{" "}
                             <span className="text-nowrap">
-                              {dateTime.format("Do MMMM YYYY")},{" "}
-                              {dateTime.format("HH:mm")}
+                              {race?.time
+                                ? dateTime.format("Do MMMM YYYY") +
+                                  ", " +
+                                  dateTime.format("HH:mm")
+                                : dateTime.format("Do MMMM YYYY")}
                             </span>
                           </p>
                         </div>
