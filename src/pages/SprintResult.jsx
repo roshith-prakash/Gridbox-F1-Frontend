@@ -277,7 +277,9 @@ const SprintResult = () => {
 
   // Set window title.
   useEffect(() => {
-    document.title = `Sprint - ${displayRace} | GridBox F1`;
+    if (displayRace) {
+      document.title = `Sprint - ${displayRace} | GridBox F1`;
+    }
   }, [displayRace]);
 
   return (

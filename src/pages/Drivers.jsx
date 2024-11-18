@@ -251,7 +251,9 @@ const Drivers = () => {
 
   // Set window title.
   useEffect(() => {
-    document.title = `Drivers ${displayYear} | GridBox F1`;
+    document.title = displayYear
+      ? `Drivers | GridBox F1`
+      : `Drivers ${displayYear} | GridBox F1`;
   }, [displayYear]);
 
   return (

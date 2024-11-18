@@ -294,7 +294,9 @@ const Circuits = () => {
 
   // Set window title.
   useEffect(() => {
-    document.title = `Circuits ${displayYear} | GridBox F1`;
+    document.title = displayYear
+      ? `Circuits | GridBox F1`
+      : `Circuits ${displayYear} | GridBox F1`;
   }, [displayYear]);
 
   return (

@@ -253,7 +253,9 @@ const QualiResult = () => {
 
   // Set window title.
   useEffect(() => {
-    document.title = `Qualifying - ${displayRace} | GridBox F1`;
+    if (displayRace) {
+      document.title = `Qualifying - ${displayRace} | GridBox F1`;
+    }
   }, [displayRace]);
 
   return (

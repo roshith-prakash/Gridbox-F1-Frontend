@@ -289,7 +289,9 @@ const RaceResult = () => {
 
   // Set window title.
   useEffect(() => {
-    document.title = `Race - ${displayRace} | GridBox F1`;
+    if (displayRace) {
+      document.title = `Race - ${displayRace} | GridBox F1`;
+    }
   }, [displayRace]);
 
   return (

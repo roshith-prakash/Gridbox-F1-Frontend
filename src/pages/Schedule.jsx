@@ -97,9 +97,10 @@ const Schedule = () => {
 
   // Set window title.
   useEffect(() => {
-    document.title = `Schedule ${displayYear} | GridBox F1`;
+    document.title = displayYear
+      ? `Schedule | GridBox F1`
+      : `Schedule ${displayYear} | GridBox F1`;
   }, [displayYear]);
-
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">

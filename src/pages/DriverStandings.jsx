@@ -267,7 +267,9 @@ const DriverStandings = () => {
 
   // Set window title.
   useEffect(() => {
-    document.title = `Drivers Standings ${displayYear} | GridBox F1`;
+    document.title = displayYear
+      ? `Drivers Standings | GridBox F1`
+      : `Drivers Standings ${displayYear} | GridBox F1`;
   }, [displayYear]);
 
   return (
