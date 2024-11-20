@@ -101,6 +101,7 @@ const Schedule = () => {
       ? `Schedule ${displayYear} | GridBox F1`
       : `Schedule | GridBox F1`;
   }, [displayYear]);
+
   return (
     <main className="bg-greyBG flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
@@ -189,22 +190,27 @@ const Schedule = () => {
                   dateTime = dayjs(`${race.date}`);
                 }
 
-                console.log(race);
-
                 return (
                   <div key={race?.date} className="flex gap-x-5">
                     {/* Timeline element */}
                     <div className="flex flex-col items-center">
-                      <div className="p-4 border-cta rounded-full border-4" />
+                      <div
+                        className={`p-4 border-hovercta ${
+                          new Date() > new Date(dateTime) && "bg-cta/80"
+                        } rounded-full border-4`}
+                      />
                       {i + 1 != schedule.length && (
                         <>
-                          <div className="h-full w-[1px] border-2 border-cta" />
+                          <div className="h-full w-[1px] border-2 border-hovercta" />
                           <FaCaretDown className="h-10" />
                         </>
                       )}
                     </div>
                     {/* Content Div */}
-                    <div className="flex-1 md:flex-none pb-16">
+                    <div
+                      data-aos="fade-left"
+                      className="flex-1 md:flex-none pb-16"
+                    >
                       {/* Race Name */}
                       <p className="font-medium text-3xl -mt-0.5 flex gap-x-2">
                         {race?.raceName}
