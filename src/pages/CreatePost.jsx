@@ -33,7 +33,8 @@ const CreatePost = () => {
   const [password, setPassword] = useState();
   // Is Viewable
   const [isViewable, setIsViewable] = useState(false);
-
+  // Image Contain
+  const [contain, setContain] = useState(false);
   // Scroll to top of page
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -87,6 +88,7 @@ const CreatePost = () => {
     formData.append("file", imageFile);
     formData.append("title", title);
     formData.append("content", String(value));
+    formData.append("contain", String(contain));
     setDisabled(true);
 
     // Sending request to server
@@ -113,6 +115,8 @@ const CreatePost = () => {
     setImageFile(e.target.files[0]);
     fileRef.current.value = null;
   };
+
+  console.log(contain);
 
   return (
     <main className="bg-greyBG">
@@ -187,6 +191,17 @@ const CreatePost = () => {
               </div>
             </div>
 
+            <div className="flex items-center gap-x-4 mt-8">
+              <p className="font-medium">Contain Image : </p>
+              <select
+                onChange={(e) => setContain(e.target.value)}
+                className="flex-1 px-5 md:flex-none border-2 py-2 rounded-xl"
+              >
+                <option value={false}>Cover</option>
+                <option value={true}>Contain</option>
+              </select>
+            </div>
+
             {/* Quill Editor */}
             <div className="mt-10">
               {error.content == 1 && (
@@ -229,10 +244,21 @@ const CreatePost = () => {
             {/* Thumbnail Image */}
             <div>
               {imageFile && (
-                <img
-                  src={URL.createObjectURL(imageFile)}
-                  className="h-96 lg:h-[30rem] w-full rounded-t object-contain object-center"
-                ></img>
+                <>
+                  {contain ? (
+                    <img
+                      key={contain}
+                      src={URL.createObjectURL(imageFile)}
+                      className={`h-52 lg:h-[30rem] w-full rounded-t object-contain object-center`}
+                    />
+                  ) : (
+                    <img
+                      key={contain}
+                      src={URL.createObjectURL(imageFile)}
+                      className={`h-52 lg:h-[30rem] w-full rounded-t object-cover object-center`}
+                    ></img>
+                  )}
+                </>
               )}
             </div>
 

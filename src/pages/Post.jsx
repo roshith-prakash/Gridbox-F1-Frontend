@@ -41,7 +41,9 @@ const Post = () => {
           <div>
             <img
               src={data?.data?.post?.thumbnail}
-              className="h-52 lg:h-[30rem] w-full rounded-t object-contain object-center"
+              className={`h-52 lg:h-[30rem] w-full rounded-t ${
+                data?.data?.post?.contain ? "object-contain" : "object-cover"
+              } object-center`}
             ></img>
           </div>
           <div className="p-5 md:p-10 md:pt-0 mt-8">
