@@ -231,7 +231,7 @@ const CreatePost = () => {
               {imageFile && (
                 <img
                   src={URL.createObjectURL(imageFile)}
-                  className="h-96 lg:h-[30rem] w-full rounded-t object-cover object-center"
+                  className="h-96 lg:h-[30rem] w-full rounded-t object-contain object-center"
                 ></img>
               )}
             </div>
