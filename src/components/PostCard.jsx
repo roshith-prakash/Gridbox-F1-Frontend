@@ -18,7 +18,7 @@ const PostCard = ({ post, index }) => {
         {/* Thumbnail for post card. */}
         <img
           src={post?.thumbnail}
-          className="h-60 w-full rounded-t-x object-top object-cover"
+          className="h-60 w-full rounded-t-x object-center object-cover"
         />
         {/* Card Content Section */}
         <div className="bg-gradient-to-br from-white to-bgwhite p-5">

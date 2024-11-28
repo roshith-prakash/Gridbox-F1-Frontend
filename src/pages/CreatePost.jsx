@@ -88,7 +88,7 @@ const CreatePost = () => {
     formData.append("file", imageFile);
     formData.append("title", title);
     formData.append("content", String(value));
-    formData.append("contain", String(contain));
+    formData.append("contain", contain);
     setDisabled(true);
 
     // Sending request to server
