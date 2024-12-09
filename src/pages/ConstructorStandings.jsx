@@ -23,6 +23,7 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { useDarkMode } from "../context/DarkModeContext";
 // Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
@@ -160,6 +161,7 @@ const LoadingTableCard = () => {
 
 const ConstructorStandings = () => {
   const navigate = useNavigate();
+  const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState();
   const [userSelectedYear, setUserSelectedYear] = useState();
@@ -263,7 +265,7 @@ const ConstructorStandings = () => {
           {/* Loader */}
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
-              <SyncLoader />
+              <SyncLoader color={isDarkMode ? "#FFF" : "#000"} />
             </div>
           )}
         </header>
