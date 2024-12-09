@@ -76,7 +76,7 @@ const LoadingTableCard = () => {
         {/* Loading Table on Large Screen */}
         <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg shadow-lg">
           <TableHeader>
-            <TableRow className="text-left bg-gray-100 dark:bg-zinc-600">
+            <TableRow className="text-left bg-gray-100 dark:bg-zinc-800">
               <TableHead className="font-bold text-black  dark:text-darkmodetext py-6 pl-3 text-nowrap">
                 Sr. no.
               </TableHead>

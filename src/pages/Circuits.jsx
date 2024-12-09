@@ -144,18 +144,22 @@ const LoadingTableCard = () => {
         <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
           <TableHeader>
             <TableRow className="text-left bg-gray-50 dark:bg-zinc-800">
-              <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+              <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                 Sr. no.
               </TableHead>
-              <TableHead className="font-bold text-black">
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
                 Circuit Name
               </TableHead>
-              <TableHead className="font-bold text-black">Country</TableHead>
-              <TableHead className="font-bold text-black">Locality</TableHead>
-              <TableHead className="font-bold text-black text-center">
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Country
+              </TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Locality
+              </TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext text-center">
                 Map
               </TableHead>
-              <TableHead className="font-bold text-black text-center">
+              <TableHead className="font-bold text-black dark:text-darkmodetext text-center">
                 Know More
               </TableHead>
             </TableRow>

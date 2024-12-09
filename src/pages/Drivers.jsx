@@ -87,7 +87,7 @@ const LoadingTableCard = () => {
       <div className="hidden md:flex justify-center pt-10 pb-5 overflow-x-auto">
         <table className="rounded-lg w-full  overflow-hidden bg-white dark:bg-secondarydarkbg">
           <TableHeader>
-            <TableRow className="text-left bg-gray-50 dark:bg-secondarydarkbg dark:border-b-2  dark:border-zinc-600">
+            <TableRow className="text-left bg-gray-50 dark:bg-zinc-800 dark:border-b-2  dark:border-zinc-600">
               <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                 Sr. no.
               </TableHead>
