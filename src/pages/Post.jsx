@@ -33,10 +33,10 @@ const Post = () => {
   }, [data?.data]);
 
   return (
-    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
+    <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
       {/* Post is available */}
       {!isLoading && !error && (
-        <div className="pb-10 w-full mx-2 md:mx-5 lg:mx-10 bg-white shadow-xl rounded-xl">
+        <div className="pb-10 w-full mx-2 md:mx-5 lg:mx-10 bg-white dark:bg-secondarydarkbg shadow-xl rounded-xl">
           {/* Thumbnail Image */}
           <div>
             <img

@@ -19,6 +19,7 @@ import { SyncLoader } from "react-spinners";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { useDarkMode } from "../context/DarkModeContext";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -29,9 +30,9 @@ const CircuitCard = ({ circuit, index }) => {
   const countryCode = countries.getAlpha2Code(circuit?.Location?.country, "en");
 
   return (
-    <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
+    <div className="flex flex-col overflow-hidden divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
       {/* Display sr.no and Circuit Name */}
-      <p className="text-lg px-5 font-medium py-3 flex items-center gap-x-2 bg-gray-100">
+      <p className="text-lg px-5 font-medium py-3 flex items-center gap-x-2 bg-gray-100 dark:bg-zinc-800">
         <span>{index + 1}.</span> {circuit?.circuitName}
       </p>
       {/* Location of Circuit */}
@@ -45,7 +46,7 @@ const CircuitCard = ({ circuit, index }) => {
       <div className={`px-5 py-3 flex justify-center `}>
         <div
           className={`h-80 w-full rounded ${
-            loading && "bg-gray-200 animate-pulse"
+            loading && "bg-gray-300 dark:bg-gray-500 animate-pulse"
           }`}
         >
           {/* Map element - uses Google Maps */}
@@ -84,7 +85,7 @@ const CircuitRow = ({ circuit, i }) => {
 
   return (
     <TableRow
-      className="text-left border-b-2 border-gray-100"
+      className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
       key={circuit.circuitId}
     >
       {/* Sr. No  */}
@@ -140,9 +141,9 @@ const LoadingTableCard = () => {
   return (
     <>
       <div className="hidden lg:block py-10 overflow-x-auto">
-        <table className="rounded-lg w-full overflow-hidden bg-white">
+        <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
           <TableHeader>
-            <TableRow className="text-left bg-gray-50">
+            <TableRow className="text-left bg-gray-50 dark:bg-zinc-800">
               <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
                 Sr. no.
               </TableHead>
@@ -165,7 +166,7 @@ const LoadingTableCard = () => {
               ?.map((driver, i) => {
                 return (
                   <TableRow
-                    className="text-left border-b-2 border-gray-100"
+                    className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
                     key={i}
                   >
                     <TableCell className="font-medium py-3 px-3 md:w-[5em]">
@@ -200,20 +201,20 @@ const LoadingTableCard = () => {
             return (
               <div
                 key={i}
-                className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
+                className="flex flex-col divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
               >
-                <div className="text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100">
-                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
+                <div className="text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100 dark:bg-zinc-800">
+                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                 </div>
                 <div className="flex px-5 gap-x-2 py-3">
-                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
-                  <div className="h-5 w-[10%] bg-gray-300 animate-pulse rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
+                  <div className="h-5 w-[10%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                 </div>
                 <div className="px-5 py-3 flex justify-center">
-                  <div className="h-80 w-full bg-gray-300 animate-pulse rounded" />
+                  <div className="h-80 w-full bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
                 </div>
                 <div className="flex justify-center gap-x-2 py-5 items-center">
-                  <div className="h-5 w-[30%] bg-gray-300 animate-pulse rounded"></div>
+                  <div className="h-5 w-[30%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                 </div>
               </div>
             );
@@ -225,6 +226,7 @@ const LoadingTableCard = () => {
 
 const Circuits = () => {
   const navigate = useNavigate();
+  const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState();
   const [userSelectedYear, setUserSelectedYear] = useState();
@@ -300,8 +302,8 @@ const Circuits = () => {
   }, [displayYear]);
 
   return (
-    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
-      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+    <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
+      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white dark:bg-secondarydarkbg">
         {/* Input section */}
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex flex-wrap w-full md:w-fit items-center gap-x-2 md:gap-x-5 gap-y-5">
@@ -327,7 +329,7 @@ const Circuits = () => {
           {/* Loader */}
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
-              <SyncLoader />
+              <SyncLoader color={isDarkMode ? "#FFF" : "#000"} />
             </div>
           )}
         </header>
@@ -342,7 +344,7 @@ const Circuits = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black dark:border-darkmodetext rounded-xl font-semibold px-2">
           Circuits {displayYear}
         </h1>
 
@@ -372,25 +374,25 @@ const Circuits = () => {
           <>
             {/* Table to be displayed on Large Screens */}
             <div className="hidden lg:block py-10 overflow-x-auto">
-              <table className="rounded-lg w-full overflow-hidden bg-white">
+              <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
                 <TableHeader>
-                  <TableRow className="text-left bg-gray-50">
-                    <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                  <TableRow className="text-left bg-gray-50 dark:bg-zinc-800">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                       Sr. no.
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Circuit Name
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Country
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Locality
                     </TableHead>
-                    <TableHead className="font-bold text-black text-center">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext text-center">
                       Map
                     </TableHead>
-                    <TableHead className="font-bold text-black text-center">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext text-center">
                       Know More
                     </TableHead>
                   </TableRow>

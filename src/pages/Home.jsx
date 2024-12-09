@@ -15,7 +15,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="bg-greyBG pb-10">
+    <div className="bg-greyBG dark:bg-darkbg pb-10">
       {/* Hero Section */}
       <div className="bg-hero flex flex-wrap bg-cover min-h-[85vh]">
         {/* Black filter above BG */}
@@ -227,7 +227,7 @@ const Home = () => {
           </Link>
         </section>
         <div className="w-full md:flex-1 flex justify-center items-center">
-          <img src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1731260323/monaco_how939.png" />
+          <img src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1733763856/monaco_how939-removebg_mlbthm.png" />
         </div>
       </div>
     </div>

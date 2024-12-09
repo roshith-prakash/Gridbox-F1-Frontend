@@ -25,6 +25,7 @@ import "flag-icons/css/flag-icons.min.css";
 
 // To get URL Params
 import { useNavigate, useParams } from "react-router-dom";
+import { useDarkMode } from "../context/DarkModeContext";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -35,9 +36,9 @@ const DriverCard = ({ driver, index }) => {
   const countryCode = countries.getAlpha2Code(country, "en");
 
   return (
-    <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
+    <div className="flex overflow-hidden flex-col divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg">
       {/* Sr no + Driver Name + Flag */}
-      <p className="text-lg flex px-5 font-medium py-3 gap-x-2 bg-gray-100">
+      <p className="text-lg rounded-t-lg flex px-5 font-medium py-3 gap-x-2 bg-gray-100 dark:bg-zinc-800 dark:border-2">
         <span>{index + 1}.</span>
         {driver?.givenName} {driver?.familyName}
         <span className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}></span>
@@ -84,26 +85,30 @@ const LoadingTableCard = () => {
   return (
     <>
       <div className="hidden md:flex justify-center pt-10 pb-5 overflow-x-auto">
-        <table className="rounded-lg w-full  overflow-hidden bg-white">
+        <table className="rounded-lg w-full  overflow-hidden bg-white dark:bg-secondarydarkbg">
           <TableHeader>
-            <TableRow className="text-left bg-gray-50">
-              <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+            <TableRow className="text-left bg-gray-50 dark:bg-secondarydarkbg dark:border-b-2  dark:border-zinc-600">
+              <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                 Sr. no.
               </TableHead>
-              <TableHead className="font-bold text-black">Driver</TableHead>
-              <TableHead className="font-bold text-black">
+              <TableHead className="font-bold text-black  dark:text-darkmodetext">
+                Driver
+              </TableHead>
+              <TableHead className="font-bold text-black  dark:text-darkmodetext">
                 Driver Code
               </TableHead>
-              <TableHead className="font-bold text-black">
+              <TableHead className="font-bold text-black  dark:text-darkmodetext">
                 Driver Number
               </TableHead>
-              <TableHead className="font-bold text-black">
+              <TableHead className="font-bold text-black  dark:text-darkmodetext">
                 Nationality
               </TableHead>
-              <TableHead className="font-bold text-black">
+              <TableHead className="font-bold text-black  dark:text-darkmodetext">
                 Date of Birth
               </TableHead>
-              <TableHead className="font-bold text-black">Know More</TableHead>
+              <TableHead className="font-bold text-black  dark:text-darkmodetext">
+                Know More
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -112,29 +117,29 @@ const LoadingTableCard = () => {
               ?.map((driver, i) => {
                 return (
                   <TableRow
-                    className="text-left border-b-2 border-gray-100"
+                    className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
                     key={i}
                   >
                     <TableCell className="font-medium py-3 px-3 md:w-[5em]">
-                      <div className="bg-gray-300 animate-pulse w-10 h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-10 h-5 rounded"></div>
                     </TableCell>
                     <TableCell className="px-2">
-                      <div className="bg-gray-300 animate-pulse w-[90%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[90%] h-5 rounded"></div>
                     </TableCell>
                     <TableCell className="px-2">
-                      <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[40%] h-5 rounded"></div>
                     </TableCell>
                     <TableCell className="px-2">
-                      <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[40%] h-5 rounded"></div>
                     </TableCell>
                     <TableCell className="gap-x-2 px-2 text-nowrap">
-                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
                     </TableCell>
                     <TableCell className="px-2 text-nowrap">
-                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
                     </TableCell>
                     <TableCell className="px-2">
-                      <div className="bg-gray-300 animate-pulse w-[90%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[90%] h-5 rounded"></div>
                     </TableCell>
                   </TableRow>
                 );
@@ -150,27 +155,27 @@ const LoadingTableCard = () => {
             return (
               <div
                 key={i}
-                className="md:hidden flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
+                className="md:hidden overflow-hidden flex flex-col divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg"
               >
-                <p className="flex text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100">
-                  <div className="h-5 w-[70%] bg-gray-300 rounded"></div>
+                <p className="flex text-lg px-5 font-medium py-3 gap-x-2 bg-gray-100 dark:bg-zinc-800">
+                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                   <div
-                    className={`w-[10%] h-5 bg-gray-300 animate-pulse rounded`}
+                    className={`w-[10%] h-5 bg-gray-300 dark:bg-gray-500 animate-pulse rounded`}
                   ></div>
                 </p>
                 <div className="flex px-5 py-3">
                   <p className="flex-1">
-                    <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
+                    <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                   </p>
                   <p className="flex-1">
-                    <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
+                    <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                   </p>
                 </div>
                 <p className="px-5 py-3">
-                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                 </p>
                 <div className="flex justify-center gap-x-2 py-5 items-center text-blue-600">
-                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                 </div>
               </div>
             );
@@ -182,6 +187,7 @@ const LoadingTableCard = () => {
 
 const Drivers = () => {
   const navigate = useNavigate();
+  const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState();
   const [userSelectedYear, setUserSelectedYear] = useState();
@@ -257,8 +263,8 @@ const Drivers = () => {
   }, [displayYear]);
 
   return (
-    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
-      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+    <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
+      <section className="w-full dark:border-2 max-w-[96%] rounded px-2 py-5 shadow bg-white dark:bg-secondarydarkbg">
         {/* Input Section */}
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex flex-wrap w-full md:w-fit items-center gap-x-2 md:gap-x-5 gap-y-5">
@@ -285,7 +291,7 @@ const Drivers = () => {
           {/* Loader */}
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
-              <SyncLoader />
+              <SyncLoader color={isDarkMode ? "#FFFFFF" : "#000000"} />
             </div>
           )}
         </header>
@@ -300,7 +306,7 @@ const Drivers = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black dark:border-darkmodetext rounded-xl font-semibold px-2">
           F1 Drivers {displayYear}
         </h1>
 
@@ -330,28 +336,28 @@ const Drivers = () => {
           <>
             {/* Table to be displayed on larger screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
-              <table className="rounded-lg w-full overflow-hidden bg-white">
+              <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg dark:border-b-2">
                 <TableHeader>
-                  <TableRow className="text-left bg-gray-50">
-                    <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                  <TableRow className="text-left bg-gray-50 dark:bg-zinc-800 dark:border-b-2  dark:border-zinc-600">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                       Sr. no.
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Driver
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Driver Code
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Driver Number
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Nationality
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Date of Birth
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Know More
                     </TableHead>
                   </TableRow>
@@ -364,7 +370,7 @@ const Drivers = () => {
 
                     return (
                       <TableRow
-                        className="text-left border-b-2 border-gray-100"
+                        className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
                         key={driver.driverId}
                       >
                         {/* Sr no */}

@@ -30,14 +30,14 @@ const YearPicker = ({ setYear, setInvalidYear, className = "" }) => {
       inputProps={{
         placeholder: "YYYY",
         className:
-          "bg-transparent text-center placeholder:text-center outline-none w-full py-2",
+          "bg-transparent text-center dark:text-white placeholder:text-center outline-none w-full py-2",
       }}
       onChange={(date) => {
         changeDate(date);
       }}
       // To close pop-out menu when a year is selected
       closeOnSelect
-      className={`w-fit text-center border-2 border-black/50 rounded outline-none ${className}`}
+      className={`w-fit text-center border-2 dark:text-black border-black/50 dark:border-darkmodetext rounded outline-none ${className}`}
     />
   );
 };

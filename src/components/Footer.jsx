@@ -1,12 +1,20 @@
 import logo from "../assets/logo.png";
 import { SiF1 } from "react-icons/si";
 import { Link } from "react-router-dom";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const Footer = () => {
+  const { isDarkMode } = useDarkMode();
   return (
-    <footer className="bg-gradient-to-b from-hovercta to-cta font-inter pb-20 min-h-50vh relative text-white">
+    <footer
+      className={` ${
+        isDarkMode
+          ? "bg-secondarydarkbg border-t-2 border-darkmodetext"
+          : " bg-gradient-to-b from-hovercta to-cta"
+      } font-inter pb-20 min-h-50vh relative text-white`}
+    >
       {/* Black div - floating into page */}
-      <div className="absolute -top-16 w-[90vw] lg:w-[80vw] left-1/2 -translate-x-1/2 rounded-lg h-32 flex justify-center items-center bg-[#1f1e1e] text-white">
+      <div className="absolute dark:border-2 dark:border-white -top-16 w-[90vw] lg:w-[80vw] left-1/2 -translate-x-1/2 rounded-lg h-32 flex justify-center items-center bg-darkbg text-white">
         <p className="text-lg md:text-xl font-medium text-center">
           GridBox F1 - Your one shot stop for everything F1 !
         </p>

@@ -25,9 +25,11 @@ import { useParams } from "react-router-dom";
 
 // Navigate Programatically
 import { useNavigate } from "react-router-dom";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const Schedule = () => {
   const navigate = useNavigate();
+  const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState();
   const [userSelectedYear, setUserSelectedYear] = useState();
@@ -103,8 +105,8 @@ const Schedule = () => {
   }, [displayYear]);
 
   return (
-    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
-      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+    <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
+      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white dark:bg-secondarydarkbg">
         {/* Input section */}
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex flex-wrap w-full md:w-fit items-center gap-x-2 md:gap-x-5 gap-y-5">
@@ -131,7 +133,7 @@ const Schedule = () => {
           {/* Loader */}
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
-              <SyncLoader />
+              <SyncLoader color={isDarkMode ? "#FFFFFF" : "#000000"} />
             </div>
           )}
         </header>
@@ -146,7 +148,7 @@ const Schedule = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black dark:border-darkmodetext rounded-xl font-semibold px-2">
           F1 Schedule {displayYear}
         </h1>
 
@@ -231,7 +233,7 @@ const Schedule = () => {
                         </p>
 
                         {/* Schedule Div */}
-                        <div className="flex flex-col w-full bg-greyBG gap-y-4 py-3 px-4 rounded-lg">
+                        <div className="flex flex-col w-full bg-greyBG dark:bg-zinc-600 gap-y-4 py-3 px-4 rounded-lg">
                           <p className="font-medium text-lg">
                             Weekend Schedule:
                           </p>
@@ -448,17 +450,17 @@ const Schedule = () => {
                       )}
                     </div>
                     <div className="flex flex-col gap-y-2 pb-16">
-                      <div className="w-full md:w-52 h-12 bg-gray-300 animate-pulse rounded font-medium text-2xl"></div>
+                      <div className="w-full md:w-52 h-12 bg-gray-300 dark:bg-gray-500 animate-pulse rounded font-medium text-2xl"></div>
                       <div className="mt-2 flex flex-col gap-y-2">
-                        <div className="w-full md:w-52 h-8 bg-gray-300 animate-pulse rounded"></div>
+                        <div className="w-full md:w-52 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                         <div className="flex gap-x-3">
-                          <div className="w-40 h-8 bg-gray-300 animate-pulse rounded" />
-                          <div className="w-9 h-8 bg-gray-300 animate-pulse rounded" />
+                          <div className="w-40 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
+                          <div className="w-9 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
                         </div>
                       </div>
-                      <div className="w-full md:w-52 h-8 bg-gray-300 animate-pulse rounded" />
-                      <div className="w-full md:w-52 h-8 bg-gray-300 animate-pulse rounded" />
-                      <div className="w-full md:w-52 h-8 bg-gray-300 animate-pulse rounded" />
+                      <div className="w-full md:w-52 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
+                      <div className="w-full md:w-52 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
+                      <div className="w-full md:w-52 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
                     </div>
                   </div>
                 );

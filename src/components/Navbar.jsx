@@ -14,6 +14,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { Drawer, DrawerClose, DrawerContent, DrawerTrigger } from "./ui/drawer";
+import { IoMoon, IoSunnySharp } from "react-icons/io5";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const ListItem = React.forwardRef(
   ({ className, title, children, ...props }, ref) => {
@@ -48,6 +50,7 @@ ListItem.propTypes = {
 };
 
 const Navbar = () => {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   return (
     <nav className="px-5 md:px-10 py-3 flex justify-between items-center shadow-md relative z-2">
       {/* Link to Home Page */}
@@ -109,10 +112,31 @@ const Navbar = () => {
         <Link to="/circuits" className="hover:text-cta transition-all">
           Circuits
         </Link>
+
+        <button
+          onClick={toggleDarkMode}
+          className="hidden lg:block outline-none"
+        >
+          {isDarkMode ? (
+            <IoSunnySharp className="text-2xl -translate-y-1 hover:text-cta transition-all" />
+          ) : (
+            <IoMoon className="text-2xl -translate-y-1 hover:text-cta transition-all" />
+          )}
+        </button>
       </div>
 
       {/* Navigation links on small screens - Drawer pops out from right side */}
-      <div className="lg:hidden">
+      <div className="lg:hidden flex gap-x-5 items-center">
+        <button
+          onClick={toggleDarkMode}
+          className="translate-y-0.5 outline-none"
+        >
+          {isDarkMode ? (
+            <IoSunnySharp className="text-2xl hover:text-cta transition-all" />
+          ) : (
+            <IoMoon className="text-2xl hover:text-cta transition-all" />
+          )}
+        </button>
         <Drawer direction="right">
           {/* Button to open drawer */}
           <DrawerTrigger asChild>

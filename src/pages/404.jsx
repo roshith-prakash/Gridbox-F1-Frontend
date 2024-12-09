@@ -15,8 +15,8 @@ const NotFound = () => {
   }, []);
 
   return (
-    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
-      <section className="w-full max-w-[96%] flex flex-col py-10 justify-center items-center gap-y-5 rounded px-2 shadow bg-white">
+    <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
+      <section className="w-full max-w-[96%] flex flex-col py-10 justify-center items-center gap-y-5 rounded px-2 shadow bg-white dark:bg-secondarydarkbg">
         {/* Title */}
         <h1 className="text-center text-4xl font-medium">
           Oops! Seems like you went off track!

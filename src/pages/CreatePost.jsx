@@ -119,13 +119,13 @@ const CreatePost = () => {
   console.log(contain);
 
   return (
-    <main className="bg-greyBG">
+    <main className="bg-greyBG dark:bg-darkbg dark:text-darkmodetext">
       <Toaster />
 
       {isViewable ? (
         <>
           {/* Editor box */}
-          <div className="p-10 pb-20 m-5 lg:m-10 bg-white shadow-xl border-[1px] rounded-xl">
+          <div className="p-10 pb-20 m-5 lg:m-10 bg-white dark:bg-secondarydarkbg shadow-xl border-[1px] rounded-xl">
             {/* Title */}
             <h1 className="text-2xl lg:text-4xl text-center font-medium">
               Create a new Article{" "}
@@ -195,7 +195,7 @@ const CreatePost = () => {
               <p className="font-medium">Contain Image : </p>
               <select
                 onChange={(e) => setContain(e.target.value)}
-                className="flex-1 px-5 md:flex-none border-2 py-2 rounded-xl"
+                className="flex-1 px-5 md:flex-none border-2 py-2 rounded-xl text-black"
               >
                 <option value={false}>Cover</option>
                 <option value={true}>Contain</option>
@@ -240,7 +240,7 @@ const CreatePost = () => {
           </h1>
 
           {/* Preview Post */}
-          <div className=" pb-20 m-5 lg:m-10 bg-white shadow-xl border-[1px] rounded-xl">
+          <div className=" pb-20 m-5 lg:m-10 bg-white dark:bg-secondarydarkbg  shadow-xl border-[1px] rounded-xl">
             {/* Thumbnail Image */}
             <div>
               {imageFile && (

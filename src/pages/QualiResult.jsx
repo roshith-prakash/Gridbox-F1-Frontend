@@ -37,9 +37,9 @@ const DriverPositionCard = ({ item }) => {
   );
 
   return (
-    <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
+    <div className="flex flex-col overflow-hidden divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg">
       {/* Position + Driver Name + Flag */}
-      <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
+      <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100 dark:bg-zinc-800">
         {item?.position}.{" "}
         <span>
           {item?.Driver?.givenName} {item?.Driver?.familyName}
@@ -81,19 +81,27 @@ const LoadingTableCard = () => {
   return (
     <>
       <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
-        <table className="rounded-lg w-full overflow-hidden bg-white">
+        <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
           <TableHeader>
-            <TableRow className="text-left bg-gray-100">
-              <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+            <TableRow className="text-left bg-gray-100 dark:bg-zinc-800">
+              <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                 Position
               </TableHead>
-              <TableHead className="font-bold text-black">Driver</TableHead>
-              <TableHead className="font-bold text-black">
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Driver
+              </TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
                 Constructor
               </TableHead>
-              <TableHead className="font-bold text-black">Q1</TableHead>
-              <TableHead className="font-bold text-black">Q2</TableHead>
-              <TableHead className="font-bold text-black">Q3</TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Q1
+              </TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Q2
+              </TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Q3
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -102,37 +110,37 @@ const LoadingTableCard = () => {
               ?.map((Driver, i) => {
                 return (
                   <TableRow
-                    className="text-left border-b-2 border-gray-100"
+                    className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
                     key={i}
                   >
                     <TableCell className="font-medium py-3 px-3 md:w-[5em]">
-                      <div className="bg-gray-300 animate-pulse w-10 h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-10 h-5 rounded"></div>
                     </TableCell>
 
                     <TableCell className="px-2 h-full py-3">
                       <div className="flex gap-x-2">
-                        <div className="bg-gray-300 animate-pulse w-[15%] h-5 rounded"></div>
-                        <div className="bg-gray-300 animate-pulse w-[60%] h-5 rounded"></div>
+                        <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[15%] h-5 rounded"></div>
+                        <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[60%] h-5 rounded"></div>
                       </div>
                     </TableCell>
 
                     <TableCell className="px-2 h-full py-3">
                       <div className="flex gap-x-2">
-                        <div className="bg-gray-300 animate-pulse w-[15%] h-5 rounded"></div>
-                        <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
+                        <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[15%] h-5 rounded"></div>
+                        <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[40%] h-5 rounded"></div>
                       </div>
                     </TableCell>
 
                     <TableCell className="px-2">
-                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
                     </TableCell>
 
                     <TableCell className="gap-x-2 px-2 text-nowrap">
-                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
                     </TableCell>
 
                     <TableCell className="gap-x-2 px-2 text-nowrap">
-                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
                     </TableCell>
                   </TableRow>
                 );
@@ -148,7 +156,7 @@ const LoadingTableCard = () => {
             return (
               <div
                 key={i}
-                className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
+                className="flex flex-col overflow-hidden divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg"
               >
                 <div className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
                   <div className="bg-gray-300 animate-pulse w-[60%] h-5 rounded"></div>
@@ -259,8 +267,8 @@ const QualiResult = () => {
   }, [displayRace]);
 
   return (
-    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
-      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+    <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
+      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white dark:bg-secondarydarkbg">
         {/* Data unavailable */}
         {error && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
@@ -286,7 +294,7 @@ const QualiResult = () => {
         {!error && standings.length > 0 && (
           <>
             {/* Title */}
-            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black dark:border-darkmodetext rounded-xl font-semibold px-2">
               Qualifying Result for the {displayRace}
               <p className="my-2">
                 Round {displayRound} of the {displayYear} season
@@ -294,21 +302,27 @@ const QualiResult = () => {
             </h1>
             {/* Table to be displayed on Large screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
-              <table className="rounded-lg w-full overflow-hidden bg-white">
+              <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
                 <TableHeader>
-                  <TableRow className="text-left bg-gray-100">
-                    <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                  <TableRow className="text-left bg-gray-100 dark:bg-zinc-800">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                       Position
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Driver
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Constructor
                     </TableHead>
-                    <TableHead className="font-bold text-black">Q1</TableHead>
-                    <TableHead className="font-bold text-black">Q2</TableHead>
-                    <TableHead className="font-bold text-black">Q3</TableHead>
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
+                      Q1
+                    </TableHead>
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
+                      Q2
+                    </TableHead>
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
+                      Q3
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -331,7 +345,7 @@ const QualiResult = () => {
 
                     return (
                       <TableRow
-                        className={`text-left border-b-2 border-gray-100`}
+                        className={`text-left border-b-2 border-gray-100 dark:border-zinc-600`}
                         key={item.position}
                       >
                         {/* Position */}
