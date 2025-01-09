@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import Scene from "../3DModels/Scene";
+import Scene from "@/3DModels/Scene";
 import { Environment } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 

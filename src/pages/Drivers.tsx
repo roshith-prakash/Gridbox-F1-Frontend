@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import dayjs from "dayjs";
 import { FaLink } from "react-icons/fa6";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { ErrorDiv, YearPicker } from "../components";
 import { SyncLoader } from "react-spinners";
 import CTAButton from "../components/CTAButton";
@@ -26,6 +26,7 @@ import "flag-icons/css/flag-icons.min.css";
 // To get URL Params
 import { useNavigate, useParams } from "react-router-dom";
 import { useDarkMode } from "../context/DarkModeContext";
+import { isAxiosError } from "axios";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -189,9 +190,9 @@ const Drivers = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
-  const [year, setYear] = useState();
-  const [userSelectedYear, setUserSelectedYear] = useState();
-  const [displayYear, setDisplayYear] = useState();
+  const [year, setYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [drivers, setDrivers] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
@@ -311,14 +312,14 @@ const Drivers = () => {
         </h1>
 
         {/* Data unavailable */}
-        {error && error?.response?.status == 404 && (
+        {error && isAxiosError(error) && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv text="Driver data for the requested year is not available." />
           </div>
         )}
 
         {/* Server error */}
-        {error && error?.response?.status != 404 && (
+        {error && isAxiosError(error)  && error?.response?.status != 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
           </div>

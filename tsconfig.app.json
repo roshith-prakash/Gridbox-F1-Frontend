@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "jsx": "react",
+    "jsx": "react-jsx",
     // ...
     "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "esModuleInterop": true,
+    "resolveJsonModule": true
     // ...
   }
 }

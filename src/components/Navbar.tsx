@@ -10,19 +10,18 @@ import {
   NavigationMenuTrigger,
 } from "./ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import React from "react";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 
 import { Drawer, DrawerClose, DrawerContent, DrawerTrigger } from "./ui/drawer";
 import { IoMoon, IoSunnySharp } from "react-icons/io5";
-import { useDarkMode } from "../context/DarkModeContext";
+import { useDarkMode } from "@/context/DarkModeContext";
 
-const ListItem = React.forwardRef(
-  ({ className, title, children, ...props }, ref) => {
+const ListItem = 
+  ({ className, title, to, ...props }) => {
     return (
       <NavigationMenuLink asChild>
         <Link
-          ref={ref}
+         to={to}
           className={cn(
             "block w-full select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors  focus:bg-accent focus:text-accent-foreground",
             className
@@ -32,21 +31,18 @@ const ListItem = React.forwardRef(
           <div className="text-lg font-medium leading-none text-nowrap">
             {title}
           </div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
         </Link>
       </NavigationMenuLink>
     );
-  }
-);
+}
+
 
 ListItem.displayName = "ListItem";
 
 ListItem.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string,
-  children: PropTypes.element,
+  to: PropTypes.string,
 };
 
 const Navbar = () => {

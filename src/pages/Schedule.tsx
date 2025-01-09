@@ -26,14 +26,15 @@ import { useParams } from "react-router-dom";
 // Navigate Programatically
 import { useNavigate } from "react-router-dom";
 import { useDarkMode } from "../context/DarkModeContext";
+import { isAxiosError } from "axios";
 
 const Schedule = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
-  const [year, setYear] = useState();
-  const [userSelectedYear, setUserSelectedYear] = useState();
-  const [displayYear, setDisplayYear] = useState();
+  const [year, setYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [schedule, setSchedule] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
@@ -153,14 +154,14 @@ const Schedule = () => {
         </h1>
 
         {/* Data unavailable */}
-        {error && error?.response?.status == 404 && (
+        {error && isAxiosError(error) && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv text="Schedule data for the requested year is not available." />
           </div>
         )}
 
         {/* Server error */}
-        {error && error?.response?.status != 404 && (
+        {error && isAxiosError(error) && error?.response?.status != 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
           </div>

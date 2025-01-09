@@ -1,7 +1,6 @@
-// Year Picker
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 
 const YearPicker = ({ setYear, setInvalidYear, className = "" }) => {
   // To set the year using DatePicker

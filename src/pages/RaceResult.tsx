@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { ErrorDiv } from "../components";
 
@@ -19,6 +19,7 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { isAxiosError } from "axios";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -222,8 +223,8 @@ const LoadingTableCard = () => {
 
 const RaceResult = () => {
   const { year: urlYear, round: urlRound } = useParams();
-  const [year, setYear] = useState();
-  const [round, setRound] = useState();
+  const [year, setYear] = useState<undefined | number>();
+  const [round, setRound] = useState<undefined | number>();
   const [displayYear, setDisplayYear] = useState();
   const [displayRound, setDisplayRound] = useState();
   const [displayRace, setDisplayRace] = useState();
@@ -306,14 +307,14 @@ const RaceResult = () => {
     <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white dark:bg-secondarydarkbg">
         {/* Data unavailable */}
-        {error && error?.response?.status == 404 && (
+        {error && isAxiosError(error) && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv text="Race data for the requested round is not available." />
           </div>
         )}
 
         {/* Server error */}
-        {error && error?.response?.status != 404 && (
+        {error && isAxiosError(error) && error?.response?.status != 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
           </div>

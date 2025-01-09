@@ -1,5 +1,5 @@
 import SecurityHeaders from "./SecurityHeaders";
-import Navbar from "./Navbar"
+import Navbar from "./Navbar";
 import YearPicker from "./YearPicker";
 import ErrorDiv from "./ErrorDiv";
 import Footer from "./Footer";
@@ -10,4 +10,16 @@ import Input from "./Input";
 import PostCard from "./PostCard";
 import TyreModel from "./TyreModel";
 
-export { SecurityHeaders, Navbar, YearPicker, ErrorDiv, Footer, ErrorStatement, CTAButton, Input, OutlineButton, PostCard, TyreModel }
+export {
+  SecurityHeaders,
+  Navbar,
+  YearPicker,
+  ErrorDiv,
+  Footer,
+  ErrorStatement,
+  CTAButton,
+  Input,
+  OutlineButton,
+  PostCard,
+  TyreModel,
+};

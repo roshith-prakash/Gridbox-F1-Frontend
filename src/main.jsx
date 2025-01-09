@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import "./index.css";
+import App from "./App.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
-import { DarkModeProvider } from "./context/DarkModeContext.jsx";
+import { DarkModeProvider } from "./context/DarkModeContext.tsx";
+import "./index.css";
 
 // Create a client
 const queryClient = new QueryClient();

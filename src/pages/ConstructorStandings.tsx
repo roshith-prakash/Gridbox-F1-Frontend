@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { ErrorDiv, YearPicker } from "../components";
 import CTAButton from "../components/CTAButton";
 import { SyncLoader } from "react-spinners";
@@ -24,6 +24,7 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 import { useDarkMode } from "../context/DarkModeContext";
+import { isAxiosError } from "axios";
 // Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
@@ -163,9 +164,9 @@ const ConstructorStandings = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
-  const [year, setYear] = useState();
-  const [userSelectedYear, setUserSelectedYear] = useState();
-  const [displayYear, setDisplayYear] = useState();
+   const [year, setYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [standings, setStandings] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
@@ -285,14 +286,14 @@ const ConstructorStandings = () => {
         </h1>
 
         {/* Data unavailable */}
-        {error && error?.response?.status == 404 && (
+        {error && isAxiosError(error) && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv text="Constructor standings data for the requested year is not available." />
           </div>
         )}
 
         {/* Server error */}
-        {error && error?.response?.status != 404 && (
+        {error && isAxiosError(error) && error?.response?.status != 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
           </div>

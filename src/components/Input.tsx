@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 
 // Styled Text input
 const Input = ({ value, placeholder, onChange, className = "" }) => {

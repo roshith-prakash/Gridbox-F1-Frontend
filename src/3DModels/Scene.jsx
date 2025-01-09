@@ -16,7 +16,7 @@ export default function Model(props) {
   const groupRef = useRef();
   const [bounce, setBounce] = useState(0);
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     setBounce(Math.sin(state.clock.elapsedTime * 3) * 0.15); // Adjust the frequency and amplitude
     if (groupRef.current) {
       groupRef.current.position.y = -1.5 + bounce; // Adjust the initial position as needed

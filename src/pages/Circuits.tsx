@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { axiosInstance } from "../utils/axios";
+import { axiosInstance } from "@/utils/axios";
 import {
   TableBody,
   TableCell,
@@ -9,17 +9,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FaLink } from "react-icons/fa6";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
-import { ErrorDiv, YearPicker } from "../components";
-import CTAButton from "../components/CTAButton";
+import { ErrorDiv, YearPicker, CTAButton } from "@/components";
 import { SyncLoader } from "react-spinners";
+import { useDarkMode } from "@/context/DarkModeContext";
+import { isAxiosError } from "axios";
 
 // To show flags for the circuits
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
-import { useDarkMode } from "../context/DarkModeContext";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -232,9 +232,9 @@ const Circuits = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
-  const [year, setYear] = useState();
-  const [userSelectedYear, setUserSelectedYear] = useState();
-  const [displayYear, setDisplayYear] = useState();
+  const [year, setYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [circuits, setCircuits] = useState([]);
   const [invalidYear, setInvalidYear] = useState();
   const [invalidURL, setInvalidURL] = useState(false);
@@ -255,6 +255,7 @@ const Circuits = () => {
     enabled: false,
     staleTime: Infinity,
   });
+
 
   // Scroll to Top
   useEffect(() => {
@@ -353,14 +354,14 @@ const Circuits = () => {
         </h1>
 
         {/* Data unavailable */}
-        {error && error?.response?.status == 404 && (
+        {error && isAxiosError(error) &&  error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv text="Circuits data for the requested year is not available." />
           </div>
         )}
 
         {/* Server error */}
-        {error && error?.response?.status != 404 && (
+        {error && isAxiosError(error) && error?.response?.status != 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
           </div>

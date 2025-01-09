@@ -1,7 +1,6 @@
-import logo from "../assets/logo.png";
 import { SiF1 } from "react-icons/si";
 import { Link } from "react-router-dom";
-import { useDarkMode } from "../context/DarkModeContext";
+import { useDarkMode } from "@/context/DarkModeContext";
 
 const Footer = () => {
   const { isDarkMode } = useDarkMode();
@@ -164,8 +163,8 @@ const Footer = () => {
         {/* Image - Hidden on Smaller Screens */}
         <div className="hidden flex-1 lg:flex justify-center items-center">
           <img
-            src={logo}
-            alt="Illustration of a programmer"
+            src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1736414559/logo_cnblu2.png"
+            alt="Gridbox F1"
             className="h-60 pointer-events-none"
           />
         </div>

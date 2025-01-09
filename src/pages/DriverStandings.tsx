@@ -8,9 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
-import { ErrorDiv } from "../components";
+import * as PropTypes from "prop-types";
+import { useNavigate, useParams } from "react-router-dom";
+import { ErrorDiv, YearPicker } from "../components";
+import CTAButton from "../components/CTAButton";
+import { SyncLoader } from "react-spinners";
 
 // To get country from nationality
 import { nationalityMap } from "../data/nationalityToCountry";
@@ -19,75 +21,80 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { useDarkMode } from "../context/DarkModeContext";
+import { isAxiosError } from "axios";
 
-// Register the locale for the countries constructor
+// Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
-const DriverPositionCard = ({ item }) => {
-  const driverCountry =
+const DriverStandingCard = ({ item }) => {
+  const DriverCountry =
     nationalityMap[String(item?.Driver?.nationality).trim()];
-  const driverCountryCode = countries.getAlpha2Code(driverCountry, "en");
-
-  const constructorCountry =
-    nationalityMap[String(item?.Constructor?.nationality).trim()];
-  const constructorCountryCode = countries.getAlpha2Code(
-    constructorCountry,
-    "en"
-  );
+  const DriverCountryCode = countries.getAlpha2Code(DriverCountry, "en");
 
   return (
     <div className="flex flex-col overflow-hidden divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg">
-      {/* Position + driver name + flag */}
+      {/* Position + Driver Name + Driver Nationality */}
       <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100 dark:bg-zinc-800">
         {item?.position}.{" "}
         <span>
           {item?.Driver?.givenName} {item?.Driver?.familyName}
         </span>
         <span
-          className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
+          className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
         ></span>
       </p>
-
-      {/* Status + points scored */}
-      <div className="flex justify-between px-5 py-3 font-medium">
-        <p>
-          Status : <span>{item?.status}</span>
+      {/* Points scored */}
+      <p className="px-5 py-3 text-lg font-medium">
+        Points : <span>{item?.points}</span>
+      </p>
+      {/* Driver Code + Number */}
+      <div className="flex px-5 py-3">
+        <p className="flex-1">
+          Code : {item?.Driver?.code ? item?.Driver?.code : "-"}
         </p>
-        <p>
-          Points : <span>{item?.points}</span>
+        <p className="flex-1">
+          Number :{" "}
+          {item?.Driver?.permanentNumber ? item?.Driver?.permanentNumber : "-"}
         </p>
       </div>
+      {/* Constructor + Nationality */}
+      <div className="px-5 flex gap-x-2 py-3">
+        Constructor:{" "}
+        {item?.Constructors?.map((constructor, j) => {
+          const ConstructorCountry =
+            nationalityMap[String(constructor?.nationality).trim()];
+          const ConstructorCountryCode = countries.getAlpha2Code(
+            ConstructorCountry,
+            "en"
+          );
 
-      {/* Constructor name + flag */}
+          return (
+            <div key={j} className="flex">
+              <span
+                className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
+              ></span>
+              {constructor?.name}{" "}
+            </div>
+          );
+        })}
+      </div>
+      {/* Grand Prix Wins */}
       <p className="px-5 py-3">
-        Constructor : {item?.Constructor?.name}{" "}
-        <span
-          className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
-        ></span>
-      </p>
-
-      {/* Start grid position */}
-      <p className={`px-5 py-3 `}>Grid Position : {item?.grid}</p>
-
-      {/* Race time */}
-      <p className="px-5 py-3">
-        Time : {item?.Time?.time ? item?.Time?.time : "---"}
+        Grand Prix Wins : <span>{item?.wins}</span>
       </p>
     </div>
   );
 };
 
-DriverPositionCard.propTypes = {
+DriverStandingCard.propTypes = {
   item: PropTypes.shape({
     Driver: PropTypes.object,
-    Constructor: PropTypes.object,
-    FastestLap: PropTypes.object,
-    Time: PropTypes.object,
-    status: PropTypes.string,
-    position: PropTypes.number,
+    Constructors: PropTypes.object,
+    position: PropTypes.number.isRequired,
     points: PropTypes.number,
-    grid: PropTypes.string,
+    wins: PropTypes.number,
   }).isRequired,
 };
 
@@ -109,24 +116,17 @@ const LoadingTableCard = () => {
                 Constructor
               </TableHead>
               <TableHead className="font-bold text-black dark:text-darkmodetext">
-                Grid
-              </TableHead>
-              <TableHead className="font-bold text-black dark:text-darkmodetext">
                 Points
               </TableHead>
               <TableHead className="font-bold text-black dark:text-darkmodetext">
-                Status
-              </TableHead>
-
-              <TableHead className="font-bold text-black dark:text-darkmodetext text-center">
-                Time
+                Wins
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {Array(20)
               .fill(null)
-              ?.map((driver, i) => {
+              ?.map((Driver, i) => {
                 return (
                   <TableRow
                     className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
@@ -151,19 +151,11 @@ const LoadingTableCard = () => {
                     </TableCell>
 
                     <TableCell className="px-2">
-                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[40%] h-5 rounded"></div>
+                      <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
                     </TableCell>
 
                     <TableCell className="gap-x-2 px-2 text-nowrap">
-                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[40%] h-5 rounded"></div>
-                    </TableCell>
-
-                    <TableCell className="px-2">
-                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
-                    </TableCell>
-
-                    <TableCell className="px-2">
-                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[80%] h-5 rounded"></div>
+                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
                     </TableCell>
                   </TableRow>
                 );
@@ -179,26 +171,30 @@ const LoadingTableCard = () => {
             return (
               <div
                 key={i}
-                className="flex flex-col divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg"
+                className="flex flex-col overflow-hidden divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
               >
                 <div className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100 dark:bg-zinc-800">
-                  <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
-                  <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[10%] h-5 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
+
+                  <div className="h-5 w-[10%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                 </div>
-                <div className="flex justify-between px-5 py-3 font-medium">
-                  <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[30%] h-5 rounded"></div>
-                  <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[30%] h-5 rounded"></div>
+                <p className="px-5 py-3 text-lg font-medium">
+                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
+                </p>
+                <div className="flex px-5 py-3">
+                  <div className="flex-1">
+                    <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
+                  </div>
                 </div>
                 <div className="px-5 py-3 flex gap-x-3">
-                  <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
-                  <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[10%] h-5 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
+                  <div className="h-5 w-[10%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                 </div>
-                <div className={`px-5 py-3`}>
-                  <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
-                </div>
-
                 <div className="px-5 py-3">
-                  <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
+                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                 </div>
               </div>
             );
@@ -208,51 +204,48 @@ const LoadingTableCard = () => {
   );
 };
 
-const SprintResult = () => {
-  const { year: urlYear, round: urlRound } = useParams();
-  const [year, setYear] = useState();
-  const [round, setRound] = useState();
-  const [displayYear, setDisplayYear] = useState();
-  const [displayRound, setDisplayRound] = useState();
-  const [displayRace, setDisplayRace] = useState();
+const DriverStandings = () => {
+  const navigate = useNavigate();
+  const { isDarkMode } = useDarkMode();
+  const { year: urlYear } = useParams();
+  const [year, setYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [standings, setStandings] = useState([]);
+  const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
 
   // Query function to fetch standings for each year
   const {
     data,
-    refetch: fetchRaceResult,
+    refetch: fetchStandings,
+    isLoading,
     error,
   } = useQuery({
-    queryKey: ["sprintResult", year, round],
+    queryKey: ["DriversStandings", year],
     queryFn: () => {
-      return axiosInstance.post("/getSprintResult", {
+      return axiosInstance.post("/getDriverStandings", {
         year: year,
-        round: round,
       });
     },
     enabled: false,
-    staleTime: Infinity,
+    staleTime: 1000 * 60 * 15,
   });
 
-  // Scroll to top
+  // Scroll to Top
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  // Set result for the current year into the state
+  // Set standings for the current year into the state
   useEffect(() => {
-    if (data?.data?.result) {
-      setStandings(data?.data?.result?.result?.result?.SprintResults);
-      setDisplayYear(data?.data?.result?.result?.result?.season);
-      setDisplayRound(data?.data?.result?.result?.result?.round);
-      setDisplayRace(data?.data?.result?.result?.result?.raceName);
-    } else {
-      console.log("No data received");
+    if (data?.data?.standings) {
+      setStandings(data?.data?.standings?.standings?.standings);
+      setDisplayYear(data?.data?.standings?.year);
     }
   }, [data?.data]);
 
-  // If year and round is present in URL
+  // If year is present
   useEffect(() => {
     if (urlYear) {
       // Valid Year in URL param
@@ -260,48 +253,91 @@ const SprintResult = () => {
         urlYear &&
         !Number.isNaN(urlYear) &&
         parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= 2024 &&
-        urlRound &&
-        !Number.isNaN(urlRound)
+        parseInt(urlYear) <= 2024
       ) {
         setYear(parseInt(urlYear));
-        setRound(parseInt(urlRound));
         setInvalidURL(false);
       } else {
         console.log("Invalid year specified");
         setInvalidURL(true);
       }
     } else {
-      console.log("Year and round not provided");
+      setYear(2024);
     }
-  }, [urlYear, urlRound]);
+  }, [urlYear]);
 
-  // Fetch result
+  // Fetch Drivers
   useEffect(() => {
-    if (year && round) {
-      fetchRaceResult();
+    if (year) {
+      fetchStandings();
     }
-  }, [fetchRaceResult, year, round]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchStandings, year]);
 
   // Set window title.
   useEffect(() => {
-    if (displayRace) {
-      document.title = `Sprint - ${displayRace} | GridBox F1`;
-    }
-  }, [displayRace]);
+    document.title = displayYear
+      ? `Drivers Standings ${displayYear} | GridBox F1`
+      : `Drivers Standings | GridBox F1`;
+  }, [displayYear]);
 
   return (
     <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white dark:bg-secondarydarkbg">
+        {/* Input Section */}
+        <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
+          <div className="flex flex-wrap w-full md:w-fit items-center gap-x-2 md:gap-x-5 gap-y-5">
+            <span className="w-full md:w-fit text-lg italic">
+              Select Year :
+            </span>
+            <YearPicker
+              className="w-full md:w-fit"
+              setInvalidYear={setInvalidYear}
+              setYear={setUserSelectedYear}
+            />
+          </div>
+
+          {/* Change URL to fetch data */}
+          <CTAButton
+            className="w-full md:w-fit py-2 px-6 border-2 rounded"
+            disabled={isLoading || invalidYear || !userSelectedYear}
+            onClick={() => {
+              navigate(`/drivers-standings/${userSelectedYear}`);
+            }}
+            text="Fetch"
+          ></CTAButton>
+
+          {/* Loader */}
+          {isLoading && (
+            <div className="w-full md:w-fit flex justify-center">
+              <SyncLoader color={isDarkMode ? "#FFF" : "#000"} />
+            </div>
+          )}
+        </header>
+
+        {/* Invalid year error  */}
+        <div
+          className={`text-red-600 font-medium px-5 overflow-hidden  ${
+            invalidYear ? "h-14" : "h-0"
+          } transition-all`}
+        >
+          Year must be between 1950 & 2024
+        </div>
+
+        {/* Title */}
+        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black dark:border-darkmodetext rounded-xl font-semibold px-2">
+          Drivers Standings {displayYear}
+        </h1>
+
         {/* Data unavailable */}
-        {error && error?.response?.status == 404 && (
+        {error && isAxiosError(error) && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
-            <ErrorDiv text="Sprint Race data for the requested round is not available." />
+            <ErrorDiv text="Drivers Standings data for the requested year is not available." />
           </div>
         )}
 
         {/* Server error */}
-        {error && error?.response?.status != 404 && (
+        {error && isAxiosError(error) && error?.response?.status != 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
           </div>
@@ -310,21 +346,14 @@ const SprintResult = () => {
         {/* Invalid param in URL */}
         {!year && invalidURL && (
           <div className="py-20 flex justify-center items-center">
-            <ErrorDiv text="Invalid Year or Round specified in URL." />
+            <ErrorDiv text="Invalid Year specified in URL." />
           </div>
         )}
 
-        {/* Show driver name and country when driver data is present */}
+        {/* Show Driver name and country when Driver data is present */}
         {!error && standings.length > 0 && (
           <>
-            {/* Title */}
-            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black dark:border-darkmodetext rounded-xl font-semibold px-2">
-              Sprint Race Result for the {displayRace}
-              <p className="my-2">
-                Round {displayRound} of the {displayYear} season
-              </p>
-            </h1>
-            {/* Table to be displayed on larger screens */}
+            {/* Table to be displayed on Larger screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
               <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
                 <TableHeader>
@@ -339,80 +368,69 @@ const SprintResult = () => {
                       Constructor
                     </TableHead>
                     <TableHead className="font-bold text-black dark:text-darkmodetext">
-                      Grid
-                    </TableHead>
-                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Points
                     </TableHead>
                     <TableHead className="font-bold text-black dark:text-darkmodetext">
-                      Status
-                    </TableHead>
-
-                    <TableHead className="font-bold text-black dark:text-darkmodetext text-center">
-                      Time
+                      Wins
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {standings?.map((item) => {
-                    const driverCountry =
+                  {standings?.map((item, i) => {
+                    const DriverCountry =
                       nationalityMap[String(item?.Driver?.nationality).trim()];
-                    const driverCountryCode = countries.getAlpha2Code(
-                      driverCountry,
-                      "en"
-                    );
-
-                    const constructorCountry =
-                      nationalityMap[
-                        String(item?.Constructor?.nationality).trim()
-                      ];
-                    const constructorCountryCode = countries.getAlpha2Code(
-                      constructorCountry,
+                    const DriverCountryCode = countries.getAlpha2Code(
+                      DriverCountry,
                       "en"
                     );
 
                     return (
                       <TableRow
-                        className={`text-left border-b-2 border-gray-100 dark:border-zinc-600`}
+                        className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
                         key={item.position}
                       >
                         {/* Position */}
                         <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
-                          {item?.position}.
-                        </TableCell>
-                        {/* Driver name + flag */}
-                        <TableCell className="px-2 w-fit">
-                          <span
-                            className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
-                          ></span>
-                          {item?.Driver?.givenName} {item?.Driver?.familyName} (
-                          {item?.number})
+                          {i + 1}.
                         </TableCell>
 
-                        {/* Constructor name + flag */}
+                        {/* Driver name + flag */}
                         <TableCell className="px-2">
                           <span
-                            className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+                            className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
                           ></span>
-                          {item?.Constructor?.name}
+                          {item?.Driver?.givenName} {item?.Driver?.familyName}
                         </TableCell>
 
-                        {/* Start grid position */}
-                        <TableCell className="gap-x-2 px-2 text-nowrap">
-                          {item?.grid}
+                        {/* Map constructors - display Constructor name + flag */}
+                        <TableCell className="px-2 flex gap-x-2">
+                          {item?.Constructors?.map((constructor, j) => {
+                            const ConstructorCountry =
+                              nationalityMap[
+                                String(constructor?.nationality).trim()
+                              ];
+                            const ConstructorCountryCode =
+                              countries.getAlpha2Code(ConstructorCountry, "en");
+
+                            return (
+                              <div key={j} className="flex">
+                                <span
+                                  className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
+                                ></span>
+                                {constructor?.name}{" "}
+                              </div>
+                            );
+                          })}
                         </TableCell>
+
                         {/* Points scored */}
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           {item?.points}
                         </TableCell>
-                        {/* Status */}
-                        <TableCell className="px-2 text-nowrap">
-                          {item?.status}
-                        </TableCell>
 
-                        {/* Race time */}
-                        <TableCell className="px-2 text-nowrap text-center">
-                          {item?.Time?.time ? item?.Time?.time : "---"}
+                        {/* Grand Prix wins */}
+                        <TableCell className="px-2 text-nowrap">
+                          {item?.wins}
                         </TableCell>
                       </TableRow>
                     );
@@ -423,17 +441,17 @@ const SprintResult = () => {
             {/* Cards to be displayed on smaller screens */}
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
               {standings?.map((item) => {
-                return <DriverPositionCard item={item} key={item.driverId} />;
+                return <DriverStandingCard item={item} key={item.DriverId} />;
               })}
             </div>
           </>
         )}
 
-        {/* When fetching race results */}
+        {/* When loading initial data */}
         {!invalidURL && !error && standings.length == 0 && <LoadingTableCard />}
       </section>
     </main>
   );
 };
 
-export default SprintResult;
+export default DriverStandings;
