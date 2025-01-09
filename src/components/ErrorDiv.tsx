@@ -1,5 +1,6 @@
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 
+// Div to display data unavailable / Server Error.
 const ErrorDiv = ({
   text = "Something went wrong. Please try again later.",
 }) => {

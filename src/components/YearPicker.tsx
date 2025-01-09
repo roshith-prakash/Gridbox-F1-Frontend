@@ -1,7 +1,6 @@
-// Year Picker
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 
 const YearPicker = ({ setYear, setInvalidYear, className = "" }) => {
   // To set the year using DatePicker
@@ -22,19 +21,22 @@ const YearPicker = ({ setYear, setInvalidYear, className = "" }) => {
   };
 
   return (
+    // DatePicker component
     <Datetime
+      // Format to allow only years as input
       dateFormat="YYYY"
       timeFormat={false}
       inputProps={{
         placeholder: "YYYY",
         className:
-          "bg-transparent text-center placeholder:text-center outline-none w-full py-2",
+          "bg-transparent text-center dark:text-white placeholder:text-center outline-none w-full py-2",
       }}
       onChange={(date) => {
         changeDate(date);
       }}
+      // To close pop-out menu when a year is selected
       closeOnSelect
-      className={`w-fit text-center border-2 border-black/50 rounded outline-none ${className}`}
+      className={`w-fit text-center border-2 dark:text-black border-black/50 dark:border-darkmodetext rounded outline-none ${className}`}
     />
   );
 };

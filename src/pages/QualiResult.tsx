@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { ErrorDiv } from "../components";
 
@@ -19,43 +19,49 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
+import { isAxiosError } from "axios";
 
-// Register the locale for the countries constructor
+// Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
 const DriverPositionCard = ({ item }) => {
-  const driverCountry =
-    nationalityMap[String(item?.driver?.nationality).trim()];
-  const driverCountryCode = countries.getAlpha2Code(driverCountry, "en");
+  const DriverCountry =
+    nationalityMap[String(item?.Driver?.nationality).trim()];
+  const DriverCountryCode = countries.getAlpha2Code(DriverCountry, "en");
 
-  const constructorCountry =
-    nationalityMap[String(item?.constructor?.nationality).trim()];
-  const constructorCountryCode = countries.getAlpha2Code(
-    constructorCountry,
+  const ConstructorCountry =
+    nationalityMap[String(item?.Constructor?.nationality).trim()];
+  const ConstructorCountryCode = countries.getAlpha2Code(
+    ConstructorCountry,
     "en"
   );
 
   return (
-    <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
-      <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
+    <div className="flex flex-col overflow-hidden divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg">
+      {/* Position + Driver Name + Flag */}
+      <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100 dark:bg-zinc-800">
         {item?.position}.{" "}
         <span>
-          {item?.driver?.givenName} {item?.driver?.familyName}
+          {item?.Driver?.givenName} {item?.Driver?.familyName}
         </span>
         <span
-          className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
+          className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
         ></span>
       </p>
+      {/* Constructor name + Flag */}
       <p className="px-5 py-3">
-        Constructor : {item?.constructor?.name}{" "}
+        Constructor : {item?.Constructor?.name}{" "}
         <span
-          className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+          className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
         ></span>
       </p>
-      <p className={`px-5 py-3`}>Q1 : {item?.q1 ? item?.q1 : "---"}</p>
-      <p className={`px-5 py-3`}>Q2 : {item?.q2 ? item?.q2 : "---"}</p>
-      <p className={`px-5 py-3`}>Q3 : {item?.q3 ? item?.q3 : "---"}</p>
+      {/* Q1 time */}
+      <p className={`px-5 py-3`}>Q1 : {item?.Q1 ? item?.Q1 : "---"}</p>
+      {/* Q2 time */}
+      <p className={`px-5 py-3`}>Q2 : {item?.Q2 ? item?.Q2 : "---"}</p>
+      {/* Q3 time */}
+      <p className={`px-5 py-3`}>Q3 : {item?.Q3 ? item?.Q3 : "---"}</p>
     </div>
   );
 };
@@ -63,11 +69,11 @@ const DriverPositionCard = ({ item }) => {
 DriverPositionCard.propTypes = {
   item: PropTypes.shape({
     position: PropTypes.number,
-    driver: PropTypes.object,
-    constructor: PropTypes.object,
-    q1: PropTypes.string,
-    q2: PropTypes.string,
-    q3: PropTypes.string,
+    Driver: PropTypes.object,
+    Constructor: PropTypes.object,
+    Q1: PropTypes.string,
+    Q2: PropTypes.string,
+    Q3: PropTypes.string,
   }).isRequired,
 };
 
@@ -76,58 +82,66 @@ const LoadingTableCard = () => {
   return (
     <>
       <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
-        <table className="rounded-lg w-full overflow-hidden bg-white">
+        <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
           <TableHeader>
-            <TableRow className="text-left bg-gray-100">
-              <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+            <TableRow className="text-left bg-gray-100 dark:bg-zinc-800">
+              <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                 Position
               </TableHead>
-              <TableHead className="font-bold text-black">Driver</TableHead>
-              <TableHead className="font-bold text-black">
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Driver
+              </TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
                 Constructor
               </TableHead>
-              <TableHead className="font-bold text-black">Q1</TableHead>
-              <TableHead className="font-bold text-black">Q2</TableHead>
-              <TableHead className="font-bold text-black">Q3</TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Q1
+              </TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Q2
+              </TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Q3
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {Array(20)
               .fill(null)
-              ?.map((driver, i) => {
+              ?.map((Driver, i) => {
                 return (
                   <TableRow
-                    className="text-left border-b-2 border-gray-100"
+                    className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
                     key={i}
                   >
                     <TableCell className="font-medium py-3 px-3 md:w-[5em]">
-                      <div className="bg-gray-300 animate-pulse w-10 h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-10 h-5 rounded"></div>
                     </TableCell>
 
                     <TableCell className="px-2 h-full py-3">
                       <div className="flex gap-x-2">
-                        <div className="bg-gray-300 animate-pulse w-[15%] h-5 rounded"></div>
-                        <div className="bg-gray-300 animate-pulse w-[60%] h-5 rounded"></div>
+                        <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[15%] h-5 rounded"></div>
+                        <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[60%] h-5 rounded"></div>
                       </div>
                     </TableCell>
 
                     <TableCell className="px-2 h-full py-3">
                       <div className="flex gap-x-2">
-                        <div className="bg-gray-300 animate-pulse w-[15%] h-5 rounded"></div>
-                        <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
+                        <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[15%] h-5 rounded"></div>
+                        <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[40%] h-5 rounded"></div>
                       </div>
                     </TableCell>
 
                     <TableCell className="px-2">
-                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
                     </TableCell>
 
                     <TableCell className="gap-x-2 px-2 text-nowrap">
-                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
                     </TableCell>
 
                     <TableCell className="gap-x-2 px-2 text-nowrap">
-                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
                     </TableCell>
                   </TableRow>
                 );
@@ -143,7 +157,7 @@ const LoadingTableCard = () => {
             return (
               <div
                 key={i}
-                className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
+                className="flex flex-col overflow-hidden divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg"
               >
                 <div className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
                   <div className="bg-gray-300 animate-pulse w-[60%] h-5 rounded"></div>
@@ -174,8 +188,8 @@ const LoadingTableCard = () => {
 
 const QualiResult = () => {
   const { year: urlYear, round: urlRound } = useParams();
-  const [year, setYear] = useState();
-  const [round, setRound] = useState();
+  const [year, setYear] = useState<undefined | number>();
+  const [round, setRound] = useState<undefined | number>();
   const [displayYear, setDisplayYear] = useState();
   const [displayRound, setDisplayRound] = useState();
   const [displayRace, setDisplayRace] = useState();
@@ -207,10 +221,10 @@ const QualiResult = () => {
   // Set standings for the current year into the state
   useEffect(() => {
     if (data?.data?.result) {
-      setStandings(data?.data?.result?.result?.result);
-      setDisplayYear(data?.data?.result?.year);
-      setDisplayRound(data?.data?.result?.round);
-      setDisplayRace(data?.data?.result?.race?.raceName);
+      setStandings(data?.data?.result?.result?.result?.QualifyingResults);
+      setDisplayYear(data?.data?.result?.result?.result?.season);
+      setDisplayRound(data?.data?.result?.result?.result?.round);
+      setDisplayRace(data?.data?.result?.result?.result?.raceName);
     } else {
       console.log("No data received");
     }
@@ -246,18 +260,25 @@ const QualiResult = () => {
     }
   }, [fetchQualiResult, year, round]);
 
+  // Set window title.
+  useEffect(() => {
+    if (displayRace) {
+      document.title = `Qualifying - ${displayRace} | GridBox F1`;
+    }
+  }, [displayRace]);
+
   return (
-    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
-      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+    <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
+      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white dark:bg-secondarydarkbg">
         {/* Data unavailable */}
-        {error && error?.response?.status == 404 && (
+        {error && isAxiosError(error) && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
-            <ErrorDiv text="Qualifying data for the requested year is not available." />
+            <ErrorDiv text="Qualifying data for the requested round is not available." />
           </div>
         )}
 
         {/* Server error */}
-        {error && error?.response?.status != 404 && (
+        {error && isAxiosError(error) && error?.response?.status != 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
           </div>
@@ -270,82 +291,96 @@ const QualiResult = () => {
           </div>
         )}
 
-        {/* Show driver name and country when driver data is present */}
+        {/* Show Driver name and country when Driver data is present */}
         {!error && standings.length > 0 && (
           <>
-            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+            {/* Title */}
+            <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black dark:border-darkmodetext rounded-xl font-semibold px-2">
               Qualifying Result for the {displayRace}
               <p className="my-2">
                 Round {displayRound} of the {displayYear} season
               </p>
             </h1>
+            {/* Table to be displayed on Large screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
-              <table className="rounded-lg w-full overflow-hidden bg-white">
+              <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
                 <TableHeader>
-                  <TableRow className="text-left bg-gray-100">
-                    <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                  <TableRow className="text-left bg-gray-100 dark:bg-zinc-800">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                       Position
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Driver
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Constructor
                     </TableHead>
-                    <TableHead className="font-bold text-black">Q1</TableHead>
-                    <TableHead className="font-bold text-black">Q2</TableHead>
-                    <TableHead className="font-bold text-black">Q3</TableHead>
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
+                      Q1
+                    </TableHead>
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
+                      Q2
+                    </TableHead>
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
+                      Q3
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {standings?.map((item, i) => {
-                    const driverCountry =
-                      nationalityMap[String(item?.driver?.nationality).trim()];
-                    const driverCountryCode = countries.getAlpha2Code(
-                      driverCountry,
+                  {standings?.map((item) => {
+                    const DriverCountry =
+                      nationalityMap[String(item?.Driver?.nationality).trim()];
+                    const DriverCountryCode = countries.getAlpha2Code(
+                      DriverCountry,
                       "en"
                     );
 
-                    const constructorCountry =
+                    const ConstructorCountry =
                       nationalityMap[
-                        String(item?.constructor?.nationality).trim()
+                        String(item?.Constructor?.nationality).trim()
                       ];
-                    const constructorCountryCode = countries.getAlpha2Code(
-                      constructorCountry,
+                    const ConstructorCountryCode = countries.getAlpha2Code(
+                      ConstructorCountry,
                       "en"
                     );
 
                     return (
                       <TableRow
-                        className={`text-left border-b-2 border-gray-100`}
+                        className={`text-left border-b-2 border-gray-100 dark:border-zinc-600`}
                         key={item.position}
                       >
+                        {/* Position */}
                         <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
-                          {i + 1}.
+                          {item?.position}.
                         </TableCell>
+                        {/* Driver name + flag + number */}
                         <TableCell className="px-2 w-fit">
                           <span
-                            className={`mx-2 fi fi-${driverCountryCode?.toLowerCase()}`}
+                            className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
                           ></span>
-                          {item?.driver?.givenName} {item?.driver?.familyName} (
+                          {item?.Driver?.givenName} {item?.Driver?.familyName} (
                           {item?.number})
                         </TableCell>
 
+                        {/* Constructor name + flag */}
                         <TableCell className="px-2">
                           <span
-                            className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+                            className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
                           ></span>
-                          {item?.constructor?.name}
+                          {item?.Constructor?.name}
                         </TableCell>
 
+                        {/* Q1 time */}
                         <TableCell className="gap-x-2 px-2 text-nowrap">
-                          {item?.q1 ? item?.q1 : "---"}
+                          {item?.Q1 ? item?.Q1 : "---"}
                         </TableCell>
+                        {/* Q2 time */}
                         <TableCell className="gap-x-2 px-2 text-nowrap">
-                          {item?.q2 ? item?.q2 : "---"}
+                          {item?.Q2 ? item?.Q2 : "---"}
                         </TableCell>
+                        {/* Q3 time */}
                         <TableCell className="px-2 text-nowrap">
-                          {item?.q3 ? item?.q3 : "---"}
+                          {item?.Q3 ? item?.Q3 : "---"}
                         </TableCell>
                       </TableRow>
                     );
@@ -353,9 +388,11 @@ const QualiResult = () => {
                 </TableBody>
               </table>
             </div>
+
+            {/* Cards to be displayed on smaller screens */}
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
               {standings?.map((item) => {
-                return <DriverPositionCard item={item} key={item.driverId} />;
+                return <DriverPositionCard item={item} key={item.DriverId} />;
               })}
             </div>
           </>

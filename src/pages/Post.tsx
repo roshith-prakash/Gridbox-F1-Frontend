@@ -25,16 +25,25 @@ const Post = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  // Set window title.
+  useEffect(() => {
+    if (data?.data?.post?.title) {
+      document.title = `${data?.data?.post?.title} | GridBox F1`;
+    }
+  }, [data?.data]);
+
   return (
-    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
+    <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
       {/* Post is available */}
       {!isLoading && !error && (
-        <div className="pb-10 w-full mx-2 md:mx-5 lg:mx-10 bg-white shadow-xl rounded-xl">
+        <div className="pb-10 w-full mx-2 md:mx-5 lg:mx-10 bg-white dark:bg-secondarydarkbg shadow-xl rounded-xl">
           {/* Thumbnail Image */}
           <div>
             <img
               src={data?.data?.post?.thumbnail}
-              className="h-52 lg:h-[30rem] w-full rounded-t object-cover object-center"
+              className={`h-52 lg:h-[30rem] w-full rounded-t ${
+                data?.data?.post?.contain ? "object-contain" : "object-cover"
+              } object-center`}
             ></img>
           </div>
           <div className="p-5 md:p-10 md:pt-0 mt-8">

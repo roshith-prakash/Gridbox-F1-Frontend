@@ -17,6 +17,7 @@ import {
   CreatePost,
   AllPosts,
   NotFound,
+  SprintResult,
 } from "./pages";
 import {
   Dialog,
@@ -29,9 +30,11 @@ import { useEffect, useState } from "react";
 import { Footer, Navbar, SecurityHeaders } from "./components";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useDarkMode } from "./context/DarkModeContext";
 
 function App() {
   const [open, setOpen] = useState(true);
+  const { isDarkMode } = useDarkMode();
 
   // Check if server is active
   const { isLoading, error } = useQuery({
@@ -45,6 +48,7 @@ function App() {
     retry: 5,
   });
 
+  // To initialize AOS animations
   useEffect(() => {
     AOS.init({
       easing: "ease-in-sine",
@@ -58,7 +62,7 @@ function App() {
 
       {/* If server isn't ready for use, show a loading indicator */}
       {isLoading && (
-        <main className="h-screen w-full flex flex-col gap-y-5 justify-center items-center">
+        <main className="h-screen dark:bg-darkbg dark:text-darkmodetext w-full flex flex-col gap-y-5 justify-center items-center">
           <p className="text-2xl md:text-4xl flex items-center gap-x-2 font-bold italic">
             <GiCarWheel className="animate-spin text-3xl md:text-5xl" />{" "}
             Starting the Engine
@@ -71,7 +75,7 @@ function App() {
           />
           {/* Three dots loading indicator */}
           <RotateLoader
-            color={"#000000"}
+            color={isDarkMode ? "#FFFFFF" : "#000000"}
             loading={isLoading}
             size={25}
             aria-label="Loading Spinner"
@@ -95,7 +99,7 @@ function App() {
         <>
           {/* Data Availability Dialog box */}
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="max-w-[90%] w-80 md:w-96">
+            <DialogContent className="max-w-[90%] dark:bg-darkbg dark:text-darkmodetext w-80 md:w-96">
               <DialogHeader>
                 <DialogTitle>
                   GridBox F1: Data Availability Limitation
@@ -167,6 +171,12 @@ function App() {
                   element={<QualiResult />}
                 />
 
+                {/* Result for a specific sprint race */}
+                <Route
+                  path="/sprint-result/:year/:round"
+                  element={<SprintResult />}
+                />
+
                 {/* View All articles */}
                 <Route path="/the-paddock-report" element={<AllPosts />} />
 
@@ -181,7 +191,7 @@ function App() {
               </Routes>
 
               {/* Footer */}
-              <section className="flex-1 bg-greyBG pt-20">
+              <section className=" bg-greyBG dark:bg-darkbg flex-1 pt-20">
                 <Footer />
               </section>
             </div>

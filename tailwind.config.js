@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 // eslint-disable-next-line no-undef
 module.exports = {
-  darkMode: ["class"],
+  darkMode: 'class',
   content: ["./src/**/*.{html,js,jsx,tsx}"],
   theme: {
     extend: {
@@ -11,7 +11,9 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)'
       },
       colors: {
-        // cta: "#2c5364",
+        "darkbg": "#181818",
+        "secondarydarkbg": "#211f1f",
+        "darkmodetext": "#E4E4E4",
         "cta": "#9b0ced",
         "hovercta": "#7123b0",
         "greyBG": "#F5F5F5",

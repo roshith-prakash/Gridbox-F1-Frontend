@@ -1,13 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import {
-  CTAButton,
-  ErrorStatement,
-  Footer,
-  Input,
-  OutlineButton,
-} from "../components";
+import { CTAButton, ErrorStatement, Input, OutlineButton } from "../components";
 import { isEditorEmpty } from "../functions/regexFunctions";
 import { FaArrowDown } from "react-icons/fa6";
 import { axiosInstance } from "../utils/axios";
@@ -39,7 +33,8 @@ const CreatePost = () => {
   const [password, setPassword] = useState();
   // Is Viewable
   const [isViewable, setIsViewable] = useState(false);
-
+  // Image Contain
+  const [contain, setContain] = useState(false);
   // Scroll to top of page
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -93,6 +88,7 @@ const CreatePost = () => {
     formData.append("file", imageFile);
     formData.append("title", title);
     formData.append("content", String(value));
+    formData.append("contain", contain);
     setDisabled(true);
 
     // Sending request to server
@@ -116,19 +112,20 @@ const CreatePost = () => {
 
   // To get image input
   const handleFileChange = (e) => {
-    console.log(e.target.files[0]);
     setImageFile(e.target.files[0]);
     fileRef.current.value = null;
   };
 
+  console.log(contain);
+
   return (
-    <main className="bg-greyBG">
+    <main className="bg-greyBG dark:bg-darkbg dark:text-darkmodetext">
       <Toaster />
 
       {isViewable ? (
         <>
           {/* Editor box */}
-          <div className="p-10 pb-20 m-5 lg:m-10 bg-white shadow-xl border-[1px] rounded-xl">
+          <div className="p-10 pb-20 m-5 lg:m-10 bg-white dark:bg-secondarydarkbg shadow-xl border-[1px] rounded-xl">
             {/* Title */}
             <h1 className="text-2xl lg:text-4xl text-center font-medium">
               Create a new Article{" "}
@@ -194,6 +191,17 @@ const CreatePost = () => {
               </div>
             </div>
 
+            <div className="flex items-center gap-x-4 mt-8">
+              <p className="font-medium">Contain Image : </p>
+              <select
+                onChange={(e) => setContain(e.target.value)}
+                className="flex-1 px-5 md:flex-none border-2 py-2 rounded-xl text-black"
+              >
+                <option value={false}>Cover</option>
+                <option value={true}>Contain</option>
+              </select>
+            </div>
+
             {/* Quill Editor */}
             <div className="mt-10">
               {error.content == 1 && (
@@ -232,14 +240,25 @@ const CreatePost = () => {
           </h1>
 
           {/* Preview Post */}
-          <div className=" pb-20 m-5 lg:m-10 bg-white shadow-xl border-[1px] rounded-xl">
+          <div className=" pb-20 m-5 lg:m-10 bg-white dark:bg-secondarydarkbg  shadow-xl border-[1px] rounded-xl">
             {/* Thumbnail Image */}
             <div>
               {imageFile && (
-                <img
-                  src={URL.createObjectURL(imageFile)}
-                  className="h-96 lg:h-[30rem] w-full rounded-t object-cover object-center"
-                ></img>
+                <>
+                  {contain ? (
+                    <img
+                      key={contain}
+                      src={URL.createObjectURL(imageFile)}
+                      className={`h-52 lg:h-[30rem] w-full rounded-t object-contain object-center`}
+                    />
+                  ) : (
+                    <img
+                      key={contain}
+                      src={URL.createObjectURL(imageFile)}
+                      className={`h-52 lg:h-[30rem] w-full rounded-t object-cover object-center`}
+                    ></img>
+                  )}
+                </>
               )}
             </div>
 
@@ -288,12 +307,9 @@ const CreatePost = () => {
               )}
             </div>
           </div>
-
-          <div className="pt-20">
-            <Footer />
-          </div>
         </>
       ) : (
+        // Div to insert password
         <section className="min-h-screen flex justify-center items-center">
           <div className="flex gap-x-5">
             <label>Enter Admin Password :</label>

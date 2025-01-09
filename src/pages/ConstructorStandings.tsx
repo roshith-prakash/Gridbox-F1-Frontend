@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { ErrorDiv, YearPicker } from "../components";
 import CTAButton from "../components/CTAButton";
 import { SyncLoader } from "react-spinners";
@@ -23,23 +23,27 @@ import { nationalityMap } from "../data/nationalityToCountry";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
-// Register the locale for the countries constructor
+import { useDarkMode } from "../context/DarkModeContext";
+import { isAxiosError } from "axios";
+// Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
 // To be displayed on Mobile screens
 const ConstructorStandingCard = ({ item }) => {
-  const constructorCountry =
-    nationalityMap[String(item?.constructor?.nationality).trim()];
-  const constructorCountryCode = countries.getAlpha2Code(
-    constructorCountry,
+  const ConstructorCountry =
+    nationalityMap[String(item?.Constructor?.nationality).trim()];
+  const ConstructorCountryCode = countries.getAlpha2Code(
+    ConstructorCountry,
     "en"
   );
 
   return (
-    <div className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg">
-      <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
-        {item?.position}. <span>{item?.constructor?.name}</span>
+    <div className="flex flex-col overflow-hidden divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg">
+      {/* Position + Constructor Name */}
+      <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100 dark:bg-zinc-800">
+        {item?.position}. <span>{item?.Constructor?.name}</span>
       </p>
+      {/* Display Points and Grand Prix wins */}
       <div className="flex justify-between">
         <p className="px-5 py-3 text-lg font-medium">
           Points : <span>{item?.points}</span>
@@ -49,10 +53,11 @@ const ConstructorStandingCard = ({ item }) => {
         </p>
       </div>
 
+      {/* Display Constructor Nationality */}
       <p className="px-5 py-3">
-        Nationality : {item?.constructor?.nationality}{" "}
+        Nationality : {item?.Constructor?.nationality}{" "}
         <span
-          className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+          className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
         ></span>
       </p>
     </div>
@@ -62,7 +67,7 @@ const ConstructorStandingCard = ({ item }) => {
 ConstructorStandingCard.propTypes = {
   item: PropTypes.shape({
     driver: PropTypes.object,
-    constructor: PropTypes.object,
+    Constructor: PropTypes.object,
     position: PropTypes.number.isRequired,
     points: PropTypes.number,
     wins: PropTypes.number,
@@ -74,20 +79,24 @@ const LoadingTableCard = () => {
   return (
     <>
       <div className="hidden md:block pt-10 pb-5 w-full overflow-x-auto">
-        <table className="rounded-lg w-full overflow-hidden bg-white">
+        <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
           <TableHeader>
-            <TableRow className="text-left bg-gray-100">
-              <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+            <TableRow className="text-left bg-gray-100 dark:bg-zinc-800">
+              <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                 Position
               </TableHead>
-              <TableHead className="font-bold text-black">
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
                 Constructor
               </TableHead>
-              <TableHead className="font-bold text-black">
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
                 Nationality
               </TableHead>
-              <TableHead className="font-bold text-black">Points</TableHead>
-              <TableHead className="font-bold text-black">Wins</TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Points
+              </TableHead>
+              <TableHead className="font-bold text-black dark:text-darkmodetext">
+                Wins
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -96,23 +105,23 @@ const LoadingTableCard = () => {
               ?.map((driver, i) => {
                 return (
                   <TableRow
-                    className="text-left border-b-2 border-gray-100"
+                    className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
                     key={i}
                   >
                     <TableCell className="font-medium py-3 px-3 md:w-[5em]">
-                      <div className="bg-gray-300 animate-pulse w-10 h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-10 h-5 rounded"></div>
                     </TableCell>
                     <TableCell className="px-2">
-                      <div className="bg-gray-300 animate-pulse w-[90%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[90%] h-5 rounded"></div>
                     </TableCell>
                     <TableCell className="px-2">
-                      <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[40%] h-5 rounded"></div>
                     </TableCell>
                     <TableCell className="px-2">
-                      <div className="bg-gray-300 animate-pulse w-[40%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[40%] h-5 rounded"></div>
                     </TableCell>
                     <TableCell className="gap-x-2 px-2 text-nowrap">
-                      <div className="bg-gray-300 animate-pulse w-[70%] h-5 rounded"></div>
+                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
                     </TableCell>
                   </TableRow>
                 );
@@ -128,20 +137,20 @@ const LoadingTableCard = () => {
             return (
               <div
                 key={i}
-                className="flex flex-col divide-y-2 divide-gray-100 border-2 w-full max-w-[95%] rounded-lg shadow-lg"
+                className="flex flex-col divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg"
               >
-                <div className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100">
-                  <div className="h-5 w-[70%] bg-gray-300 animate-pulse rounded"></div>
+                <div className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100 dark:bg-zinc-800">
+                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                 </div>
                 <div className="flex justify-between px-5 py-3">
-                  <div className="h-5 w-[30%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[30%] bg-gray-300 dark:bg-gray-500 rounded"></div>
 
-                  <div className="h-5 w-[30%] bg-gray-300 rounded"></div>
+                  <div className="h-5 w-[30%] bg-gray-300 dark:bg-gray-500 rounded"></div>
                 </div>
 
                 <div className="flex gap-x-2 px-5 py-3">
                   <div className="h-5 w-[70%] bg-gray- animate-pulse rounded"></div>
-                  <div className="h-5 w-[10%] bg-gray-300 animate-pulse rounded"></div>
+                  <div className="h-5 w-[10%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
                 </div>
               </div>
             );
@@ -153,10 +162,11 @@ const LoadingTableCard = () => {
 
 const ConstructorStandings = () => {
   const navigate = useNavigate();
+  const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
-  const [year, setYear] = useState();
-  const [userSelectedYear, setUserSelectedYear] = useState();
-  const [displayYear, setDisplayYear] = useState();
+   const [year, setYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [standings, setStandings] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
@@ -168,7 +178,7 @@ const ConstructorStandings = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["constructorsStandings", year],
+    queryKey: ["ConstructorsStandings", year],
     queryFn: () => {
       return axiosInstance.post("/getConstructorStandings", {
         year: year,
@@ -220,9 +230,16 @@ const ConstructorStandings = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchStandings, year]);
 
+  // Set window title.
+  useEffect(() => {
+    document.title = displayYear
+      ? `Constructors Standings ${displayYear} | GridBox F1`
+      : `Constructors Standings | GridBox F1`;
+  }, [displayYear]);
+
   return (
-    <main className="bg-greyBG flex justify-center py-10 rounded-lg">
-      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white">
+    <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
+      <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white dark:bg-secondarydarkbg">
         {/* Input Section */}
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex flex-wrap w-full md:w-fit items-center gap-x-2 md:gap-x-5 gap-y-5">
@@ -235,6 +252,8 @@ const ConstructorStandings = () => {
               setYear={setUserSelectedYear}
             />
           </div>
+
+          {/* Change URL to fetch data */}
           <CTAButton
             className="w-full md:w-fit py-2 px-6 border-2 rounded"
             disabled={isLoading || invalidYear || !userSelectedYear}
@@ -244,9 +263,10 @@ const ConstructorStandings = () => {
             text="Fetch"
           ></CTAButton>
 
+          {/* Loader */}
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
-              <SyncLoader />
+              <SyncLoader color={isDarkMode ? "#FFF" : "#000"} />
             </div>
           )}
         </header>
@@ -260,19 +280,20 @@ const ConstructorStandings = () => {
           Year must be between 1950 & 2024
         </div>
 
-        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black rounded-xl font-semibold px-2">
+        {/* Title */}
+        <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black dark:border-darkmodetext rounded-xl font-semibold px-2">
           Constructors Standings {displayYear}
         </h1>
 
         {/* Data unavailable */}
-        {error && error?.response?.status == 404 && (
+        {error && isAxiosError(error) && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv text="Constructor standings data for the requested year is not available." />
           </div>
         )}
 
         {/* Server error */}
-        {error && error?.response?.status != 404 && (
+        {error && isAxiosError(error) && error?.response?.status != 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
           </div>
@@ -288,58 +309,64 @@ const ConstructorStandings = () => {
         {/* Show driver name and country when driver data is present */}
         {!error && standings.length > 0 && (
           <>
+            {/* Table to be displayd on larger screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
-              <table className="rounded-lg w-full overflow-hidden bg-white">
+              <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
                 <TableHeader>
-                  <TableRow className="text-left bg-gray-100">
-                    <TableHead className="font-bold text-black py-6 pl-3 text-nowrap">
+                  <TableRow className="text-left bg-gray-100 dark:bg-zinc-800">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
                       Position
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Constructor
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Nationality
                     </TableHead>
-                    <TableHead className="font-bold text-black">
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Points
                     </TableHead>
-                    <TableHead className="font-bold text-black">Wins</TableHead>
+                    <TableHead className="font-bold text-black dark:text-darkmodetext">
+                      Wins
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {standings?.map((item, i) => {
-                    const constructorCountry =
+                    const ConstructorCountry =
                       nationalityMap[
-                        String(item?.constructor?.nationality).trim()
+                        String(item?.Constructor?.nationality).trim()
                       ];
-                    const constructorCountryCode = countries.getAlpha2Code(
-                      constructorCountry,
+                    const ConstructorCountryCode = countries.getAlpha2Code(
+                      ConstructorCountry,
                       "en"
                     );
 
                     return (
                       <TableRow
-                        className="text-left border-b-2 border-gray-100"
+                        className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
                         key={item.position}
                       >
+                        {/* Position */}
                         <TableCell className="font-medium py-3 px-3 md:w-[5em] text-center">
                           {i + 1}.
                         </TableCell>
+                        {/* Constructor Name */}
                         <TableCell className="px-2">
-                          {item?.constructor?.name}
+                          {item?.Constructor?.name}
                         </TableCell>
-
+                        {/* Constructor Nationality */}
                         <TableCell className="px-2">
                           <span
-                            className={`mx-2 fi fi-${constructorCountryCode?.toLowerCase()}`}
+                            className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
                           ></span>
-                          {item?.constructor?.nationality}
+                          {item?.Constructor?.nationality}
                         </TableCell>
-
+                        {/* Points Scored */}
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           {item?.points}
                         </TableCell>
+                        {/* Grand Prix Wins */}
                         <TableCell className="px-2 text-nowrap">
                           {item?.wins}
                         </TableCell>
@@ -349,6 +376,7 @@ const ConstructorStandings = () => {
                 </TableBody>
               </table>
             </div>
+            {/* Cards to be displayed on smaller screens */}
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
               {standings?.map((item) => {
                 return (

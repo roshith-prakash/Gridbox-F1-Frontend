@@ -4,8 +4,10 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { PostCard } from "../components";
 import { SyncLoader } from "react-spinners";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const AllPosts = () => {
+  const { isDarkMode } = useDarkMode();
   // Query to get posts
   const { data, isLoading, error, fetchNextPage } = useInfiniteQuery({
     queryKey: ["recent-posts-home"],
@@ -34,11 +36,18 @@ const AllPosts = () => {
     }
   }, [inView, fetchNextPage]);
 
+  // Set window title.
+  useEffect(() => {
+    document.title = "The Paddock Report | GridBox F1";
+  }, []);
+
   return (
-    <div className="pb-32 bg-greyBG">
+    <div className="pb-32 bg-greyBG dark:bg-darkbg">
+      {/* Title */}
       <h1 className="text-4xl font-medium px-6 pt-5 italic">
         The Paddock Report
       </h1>
+      {/* Subtitle */}
       <h2 className="mt-4 text-lg px-6">
         Stay up-to-date with the latest in Formula 1 on the GridBox F1&apos;s
         Paddock Report! From breaking news and race recaps to in-depth analysis
@@ -51,6 +60,7 @@ const AllPosts = () => {
         {isLoading && (
           <div className="h-96 flex justify-center items-center">
             <SyncLoader
+              color={isDarkMode ? "#FFF" : "#000"}
               loading={isLoading}
               size={50}
               aria-label="Loading Spinner"
