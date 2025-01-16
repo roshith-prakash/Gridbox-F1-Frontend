@@ -233,7 +233,9 @@ const Circuits = () => {
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState<undefined | number>();
-  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<
+    undefined | number
+  >();
   const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [circuits, setCircuits] = useState([]);
   const [invalidYear, setInvalidYear] = useState();
@@ -256,7 +258,6 @@ const Circuits = () => {
     staleTime: Infinity,
   });
 
-
   // Scroll to Top
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -278,7 +279,7 @@ const Circuits = () => {
         urlYear &&
         !Number.isNaN(urlYear) &&
         parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= 2024
+        parseInt(urlYear) <= new Date().getFullYear()
       ) {
         setYear(parseInt(urlYear));
         setInvalidURL(false);
@@ -287,7 +288,7 @@ const Circuits = () => {
         setInvalidURL(true);
       }
     } else {
-      setYear(2024);
+      setYear(new Date().getFullYear());
     }
   }, [urlYear]);
 
@@ -354,7 +355,7 @@ const Circuits = () => {
         </h1>
 
         {/* Data unavailable */}
-        {error && isAxiosError(error) &&  error?.response?.status == 404 && (
+        {error && isAxiosError(error) && error?.response?.status == 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv text="Circuits data for the requested year is not available." />
           </div>

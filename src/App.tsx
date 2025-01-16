@@ -103,7 +103,7 @@ function App() {
         // !isLoading && !error &&
         <>
           {/* Data Availability Dialog box */}
-          <Dialog open={open} onOpenChange={setOpen}>
+          {/* <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="max-w-[90%] dark:bg-darkbg dark:text-darkmodetext w-80 md:w-96">
               <DialogHeader>
                 <DialogTitle>
@@ -116,7 +116,7 @@ function App() {
                 </DialogDescription>
               </DialogHeader>
             </DialogContent>
-          </Dialog>
+          </Dialog> */}
 
           <BrowserRouter>
             <div className="min-h-screen flex flex-col">

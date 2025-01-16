@@ -33,7 +33,9 @@ const Schedule = () => {
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState<undefined | number>();
-  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<
+    undefined | number
+  >();
   const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [schedule, setSchedule] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
@@ -77,7 +79,7 @@ const Schedule = () => {
         urlYear &&
         !Number.isNaN(urlYear) &&
         parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= 2024
+        parseInt(urlYear) <= new Date().getFullYear()
       ) {
         setYear(parseInt(urlYear));
         setInvalidURL(false);
@@ -86,7 +88,7 @@ const Schedule = () => {
         setInvalidURL(true);
       }
     } else {
-      setYear(2024);
+      setYear(new Date().getFullYear());
     }
   }, [urlYear]);
 
@@ -145,7 +147,7 @@ const Schedule = () => {
             invalidYear ? "h-14" : "h-0"
           } transition-all`}
         >
-          Year must be between 1950 & 2024
+          Year must be between 1950 & {new Date().getFullYear()}
         </div>
 
         {/* Title */}

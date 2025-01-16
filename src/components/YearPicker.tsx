@@ -7,7 +7,7 @@ const YearPicker = ({ setYear, setInvalidYear, className = "" }) => {
   const changeDate = (date) => {
     // Invalid date (first season is 1950 and last maintained season is 2024)
     if (
-      new Date(date._d).getFullYear() > 2024 ||
+      new Date(date._d).getFullYear() > new Date().getFullYear() ||
       new Date(date._d).getFullYear() < 1950
     ) {
       console.log("Invalid Year");

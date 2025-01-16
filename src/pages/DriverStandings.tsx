@@ -209,11 +209,15 @@ const DriverStandings = () => {
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState<undefined | number>();
-  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<
+    undefined | number
+  >();
   const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [standings, setStandings] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
+
+  const [customError, setCustomError] = useState(false);
 
   // Query function to fetch standings for each year
   const {
@@ -239,9 +243,14 @@ const DriverStandings = () => {
 
   // Set standings for the current year into the state
   useEffect(() => {
-    if (data?.data?.standings) {
-      setStandings(data?.data?.standings?.standings?.standings);
-      setDisplayYear(data?.data?.standings?.year);
+    if (data?.data) {
+      if (data?.data?.standings?.standings?.standings) {
+        setCustomError(false);
+        setStandings(data?.data?.standings?.standings?.standings);
+        setDisplayYear(data?.data?.standings?.year);
+      } else {
+        setCustomError(true);
+      }
     }
   }, [data?.data]);
 
@@ -253,7 +262,7 @@ const DriverStandings = () => {
         urlYear &&
         !Number.isNaN(urlYear) &&
         parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= 2024
+        parseInt(urlYear) <= new Date().getFullYear()
       ) {
         setYear(parseInt(urlYear));
         setInvalidURL(false);
@@ -262,7 +271,7 @@ const DriverStandings = () => {
         setInvalidURL(true);
       }
     } else {
-      setYear(2024);
+      setYear(new Date().getFullYear());
     }
   }, [urlYear]);
 
@@ -280,6 +289,8 @@ const DriverStandings = () => {
       ? `Drivers Standings ${displayYear} | GridBox F1`
       : `Drivers Standings | GridBox F1`;
   }, [displayYear]);
+
+  console.log(data?.data);
 
   return (
     <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
@@ -321,12 +332,12 @@ const DriverStandings = () => {
             invalidYear ? "h-14" : "h-0"
           } transition-all`}
         >
-          Year must be between 1950 & 2024
+          Year must be between 1950 & {new Date().getFullYear()}
         </div>
 
         {/* Title */}
         <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black dark:border-darkmodetext rounded-xl font-semibold px-2">
-          Drivers Standings {displayYear}
+          Drivers Standings {!customError && displayYear}
         </h1>
 
         {/* Data unavailable */}
@@ -343,6 +354,12 @@ const DriverStandings = () => {
           </div>
         )}
 
+        {customError && (
+          <div className="py-20 flex justify-center items-center">
+            <ErrorDiv text="Drivers Standings data for the requested year is not available." />
+          </div>
+        )}
+
         {/* Invalid param in URL */}
         {!year && invalidURL && (
           <div className="py-20 flex justify-center items-center">
@@ -351,7 +368,7 @@ const DriverStandings = () => {
         )}
 
         {/* Show Driver name and country when Driver data is present */}
-        {!error && standings.length > 0 && (
+        {!customError && !error && standings.length > 0 && (
           <>
             {/* Table to be displayed on Larger screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
@@ -448,7 +465,9 @@ const DriverStandings = () => {
         )}
 
         {/* When loading initial data */}
-        {!invalidURL && !error && standings.length == 0 && <LoadingTableCard />}
+        {!customError && !invalidURL && !error && standings.length == 0 && (
+          <LoadingTableCard />
+        )}
       </section>
     </main>
   );

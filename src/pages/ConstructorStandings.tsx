@@ -164,12 +164,16 @@ const ConstructorStandings = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
-   const [year, setYear] = useState<undefined | number>();
-  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [year, setYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<
+    undefined | number
+  >();
   const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [standings, setStandings] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
+
+  const [customError, setCustomError] = useState(false);
 
   // Query function to fetch standings for each year
   const {
@@ -195,9 +199,14 @@ const ConstructorStandings = () => {
 
   // Set standings for the current year into the state
   useEffect(() => {
-    if (data?.data?.standings) {
-      setStandings(data?.data?.standings?.standings?.standings);
-      setDisplayYear(data?.data?.standings?.year);
+    if (data?.data) {
+      if (data?.data?.standings?.standings?.standings) {
+        setCustomError(false);
+        setStandings(data?.data?.standings?.standings?.standings);
+        setDisplayYear(data?.data?.standings?.year);
+      } else {
+        setCustomError(true);
+      }
     }
   }, [data?.data]);
 
@@ -209,7 +218,7 @@ const ConstructorStandings = () => {
         urlYear &&
         !Number.isNaN(urlYear) &&
         parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= 2024
+        parseInt(urlYear) <= new Date().getFullYear()
       ) {
         setYear(parseInt(urlYear));
         setInvalidURL(false);
@@ -218,7 +227,7 @@ const ConstructorStandings = () => {
         setInvalidURL(true);
       }
     } else {
-      setYear(2024);
+      setYear(new Date().getFullYear());
     }
   }, [urlYear]);
 
@@ -277,7 +286,7 @@ const ConstructorStandings = () => {
             invalidYear ? "h-14" : "h-0"
           } transition-all`}
         >
-          Year must be between 1950 & 2024
+          Year must be between 1950 & {new Date().getFullYear()}
         </div>
 
         {/* Title */}
@@ -299,6 +308,13 @@ const ConstructorStandings = () => {
           </div>
         )}
 
+        {/* Data unavailable */}
+        {customError && (
+          <div className="py-20 flex justify-center items-center">
+            <ErrorDiv text="Constructor standings data for the requested year is not available." />
+          </div>
+        )}
+
         {/* Invalid param in URL */}
         {!year && invalidURL && (
           <div className="py-20 flex justify-center items-center">
@@ -307,7 +323,7 @@ const ConstructorStandings = () => {
         )}
 
         {/* Show driver name and country when driver data is present */}
-        {!error && standings.length > 0 && (
+        {!customError && !error && standings.length > 0 && (
           <>
             {/* Table to be displayd on larger screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
@@ -388,7 +404,9 @@ const ConstructorStandings = () => {
         )}
 
         {/* Show when standings have not been fetched */}
-        {!invalidURL && !error && standings.length == 0 && <LoadingTableCard />}
+        {!customError && !invalidURL && !error && standings.length == 0 && (
+          <LoadingTableCard />
+        )}
       </section>
     </main>
   );
