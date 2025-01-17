@@ -28,6 +28,8 @@ import { isAxiosError } from "axios";
 // Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
+// --------------------------------------------------------------------------------------------------------
+
 // To be displayed on Mobile screens
 const ConstructorStandingCard = ({ item }) => {
   const ConstructorCountry =
@@ -73,6 +75,8 @@ ConstructorStandingCard.propTypes = {
     wins: PropTypes.number,
   }).isRequired,
 };
+
+// --------------------------------------------------------------------------------------------------------
 
 // Loading Placeholder Table / Card
 const LoadingTableCard = () => {
@@ -160,6 +164,8 @@ const LoadingTableCard = () => {
   );
 };
 
+// --------------------------------------------------------------------------------------------------------
+
 const ConstructorStandings = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
@@ -172,8 +178,6 @@ const ConstructorStandings = () => {
   const [standings, setStandings] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
-
-  const [customError, setCustomError] = useState(false);
 
   // Query function to fetch standings for each year
   const {
@@ -199,14 +203,9 @@ const ConstructorStandings = () => {
 
   // Set standings for the current year into the state
   useEffect(() => {
-    if (data?.data) {
-      if (data?.data?.standings?.standings?.standings) {
-        setCustomError(false);
-        setStandings(data?.data?.standings?.standings?.standings);
-        setDisplayYear(data?.data?.standings?.year);
-      } else {
-        setCustomError(true);
-      }
+    if (data?.data?.standings?.standings?.standings) {
+      setStandings(data?.data?.standings?.standings?.standings);
+      setDisplayYear(data?.data?.standings?.year);
     }
   }, [data?.data]);
 
@@ -256,6 +255,7 @@ const ConstructorStandings = () => {
               Select Year :
             </span>
             <YearPicker
+              year={year}
               className="w-full md:w-fit"
               setInvalidYear={setInvalidYear}
               setYear={setUserSelectedYear}
@@ -308,13 +308,6 @@ const ConstructorStandings = () => {
           </div>
         )}
 
-        {/* Data unavailable */}
-        {customError && (
-          <div className="py-20 flex justify-center items-center">
-            <ErrorDiv text="Constructor standings data for the requested year is not available." />
-          </div>
-        )}
-
         {/* Invalid param in URL */}
         {!year && invalidURL && (
           <div className="py-20 flex justify-center items-center">
@@ -323,7 +316,7 @@ const ConstructorStandings = () => {
         )}
 
         {/* Show driver name and country when driver data is present */}
-        {!customError && !error && standings.length > 0 && (
+        {!error && standings.length > 0 && (
           <>
             {/* Table to be displayd on larger screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
@@ -404,9 +397,7 @@ const ConstructorStandings = () => {
         )}
 
         {/* Show when standings have not been fetched */}
-        {!customError && !invalidURL && !error && standings.length == 0 && (
-          <LoadingTableCard />
-        )}
+        {!invalidURL && !error && standings.length == 0 && <LoadingTableCard />}
       </section>
     </main>
   );

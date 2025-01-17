@@ -217,8 +217,6 @@ const DriverStandings = () => {
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
 
-  const [customError, setCustomError] = useState(false);
-
   // Query function to fetch standings for each year
   const {
     data,
@@ -243,14 +241,10 @@ const DriverStandings = () => {
 
   // Set standings for the current year into the state
   useEffect(() => {
-    if (data?.data) {
-      if (data?.data?.standings?.standings?.standings) {
-        setCustomError(false);
-        setStandings(data?.data?.standings?.standings?.standings);
-        setDisplayYear(data?.data?.standings?.year);
-      } else {
-        setCustomError(true);
-      }
+    if (data?.data?.standings?.standings?.standings) {
+      // setDataNotAvailableError(false);
+      setStandings(data?.data?.standings?.standings?.standings);
+      setDisplayYear(data?.data?.standings?.year);
     }
   }, [data?.data]);
 
@@ -302,6 +296,7 @@ const DriverStandings = () => {
               Select Year :
             </span>
             <YearPicker
+              year={year}
               className="w-full md:w-fit"
               setInvalidYear={setInvalidYear}
               setYear={setUserSelectedYear}
@@ -337,7 +332,7 @@ const DriverStandings = () => {
 
         {/* Title */}
         <h1 className="text-4xl py-5 border-t-4 border-r-4 border-black dark:border-darkmodetext rounded-xl font-semibold px-2">
-          Drivers Standings {!customError && displayYear}
+          Drivers Standings {displayYear}
         </h1>
 
         {/* Data unavailable */}
@@ -354,12 +349,6 @@ const DriverStandings = () => {
           </div>
         )}
 
-        {customError && (
-          <div className="py-20 flex justify-center items-center">
-            <ErrorDiv text="Drivers Standings data for the requested year is not available." />
-          </div>
-        )}
-
         {/* Invalid param in URL */}
         {!year && invalidURL && (
           <div className="py-20 flex justify-center items-center">
@@ -368,7 +357,7 @@ const DriverStandings = () => {
         )}
 
         {/* Show Driver name and country when Driver data is present */}
-        {!customError && !error && standings.length > 0 && (
+        {!error && standings.length > 0 && (
           <>
             {/* Table to be displayed on Larger screens */}
             <div className="hidden md:block pt-10 pb-5 overflow-x-auto">
@@ -465,9 +454,7 @@ const DriverStandings = () => {
         )}
 
         {/* When loading initial data */}
-        {!customError && !invalidURL && !error && standings.length == 0 && (
-          <LoadingTableCard />
-        )}
+        {!invalidURL && !error && standings.length == 0 && <LoadingTableCard />}
       </section>
     </main>
   );

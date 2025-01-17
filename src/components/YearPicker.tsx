@@ -2,7 +2,7 @@ import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import * as PropTypes from "prop-types";
 
-const YearPicker = ({ setYear, setInvalidYear, className = "" }) => {
+const YearPicker = ({ setYear, setInvalidYear, className = "", year }) => {
   // To set the year using DatePicker
   const changeDate = (date) => {
     // Invalid date (first season is 1950 and last maintained season is 2024)
@@ -27,7 +27,7 @@ const YearPicker = ({ setYear, setInvalidYear, className = "" }) => {
       dateFormat="YYYY"
       timeFormat={false}
       inputProps={{
-        placeholder: "YYYY",
+        placeholder: String(year),
         className:
           "bg-transparent text-center dark:text-white placeholder:text-center outline-none w-full py-2",
       }}

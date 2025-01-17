@@ -317,6 +317,7 @@ const Circuits = () => {
               Select Year :
             </span>
             <YearPicker
+              year={year}
               className="w-full md:w-fit"
               setInvalidYear={setInvalidYear}
               setYear={setUserSelectedYear}
