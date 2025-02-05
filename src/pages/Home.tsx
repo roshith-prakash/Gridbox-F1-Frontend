@@ -103,15 +103,15 @@ const Home = () => {
         {/* Next Race */}
         {data?.data && (
           <div data-aos="fade-in" className="flex flex-col items-center gap-8">
-            <p className="text-center text-6xl font-semibold">
+            <p className="text-center text-4xl md:text-6xl font-semibold">
               {data?.data?.nextRace?.raceName}
             </p>
 
-            <div className="flex justify-center gap-x-8">
+            <div className="flex flex-col md:flex-row justify-center gap-x-8 gap-y-4">
               <p className="text-center text-2xl text-md font-medium">
                 Round : {data?.data?.nextRace?.round}
               </p>
-              <p className="border-r-2 border-darkbg dark:border-darkmodetext"></p>
+              <p className=" md:border-r-2 border-darkbg dark:border-darkmodetext"></p>
               <p className="text-center text-2xl text-md font-medium">
                 {data?.data?.nextRace?.Circuit?.circuitName}
                 <span
