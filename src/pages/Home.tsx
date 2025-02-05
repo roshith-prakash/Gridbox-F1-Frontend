@@ -1,18 +1,52 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SiF1 } from "react-icons/si";
-import { CTAButton, TyreModel } from "../components";
+import { Countdown, CTAButton, TyreModel } from "../components";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { axiosInstance } from "@/utils/axios";
+import { SyncLoader } from "react-spinners";
+import { useDarkMode } from "@/context/DarkModeContext";
+
+// To show flags for the drivers
+import countries from "i18n-iso-countries";
+import enLocale from "i18n-iso-countries/langs/en.json";
+import "flag-icons/css/flag-icons.min.css";
 
 const Home = () => {
+  const { isDarkMode } = useDarkMode();
+  const [countryCode, setCountryCode] = useState<string>("");
+
+  // Query function to fetch constructors for each year
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["next-race"],
+    queryFn: () => {
+      return axiosInstance.get("/getNextRace");
+    },
+    staleTime: 15 * 60 * 1000,
+  });
+
   // Scroll to Top
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  useEffect(() => {
+    if (data?.data?.nextRace) {
+      setCountryCode(
+        countries.getAlpha2Code(
+          data?.data?.nextRace?.Circuit?.Location?.country,
+          "en"
+        )
+      );
+    }
+  }, [data?.data]);
+
   // Set window title.
   useEffect(() => {
     document.title = "Home | GridBox F1";
   }, []);
+
+  console.log(data?.data?.nextRace);
 
   return (
     <div className="bg-greyBG dark:bg-darkbg pb-10">
@@ -48,6 +82,59 @@ const Home = () => {
             <div className="absolute left-0 top-0 h-full w-full p-1"></div>
           </div>
         </div>
+      </div>
+
+      {/* Next Race Section */}
+      <div className="py-20 flex flex-col items-center justify-center gap-y-10 bg-hovercta/5">
+        {/* Loading Indicator */}
+        {isLoading && (
+          <div className="h-36 flex gap-10 flex-col justify-center items-center">
+            <SyncLoader
+              color={isDarkMode ? "#FFF" : "#000"}
+              loading={isLoading}
+              size={40}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+            <p className="text-xl">Checking Next Race...</p>
+          </div>
+        )}
+
+        {/* Next Race */}
+        {data?.data && (
+          <div data-aos="fade-in" className="flex flex-col items-center gap-8">
+            <p className="text-center text-6xl font-semibold">
+              {data?.data?.nextRace?.raceName}
+            </p>
+
+            <div className="flex justify-center gap-x-8">
+              <p className="text-center text-2xl text-md font-medium">
+                Round : {data?.data?.nextRace?.round}
+              </p>
+              <p className="border-r-2 border-darkbg dark:border-darkmodetext"></p>
+              <p className="text-center text-2xl text-md font-medium">
+                {data?.data?.nextRace?.Circuit?.circuitName}
+                <span
+                  className={`mx-4 fi fi-${countryCode?.toLowerCase()}`}
+                ></span>
+              </p>
+            </div>
+            <Countdown
+              targetDate={`${data?.data?.nextRace?.date}T${data?.data?.nextRace?.time}`}
+            />
+
+            <Link to="/schedule">
+              <CTAButton text="Check out the Schedule!" />
+            </Link>
+          </div>
+        )}
+
+        {/* Error */}
+        {error && (
+          <p className="text-2xl font-medium text-center">
+            Can't find the next race! Meanwhile check out the Paddock Report?
+          </p>
+        )}
       </div>
 
       {/* Drivers Section */}
