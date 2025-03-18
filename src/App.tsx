@@ -102,22 +102,6 @@ function App() {
       {
         // !isLoading && !error &&
         <>
-          {/* Data Availability Dialog box */}
-          {/* <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="max-w-[90%] dark:bg-darkbg dark:text-darkmodetext w-80 md:w-96">
-              <DialogHeader>
-                <DialogTitle>
-                  GridBox F1: Data Availability Limitation
-                </DialogTitle>
-                <DialogDescription className="py-3">
-                  GridBox F1 relies on data from the Ergast Database, which will
-                  only be available up to the 2024 season. All site data will
-                  reflect information from the 2024 season and earlier.
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog> */}
-
           <BrowserRouter>
             <div className="min-h-screen flex flex-col">
               {/* Navbar */}

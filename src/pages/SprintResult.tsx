@@ -211,7 +211,7 @@ const LoadingTableCard = () => {
 
 const SprintResult = () => {
   const { year: urlYear, round: urlRound } = useParams();
- const [year, setYear] = useState<undefined | number>();
+  const [year, setYear] = useState<undefined | number>();
   const [round, setRound] = useState<undefined | number>();
   const [displayYear, setDisplayYear] = useState();
   const [displayRound, setDisplayRound] = useState();
@@ -261,7 +261,7 @@ const SprintResult = () => {
         urlYear &&
         !Number.isNaN(urlYear) &&
         parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= 2024 &&
+        parseInt(urlYear) <= new Date().getFullYear() &&
         urlRound &&
         !Number.isNaN(urlRound)
       ) {

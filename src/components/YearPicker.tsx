@@ -5,7 +5,7 @@ import * as PropTypes from "prop-types";
 const YearPicker = ({ setYear, setInvalidYear, className = "", year }) => {
   // To set the year using DatePicker
   const changeDate = (date) => {
-    // Invalid date (first season is 1950 and last maintained season is 2024)
+    // Invalid date (first season is 1950)
     if (
       new Date(date._d).getFullYear() > new Date().getFullYear() ||
       new Date(date._d).getFullYear() < 1950

@@ -347,7 +347,7 @@ const Circuits = () => {
             invalidYear ? "h-14" : "h-0"
           } transition-all`}
         >
-          Year must be between 1950 & 2024
+          Year must be between 1950 & {new Date().getFullYear()}
         </div>
 
         {/* Title */}
