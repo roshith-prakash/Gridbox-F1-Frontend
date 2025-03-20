@@ -10,7 +10,7 @@ const Footer = () => {
         isDarkMode
           ? "bg-secondarydarkbg border-t-2 border-darkmodetext"
           : " bg-gradient-to-b from-hovercta to-cta"
-      } font-inter pb-20 min-h-50vh relative text-white`}
+      } pb-20 min-h-50vh relative text-white`}
     >
       {/* Black div - floating into page */}
       <div className="absolute dark:border-2 dark:border-white -top-16 w-[90vw] lg:w-[80vw] left-1/2 -translate-x-1/2 rounded-lg h-32 flex justify-center items-center bg-darkbg text-white">

@@ -103,7 +103,7 @@ function App() {
         // !isLoading && !error &&
         <>
           <BrowserRouter>
-            <div className="min-h-screen flex flex-col">
+            <div className="min-h-screen font-f1 flex flex-col">
               {/* Navbar */}
               <Navbar />
 

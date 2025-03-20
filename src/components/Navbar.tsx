@@ -16,26 +16,24 @@ import { Drawer, DrawerClose, DrawerContent, DrawerTrigger } from "./ui/drawer";
 import { IoMoon, IoSunnySharp } from "react-icons/io5";
 import { useDarkMode } from "@/context/DarkModeContext";
 
-const ListItem = 
-  ({ className, title, to, ...props }) => {
-    return (
-      <NavigationMenuLink asChild>
-        <Link
-         to={to}
-          className={cn(
-            "block w-full select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors  focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-lg font-medium leading-none text-nowrap">
-            {title}
-          </div>
-        </Link>
-      </NavigationMenuLink>
-    );
-}
-
+const ListItem = ({ className, title, to, ...props }) => {
+  return (
+    <NavigationMenuLink asChild>
+      <Link
+        to={to}
+        className={cn(
+          "block w-full select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors  focus:bg-accent focus:text-accent-foreground",
+          className
+        )}
+        {...props}
+      >
+        <div className="text-lg font-medium leading-none text-nowrap">
+          {title}
+        </div>
+      </Link>
+    </NavigationMenuLink>
+  );
+};
 
 ListItem.displayName = "ListItem";
 
@@ -52,7 +50,7 @@ const Navbar = () => {
       {/* Link to Home Page */}
       <Link
         to="/"
-        className="font-mono font-bold italian flex gap-x-2 items-center text-2xl hover:text-cta transition-all"
+        className=" font-bold italian flex gap-x-2 items-center text-2xl hover:text-cta transition-all"
       >
         GridBox <SiF1 className="text-[3rem] translate-y-0.5 " />
       </Link>
@@ -94,7 +92,7 @@ const Navbar = () => {
         {/* Link to Paddock Report */}
         <Link
           to="/the-paddock-report"
-          className="hover:text-cta transition-all"
+          className="hover:text-cta -translate-x-1 transition-all"
         >
           The Paddock Report
         </Link>
@@ -148,7 +146,7 @@ const Navbar = () => {
                 <DrawerClose asChild>
                   <Link
                     to="/"
-                    className="font-mono font-bold italian flex gap-x-2 items-center text-2xl "
+                    className=" font-bold italian flex gap-x-2 items-center text-2xl "
                   >
                     GridBox <SiF1 className="text-[3rem] translate-y-0.5" />
                   </Link>
