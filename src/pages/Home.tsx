@@ -9,7 +9,6 @@ import { useDarkMode } from "@/context/DarkModeContext";
 
 // To show flags for the drivers
 import countries from "i18n-iso-countries";
-import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 
 const Home = () => {
@@ -45,8 +44,6 @@ const Home = () => {
   useEffect(() => {
     document.title = "Home | GridBox F1";
   }, []);
-
-  console.log(data?.data?.nextRace);
 
   return (
     <div className="bg-greyBG dark:bg-darkbg pb-10">

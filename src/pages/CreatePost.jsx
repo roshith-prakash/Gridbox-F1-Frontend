@@ -116,8 +116,6 @@ const CreatePost = () => {
     fileRef.current.value = null;
   };
 
-  console.log(contain);
-
   return (
     <main className="bg-greyBG dark:bg-darkbg dark:text-darkmodetext">
       <Toaster />

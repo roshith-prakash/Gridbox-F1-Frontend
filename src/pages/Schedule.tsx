@@ -387,14 +387,16 @@ const Schedule = () => {
                         )}
 
                         {/* Results Navigator - Displayed only if grand prix weekend is completed */}
-                        {new Date() > new Date(dateTime) && (
-                          <>
-                            <div className="flex items-center flex-wrap gap-x-2 gap-y-4">
-                              <p className="text-lg font-medium pr-2">
-                                Results:
-                              </p>
 
-                              {!!race?.Sprint && (
+                        <>
+                          <div className="flex items-center flex-wrap gap-x-2 gap-y-4">
+                            <p className="text-lg font-medium pr-2">Results:</p>
+
+                            {!!race?.Sprint &&
+                              new Date() >
+                                new Date(
+                                  `${race?.Sprint?.date}T${race?.Sprint?.time}`
+                                ) && (
                                 <CTAButton
                                   onClick={() => {
                                     navigate(
@@ -406,6 +408,10 @@ const Schedule = () => {
                                 ></CTAButton>
                               )}
 
+                            {new Date() >
+                              new Date(
+                                `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
+                              ) && (
                               <CTAButton
                                 onClick={() => {
                                   navigate(
@@ -415,6 +421,9 @@ const Schedule = () => {
                                 text="
                               Qualifying"
                               ></CTAButton>
+                            )}
+
+                            {new Date() > new Date(dateTime) && (
                               <CTAButton
                                 onClick={() => {
                                   navigate(
@@ -424,9 +433,9 @@ const Schedule = () => {
                                 text="
                               Race"
                               ></CTAButton>
-                            </div>
-                          </>
-                        )}
+                            )}
+                          </div>
+                        </>
                       </div>
                     </div>
                   </div>
