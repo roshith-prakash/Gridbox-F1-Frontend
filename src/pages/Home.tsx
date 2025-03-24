@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { SiF1 } from "react-icons/si";
 import { Countdown, CTAButton, TyreModel } from "../components";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -55,13 +54,8 @@ const Home = () => {
           <div className="px-5 flex-1 text-white flex justify-center items-center font-medium">
             {/* Content Section */}
             <section className="flex flex-col gap-y-8">
-              <h1 className="text-3xl">
-                <span className="flex text-4xl gap-x-2 items-center">
-                  GridBox <SiF1 className="text-7xl translate-y-1.5" />
-                </span>{" "}
-                Your one shot stop for everything F1 !
-              </h1>
-              <p className="text-lg italic leading-7 drop-shadow-lg">
+              <h1 className="text-4xl font-semibold">GridBox</h1>
+              <p className="text-lg  leading-7 drop-shadow-lg">
                 Explore the world of Formula 1 like never before with GridBox
                 F1! Instantly access detailed data on every driver and
                 constructor that&apos;s raced in any season, view year-by-year
@@ -116,6 +110,9 @@ const Home = () => {
                 ></span>
               </p>
             </div>
+            <p className="text-lg font-medium pr-2 -mb-2">
+              The Grand Prix will start in:
+            </p>
             <Countdown
               targetDate={`${data?.data?.nextRace?.date}T${data?.data?.nextRace?.time}`}
             />

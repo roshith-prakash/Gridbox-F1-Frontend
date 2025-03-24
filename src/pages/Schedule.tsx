@@ -390,7 +390,18 @@ const Schedule = () => {
 
                         <>
                           <div className="flex items-center flex-wrap gap-x-2 gap-y-4">
-                            <p className="text-lg font-medium pr-2">Results:</p>
+                            {(new Date() >
+                              new Date(
+                                `${race?.Sprint?.date}T${race?.Sprint?.time}`
+                              ) ||
+                              new Date() >
+                                new Date(
+                                  `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
+                                )) && (
+                              <p className="text-lg font-medium pr-2">
+                                Results:
+                              </p>
+                            )}
 
                             {!!race?.Sprint &&
                               new Date() >
