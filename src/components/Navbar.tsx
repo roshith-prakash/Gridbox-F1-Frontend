@@ -17,6 +17,8 @@ import { useDarkMode } from "@/context/DarkModeContext";
 
 // @ts-expect-error asset declaration error
 import car from "@/assets/racing-car.png";
+// @ts-expect-error asset declaration error
+import carDark from "@/assets/racing-car-dark.png";
 
 const ListItem = ({ className, title, to, ...props }) => {
   return (
@@ -54,7 +56,7 @@ const Navbar = () => {
         to="/"
         className=" font-bold italian flex gap-x-3 items-center text-3xl hover:text-cta transition-all"
       >
-        <img src={car} className="h-8" />
+        <img src={isDarkMode ? carDark : car} className="h-8" />
         GridBox
       </Link>
 
@@ -151,7 +153,7 @@ const Navbar = () => {
                     to="/"
                     className=" font-bold font-f1 text-3xl italian flex gap-x-3 items-center "
                   >
-                    <img src={car} className="h-8" />
+                    <img src={isDarkMode ? carDark : car} className="h-8" />
                     GridBox
                   </Link>
                 </DrawerClose>

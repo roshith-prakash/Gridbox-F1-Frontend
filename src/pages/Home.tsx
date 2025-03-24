@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Countdown, CTAButton, TyreModel } from "../components";
+import { Countdown, CTAButton } from "../components";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "@/utils/axios";
@@ -9,6 +9,9 @@ import { useDarkMode } from "@/context/DarkModeContext";
 // To show flags for the drivers
 import countries from "i18n-iso-countries";
 import "flag-icons/css/flag-icons.min.css";
+
+// @ts-expect-error asset declaration
+import carDark from "@/assets/racing-car-dark.png";
 
 const Home = () => {
   const { isDarkMode } = useDarkMode();
@@ -47,31 +50,36 @@ const Home = () => {
   return (
     <div className="bg-greyBG dark:bg-darkbg pb-10">
       {/* Hero Section */}
-      <div className="bg-hero flex flex-wrap bg-cover min-h-[85vh]">
-        {/* Black filter above BG */}
-        <div className="flex-1 w-full flex flex-wrap bg-black bg-opacity-75">
-          {/* Flex */}
-          <div className="px-5 flex-1 text-white flex justify-center items-center font-medium">
-            {/* Content Section */}
-            <section className="flex flex-col gap-y-8">
-              <h1 className="text-4xl font-semibold">GridBox</h1>
-              <p className="text-lg  leading-7 drop-shadow-lg">
-                Explore the world of Formula 1 like never before with GridBox
-                F1! Instantly access detailed data on every driver and
-                constructor that&apos;s raced in any season, view year-by-year
-                standings, and dive into race and qualifying results. With
-                comprehensive circuit profiles and the latest news in the
-                paddock, GridBox F1 is your go-to platform for all things F1,
-                whether you&apos;re tracking past champions or viewing the
-                latest race outcomes.
-              </p>
-            </section>
-          </div>
-          {/* 3D Model of Pirelli Tyres */}
-          <div className="hidden xl:block flex-1 relative max-w-[50%]">
-            <TyreModel />
-            <div className="absolute left-0 top-0 h-full w-full p-1"></div>
-          </div>
+      <div className="relative min-h-[80vh] max-h-[80vh] overflow-hidden flex items-center justify-center bg-cover">
+        {/* Video Background */}
+        <video
+          src={
+            "https://res.cloudinary.com/do8rpl9l4/video/upload/v1742812954/f1_edit_1_c97gn7.mp4"
+          }
+          className="absolute top-0 left-0 w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+        />
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-75" />
+
+        {/* Content Section */}
+        <div className="relative z-10 text-white text-center px-5 max-w-3xl">
+          <h1 className="text-5xl flex items-center font-bold justify-center gap-x-4 mb-6 drop-shadow-lg">
+            <img src={carDark} className="h-12" />
+            GridBox
+          </h1>
+          <p className="text-lg leading-7 pt-4 drop-shadow-lg">
+            Explore the world of Formula 1 like never before with GridBox F1!
+            Instantly access detailed data on every driver and constructor
+            that&apos;s raced in any season, view year-by-year standings, and
+            dive into race and qualifying results. With comprehensive circuit
+            profiles and the latest news in the paddock, GridBox F1 is your
+            go-to platform for all things F1, whether you&apos;re tracking past
+            champions or viewing the latest race outcomes.
+          </p>
         </div>
       </div>
 
