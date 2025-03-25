@@ -144,11 +144,11 @@ const Schedule = () => {
 
         {/* Invalid year error  */}
         <div
-          className={`text-red-600 font-medium px-5 overflow-hidden  ${
+          className={`text-red-600 dark:text-red-500 font-medium px-5 overflow-hidden  ${
             invalidYear ? "h-14" : "h-0"
           } transition-all`}
         >
-          Year must be between 1950 & {new Date().getFullYear()}
+          Year must be between 1950 & {new Date().getFullYear()}.
         </div>
 
         {/* Title */}

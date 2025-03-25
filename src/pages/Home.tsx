@@ -63,7 +63,7 @@ const Home = () => {
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-75" />
+        <div className="absolute inset-0 bg-black bg-opacity-65" />
 
         {/* Content Section */}
         <div className="relative z-10 text-white text-center px-5 max-w-3xl">
