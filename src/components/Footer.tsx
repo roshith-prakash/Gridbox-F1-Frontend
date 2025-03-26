@@ -165,7 +165,7 @@ const Footer = () => {
           <img
             // src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1736414559/logo_cnblu2.png"
             src={footerImage}
-            alt="Gridbox F1"
+            alt="GridBox"
             className="h-96 pointer-events-none"
           />
         </div>

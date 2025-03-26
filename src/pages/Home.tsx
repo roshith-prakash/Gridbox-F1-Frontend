@@ -31,6 +31,7 @@ const Home = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  // Find country code for next race.
   useEffect(() => {
     if (data?.data?.nextRace) {
       setCountryCode(
@@ -50,7 +51,7 @@ const Home = () => {
   return (
     <div className="bg-greyBG dark:bg-darkbg pb-10">
       {/* Hero Section */}
-      <div className="relative min-h-[80vh] max-h-[80vh] overflow-hidden flex items-center justify-center bg-cover">
+      <div className="relative min-h-[80vh]  overflow-hidden flex items-center justify-center bg-cover">
         {/* Video Background */}
         <video
           src={
@@ -66,7 +67,7 @@ const Home = () => {
         <div className="absolute inset-0 bg-black bg-opacity-65" />
 
         {/* Content Section */}
-        <div className="relative z-10 text-white text-center px-5 max-w-3xl">
+        <div className="relative z-10 py-10 text-white text-center px-5 max-w-3xl">
           <h1 className="text-5xl flex items-center font-bold justify-center gap-x-4 mb-6 drop-shadow-lg">
             <img src={carDark} className="h-12" />
             GridBox
