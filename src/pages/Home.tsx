@@ -51,11 +51,12 @@ const Home = () => {
   return (
     <div className="bg-greyBG dark:bg-darkbg pb-10">
       {/* Hero Section */}
-      <div className="relative min-h-[80vh]  overflow-hidden flex items-center justify-center bg-cover">
+      <div className="relative min-h-[80vh] bg-darkbg overflow-hidden flex items-center justify-center bg-cover">
         {/* Video Background */}
         <video
           src={
-            "https://res.cloudinary.com/do8rpl9l4/video/upload/v1742812954/f1_edit_1_c97gn7.mp4"
+            // "https://res.cloudinary.com/do8rpl9l4/video/upload/v1742812954/f1_edit_1_c97gn7.mp4"
+            "https://res.cloudinary.com/do8rpl9l4/video/upload/v1743154131/gridbox_edit_ayca4i.mp4"
           }
           className="absolute top-0 left-0 w-full h-full object-cover"
           autoPlay
