@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { SiF1 } from "react-icons/si";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 import {
   NavigationMenu,
@@ -16,26 +15,29 @@ import { Drawer, DrawerClose, DrawerContent, DrawerTrigger } from "./ui/drawer";
 import { IoMoon, IoSunnySharp } from "react-icons/io5";
 import { useDarkMode } from "@/context/DarkModeContext";
 
-const ListItem = 
-  ({ className, title, to, ...props }) => {
-    return (
-      <NavigationMenuLink asChild>
-        <Link
-         to={to}
-          className={cn(
-            "block w-full select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors  focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-lg font-medium leading-none text-nowrap">
-            {title}
-          </div>
-        </Link>
-      </NavigationMenuLink>
-    );
-}
+// @ts-expect-error asset declaration error
+import car from "@/assets/racing-car.png";
+// @ts-expect-error asset declaration error
+import carDark from "@/assets/racing-car-dark.png";
 
+const ListItem = ({ className, title, to, ...props }) => {
+  return (
+    <NavigationMenuLink asChild>
+      <Link
+        to={to}
+        className={cn(
+          "block w-full select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors  focus:bg-accent focus:text-accent-foreground",
+          className
+        )}
+        {...props}
+      >
+        <div className="text-lg font-medium leading-none text-nowrap">
+          {title}
+        </div>
+      </Link>
+    </NavigationMenuLink>
+  );
+};
 
 ListItem.displayName = "ListItem";
 
@@ -48,13 +50,14 @@ ListItem.propTypes = {
 const Navbar = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   return (
-    <nav className="px-5 md:px-10 py-3 flex justify-between items-center shadow-md relative z-2">
+    <nav className="px-5 md:px-10 py-4 flex justify-between items-center shadow-md relative z-2">
       {/* Link to Home Page */}
       <Link
         to="/"
-        className="font-mono font-bold italian flex gap-x-2 items-center text-2xl hover:text-cta transition-all"
+        className=" font-bold italian flex gap-x-3 items-center text-3xl hover:text-cta transition-all"
       >
-        GridBox <SiF1 className="text-[3rem] translate-y-0.5 " />
+        <img src={isDarkMode ? carDark : car} className="h-8" />
+        GridBox
       </Link>
 
       {/* Navigation links on large screens */}
@@ -94,7 +97,7 @@ const Navbar = () => {
         {/* Link to Paddock Report */}
         <Link
           to="/the-paddock-report"
-          className="hover:text-cta transition-all"
+          className="hover:text-cta -translate-x-1 transition-all"
         >
           The Paddock Report
         </Link>
@@ -122,7 +125,7 @@ const Navbar = () => {
       </div>
 
       {/* Navigation links on small screens - Drawer pops out from right side */}
-      <div className="lg:hidden flex gap-x-5 items-center">
+      <div className="lg:hidden font-f1 flex gap-x-5 items-center">
         <button
           onClick={toggleDarkMode}
           className="translate-y-0.5 outline-none"
@@ -148,9 +151,10 @@ const Navbar = () => {
                 <DrawerClose asChild>
                   <Link
                     to="/"
-                    className="font-mono font-bold italian flex gap-x-2 items-center text-2xl "
+                    className=" font-bold font-f1 text-3xl italian flex gap-x-3 items-center "
                   >
-                    GridBox <SiF1 className="text-[3rem] translate-y-0.5" />
+                    <img src={isDarkMode ? carDark : car} className="h-8" />
+                    GridBox
                   </Link>
                 </DrawerClose>
                 {/* Button to close drawer */}

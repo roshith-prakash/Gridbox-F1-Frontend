@@ -33,7 +33,9 @@ const Schedule = () => {
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState<undefined | number>();
-  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<
+    undefined | number
+  >();
   const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [schedule, setSchedule] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
@@ -77,7 +79,7 @@ const Schedule = () => {
         urlYear &&
         !Number.isNaN(urlYear) &&
         parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= 2024
+        parseInt(urlYear) <= new Date().getFullYear()
       ) {
         setYear(parseInt(urlYear));
         setInvalidURL(false);
@@ -86,7 +88,7 @@ const Schedule = () => {
         setInvalidURL(true);
       }
     } else {
-      setYear(2024);
+      setYear(new Date().getFullYear());
     }
   }, [urlYear]);
 
@@ -115,6 +117,7 @@ const Schedule = () => {
               Select Year :
             </span>
             <YearPicker
+              year={year}
               className="w-full md:w-fit"
               setInvalidYear={setInvalidYear}
               setYear={setUserSelectedYear}
@@ -141,11 +144,11 @@ const Schedule = () => {
 
         {/* Invalid year error  */}
         <div
-          className={`text-red-600 font-medium px-5 overflow-hidden  ${
+          className={`text-red-600 dark:text-red-500 font-medium px-5 overflow-hidden  ${
             invalidYear ? "h-14" : "h-0"
           } transition-all`}
         >
-          Year must be between 1950 & 2024
+          Year must be between 1950 & {new Date().getFullYear()}.
         </div>
 
         {/* Title */}
@@ -384,14 +387,27 @@ const Schedule = () => {
                         )}
 
                         {/* Results Navigator - Displayed only if grand prix weekend is completed */}
-                        {new Date() > new Date(dateTime) && (
-                          <>
-                            <div className="flex items-center flex-wrap gap-x-2 gap-y-4">
+
+                        <>
+                          <div className="flex items-center flex-wrap gap-x-2 gap-y-4">
+                            {(new Date() >
+                              new Date(
+                                `${race?.Sprint?.date}T${race?.Sprint?.time}`
+                              ) ||
+                              new Date() >
+                                new Date(
+                                  `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
+                                )) && (
                               <p className="text-lg font-medium pr-2">
                                 Results:
                               </p>
+                            )}
 
-                              {!!race?.Sprint && (
+                            {!!race?.Sprint &&
+                              new Date() >
+                                new Date(
+                                  `${race?.Sprint?.date}T${race?.Sprint?.time}`
+                                ) && (
                                 <CTAButton
                                   onClick={() => {
                                     navigate(
@@ -403,6 +419,10 @@ const Schedule = () => {
                                 ></CTAButton>
                               )}
 
+                            {new Date() >
+                              new Date(
+                                `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
+                              ) && (
                               <CTAButton
                                 onClick={() => {
                                   navigate(
@@ -412,6 +432,9 @@ const Schedule = () => {
                                 text="
                               Qualifying"
                               ></CTAButton>
+                            )}
+
+                            {new Date() > new Date(dateTime) && (
                               <CTAButton
                                 onClick={() => {
                                   navigate(
@@ -421,9 +444,9 @@ const Schedule = () => {
                                 text="
                               Race"
                               ></CTAButton>
-                            </div>
-                          </>
-                        )}
+                            )}
+                          </div>
+                        </>
                       </div>
                     </div>
                   </div>

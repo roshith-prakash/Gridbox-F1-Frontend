@@ -8,7 +8,7 @@ import CTAButton from "./CTAButton";
 import OutlineButton from "./OutlineButton";
 import Input from "./Input";
 import PostCard from "./PostCard";
-import TyreModel from "./TyreModel";
+import Countdown from "./CountDown";
 
 export {
   SecurityHeaders,
@@ -21,5 +21,5 @@ export {
   Input,
   OutlineButton,
   PostCard,
-  TyreModel,
+  Countdown,
 };

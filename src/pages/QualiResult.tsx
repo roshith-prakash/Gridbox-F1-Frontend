@@ -238,7 +238,7 @@ const QualiResult = () => {
         urlYear &&
         !Number.isNaN(urlYear) &&
         parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= 2024 &&
+        parseInt(urlYear) <= new Date().getFullYear() &&
         urlRound &&
         !Number.isNaN(urlRound)
       ) {

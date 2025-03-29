@@ -35,7 +35,7 @@ const Post = () => {
   return (
     <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
       {/* Post is available */}
-      {!isLoading && !error && (
+      {!isLoading && !error && data?.data?.post && (
         <div className="pb-10 w-full mx-2 md:mx-5 lg:mx-10 bg-white dark:bg-secondarydarkbg shadow-xl rounded-xl">
           {/* Thumbnail Image */}
           <div>
@@ -46,9 +46,9 @@ const Post = () => {
               } object-center`}
             ></img>
           </div>
-          <div className="p-5 md:p-10 md:pt-0 mt-8">
+          <div className="p-5 md:p-10 md:pt-0 mt-8 max-w-5xl mx-auto">
             {/* Post Title */}
-            <h1 className="mt-10 text-4xl lg:text-6xl font-bold text-ink">
+            <h1 className="mt-10 text-4xl ml-4 lg:text-6xl font-bold text-ink">
               {data?.data?.post?.title}
             </h1>
 

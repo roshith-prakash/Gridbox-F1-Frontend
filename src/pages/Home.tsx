@@ -1,13 +1,47 @@
-import { useEffect } from "react";
-import { SiF1 } from "react-icons/si";
-import { CTAButton, TyreModel } from "../components";
+import { useEffect, useState } from "react";
+import { Countdown, CTAButton } from "../components";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { axiosInstance } from "@/utils/axios";
+import { SyncLoader } from "react-spinners";
+import { useDarkMode } from "@/context/DarkModeContext";
+
+// To show flags for the drivers
+import countries from "i18n-iso-countries";
+import "flag-icons/css/flag-icons.min.css";
+
+// @ts-expect-error asset declaration
+import carDark from "@/assets/racing-car-dark.png";
 
 const Home = () => {
+  const { isDarkMode } = useDarkMode();
+  const [countryCode, setCountryCode] = useState<string>("");
+
+  // Query function to fetch constructors for each year
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["next-race"],
+    queryFn: () => {
+      return axiosInstance.get("/getNextRace");
+    },
+    staleTime: 15 * 60 * 1000,
+  });
+
   // Scroll to Top
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+
+  // Find country code for next race.
+  useEffect(() => {
+    if (data?.data?.nextRace) {
+      setCountryCode(
+        countries.getAlpha2Code(
+          data?.data?.nextRace?.Circuit?.Location?.country,
+          "en"
+        )
+      );
+    }
+  }, [data?.data]);
 
   // Set window title.
   useEffect(() => {
@@ -17,37 +51,94 @@ const Home = () => {
   return (
     <div className="bg-greyBG dark:bg-darkbg pb-10">
       {/* Hero Section */}
-      <div className="bg-hero flex flex-wrap bg-cover min-h-[85vh]">
-        {/* Black filter above BG */}
-        <div className="flex-1 w-full flex flex-wrap bg-black bg-opacity-75">
-          {/* Flex */}
-          <div className="px-5 flex-1 text-white flex justify-center items-center font-medium">
-            {/* Content Section */}
-            <section className="flex flex-col gap-y-8">
-              <h1 className="text-3xl">
-                <span className="flex text-4xl gap-x-2 items-center">
-                  GridBox <SiF1 className="text-7xl translate-y-1.5" />
-                </span>{" "}
-                Your one shot stop for everything F1 !
-              </h1>
-              <p className="text-lg italic leading-7 drop-shadow-lg">
-                Explore the world of Formula 1 like never before with GridBox
-                F1! Instantly access detailed data on every driver and
-                constructor that&apos;s raced in any season, view year-by-year
-                standings, and dive into race and qualifying results. With
-                comprehensive circuit profiles and the latest news in the
-                paddock, GridBox F1 is your go-to platform for all things F1,
-                whether you&apos;re tracking past champions or viewing the
-                latest race outcomes.
-              </p>
-            </section>
-          </div>
-          {/* 3D Model of Pirelli Tyres */}
-          <div className="hidden xl:block flex-1 relative max-w-[50%]">
-            <TyreModel />
-            <div className="absolute left-0 top-0 h-full w-full p-1"></div>
-          </div>
+      <div className="relative min-h-[80vh] bg-darkbg overflow-hidden flex items-center justify-center bg-cover">
+        {/* Video Background */}
+        <video
+          src={
+            // "https://res.cloudinary.com/do8rpl9l4/video/upload/v1742812954/f1_edit_1_c97gn7.mp4"
+            "https://res.cloudinary.com/do8rpl9l4/video/upload/v1743154131/gridbox_edit_ayca4i.mp4"
+          }
+          className="absolute top-0 left-0 w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+        />
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-65" />
+
+        {/* Content Section */}
+        <div className="relative z-10 py-10 text-white text-center px-5 max-w-3xl">
+          <h1 className="text-5xl flex items-center font-bold justify-center gap-x-4 mb-6 drop-shadow-lg">
+            <img src={carDark} className="h-12" />
+            GridBox
+          </h1>
+          <p className="text-lg leading-7 pt-4 drop-shadow-lg">
+            Explore the world of Formula 1 like never before with GridBox F1!
+            Instantly access detailed data on every driver and constructor
+            that&apos;s raced in any season, view year-by-year standings, and
+            dive into race and qualifying results. With comprehensive circuit
+            profiles and the latest news in the paddock, GridBox F1 is your
+            go-to platform for all things F1, whether you&apos;re tracking past
+            champions or viewing the latest race outcomes.
+          </p>
         </div>
+      </div>
+
+      {/* Next Race Section */}
+      <div className="py-20 flex flex-col items-center justify-center gap-y-10 bg-hovercta/5">
+        {/* Loading Indicator */}
+        {isLoading && (
+          <div className="h-36 flex gap-10 flex-col justify-center items-center">
+            <SyncLoader
+              color={isDarkMode ? "#FFF" : "#000"}
+              loading={isLoading}
+              size={40}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+            <p className="text-xl">Checking Next Race...</p>
+          </div>
+        )}
+
+        {/* Next Race */}
+        {data?.data && (
+          <div data-aos="fade-in" className="flex flex-col items-center gap-8">
+            <p className="text-center text-4xl md:text-6xl font-semibold">
+              {data?.data?.nextRace?.raceName}
+            </p>
+
+            <div className="flex flex-col md:flex-row justify-center gap-x-8 gap-y-4">
+              <p className="text-center text-2xl text-md font-medium">
+                Round : {data?.data?.nextRace?.round}
+              </p>
+              <p className=" md:border-r-2 border-darkbg dark:border-darkmodetext"></p>
+              <p className="text-center text-2xl text-md font-medium">
+                {data?.data?.nextRace?.Circuit?.circuitName}
+                <span
+                  className={`mx-4 fi fi-${countryCode?.toLowerCase()}`}
+                ></span>
+              </p>
+            </div>
+            <p className="text-lg font-medium pr-2 -mb-2">
+              The Grand Prix will start in:
+            </p>
+            <Countdown
+              targetDate={`${data?.data?.nextRace?.date}T${data?.data?.nextRace?.time}`}
+            />
+
+            <Link to="/schedule">
+              <CTAButton text="Check out the Schedule!" />
+            </Link>
+          </div>
+        )}
+
+        {/* Error */}
+        {error && (
+          <p className="text-2xl font-medium text-center">
+            Can't find the next race! Meanwhile check out the Paddock Report?
+          </p>
+        )}
       </div>
 
       {/* Drivers Section */}

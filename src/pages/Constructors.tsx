@@ -23,7 +23,7 @@ import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDarkMode } from "../context/DarkModeContext";
-import { isAxiosError  } from "axios";
+import { isAxiosError } from "axios";
 
 // Register the locale for the countries constructor
 countries.registerLocale(enLocale);
@@ -151,7 +151,9 @@ const Constructors = () => {
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
   const [year, setYear] = useState<undefined | number>();
-  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<
+    undefined | number
+  >();
   const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [constructors, setConstructors] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
@@ -182,7 +184,7 @@ const Constructors = () => {
         urlYear &&
         !Number.isNaN(urlYear) &&
         parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= 2024
+        parseInt(urlYear) <= new Date().getFullYear()
       ) {
         setYear(parseInt(urlYear));
         setInvalidURL(false);
@@ -191,7 +193,7 @@ const Constructors = () => {
         setInvalidURL(true);
       }
     } else {
-      setYear(2024);
+      setYear(new Date().getFullYear());
     }
   }, [urlYear]);
 
@@ -233,6 +235,7 @@ const Constructors = () => {
               Select Year :
             </span>
             <YearPicker
+              year={year}
               className="w-full md:w-fit"
               setInvalidYear={setInvalidYear}
               setYear={setUserSelectedYear}
@@ -258,11 +261,11 @@ const Constructors = () => {
 
         {/* Invalid year error  */}
         <div
-          className={`text-red-600 font-medium px-5 overflow-hidden  ${
+          className={`text-red-600 dark:text-red-500 font-medium px-5 overflow-hidden  ${
             invalidYear ? "h-14" : "h-0"
           } transition-all`}
         >
-          Year must be between 1950 & 2024
+          Year must be between 1950 & {new Date().getFullYear()}.
         </div>
 
         {/* Title */}

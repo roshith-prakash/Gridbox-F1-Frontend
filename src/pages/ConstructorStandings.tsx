@@ -28,6 +28,8 @@ import { isAxiosError } from "axios";
 // Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
+// --------------------------------------------------------------------------------------------------------
+
 // To be displayed on Mobile screens
 const ConstructorStandingCard = ({ item }) => {
   const ConstructorCountry =
@@ -73,6 +75,8 @@ ConstructorStandingCard.propTypes = {
     wins: PropTypes.number,
   }).isRequired,
 };
+
+// --------------------------------------------------------------------------------------------------------
 
 // Loading Placeholder Table / Card
 const LoadingTableCard = () => {
@@ -160,12 +164,16 @@ const LoadingTableCard = () => {
   );
 };
 
+// --------------------------------------------------------------------------------------------------------
+
 const ConstructorStandings = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
-   const [year, setYear] = useState<undefined | number>();
-  const [userSelectedYear, setUserSelectedYear] = useState<undefined | number>();
+  const [year, setYear] = useState<undefined | number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<
+    undefined | number
+  >();
   const [displayYear, setDisplayYear] = useState<undefined | number>();
   const [standings, setStandings] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
@@ -195,7 +203,7 @@ const ConstructorStandings = () => {
 
   // Set standings for the current year into the state
   useEffect(() => {
-    if (data?.data?.standings) {
+    if (data?.data?.standings?.standings?.standings) {
       setStandings(data?.data?.standings?.standings?.standings);
       setDisplayYear(data?.data?.standings?.year);
     }
@@ -209,7 +217,7 @@ const ConstructorStandings = () => {
         urlYear &&
         !Number.isNaN(urlYear) &&
         parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= 2024
+        parseInt(urlYear) <= new Date().getFullYear()
       ) {
         setYear(parseInt(urlYear));
         setInvalidURL(false);
@@ -218,7 +226,7 @@ const ConstructorStandings = () => {
         setInvalidURL(true);
       }
     } else {
-      setYear(2024);
+      setYear(new Date().getFullYear());
     }
   }, [urlYear]);
 
@@ -247,6 +255,7 @@ const ConstructorStandings = () => {
               Select Year :
             </span>
             <YearPicker
+              year={year}
               className="w-full md:w-fit"
               setInvalidYear={setInvalidYear}
               setYear={setUserSelectedYear}
@@ -273,11 +282,11 @@ const ConstructorStandings = () => {
 
         {/* Invalid year error  */}
         <div
-          className={`text-red-600 font-medium px-5 overflow-hidden  ${
+          className={`text-red-600 dark:text-red-500 font-medium px-5 overflow-hidden  ${
             invalidYear ? "h-14" : "h-0"
           } transition-all`}
         >
-          Year must be between 1950 & 2024
+          Year must be between 1950 & {new Date().getFullYear()}.
         </div>
 
         {/* Title */}
