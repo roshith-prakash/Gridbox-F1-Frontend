@@ -55,7 +55,6 @@ const Home = () => {
         {/* Video Background */}
         <video
           src={
-            // "https://res.cloudinary.com/do8rpl9l4/video/upload/v1742812954/f1_edit_1_c97gn7.mp4"
             "https://res.cloudinary.com/do8rpl9l4/video/upload/v1743154131/gridbox_edit_ayca4i.mp4"
           }
           className="absolute top-0 left-0 w-full h-full object-cover"
@@ -102,36 +101,113 @@ const Home = () => {
         )}
 
         {/* Next Race */}
-        {data?.data && (
-          <div data-aos="fade-in" className="flex flex-col items-center gap-8">
-            <p className="text-center text-4xl md:text-6xl font-semibold">
-              {data?.data?.nextRace?.raceName}
-            </p>
+        {data?.data &&
+          (() => {
+            const race = data.data.nextRace;
 
-            <div className="flex flex-col md:flex-row justify-center gap-x-8 gap-y-4">
-              <p className="text-center text-2xl text-md font-medium">
-                Round : {data?.data?.nextRace?.round}
-              </p>
-              <p className=" md:border-r-2 border-darkbg dark:border-darkmodetext"></p>
-              <p className="text-center text-2xl text-md font-medium">
-                {data?.data?.nextRace?.Circuit?.circuitName}
-                <span
-                  className={`mx-4 fi fi-${countryCode?.toLowerCase()}`}
-                ></span>
-              </p>
-            </div>
-            <p className="text-lg font-medium pr-2 -mb-2">
-              The Grand Prix will start in:
-            </p>
-            <Countdown
-              targetDate={`${data?.data?.nextRace?.date}T${data?.data?.nextRace?.time}`}
-            />
+            const sessions = [
+              {
+                name: "First Practice",
+                date: race.FirstPractice?.date,
+                time: race.FirstPractice?.time,
+              },
+              {
+                name: "Second Practice",
+                date: race.SecondPractice?.date,
+                time: race.SecondPractice?.time,
+              },
+              {
+                name: "Third Practice",
+                date: race.ThirdPractice?.date,
+                time: race.ThirdPractice?.time,
+              },
+              {
+                name: "Sprint Qualifying",
+                date: race.SprintQualifying?.date,
+                time: race.SprintQualifying?.time,
+              },
+              {
+                name: "Sprint",
+                date: race.Sprint?.date,
+                time: race.Sprint?.time,
+              },
+              {
+                name: "Qualifying",
+                date: race.Qualifying?.date,
+                time: race.Qualifying?.time,
+              },
+              { name: "Race", date: race.date, time: race.time },
+            ];
 
-            <Link to="/schedule">
-              <CTAButton text="Check out the Schedule!" />
-            </Link>
-          </div>
-        )}
+            const now = new Date();
+
+            // Convert sessions to usable objects
+            const parsedSessions = sessions
+              .filter((s) => s.date && s.time)
+              .map((s) => {
+                const start = new Date(`${s.date}T${s.time}`);
+                const durationMs =
+                  s.name === "Race" ? 2 * 60 * 60 * 1000 : 1 * 60 * 60 * 1000;
+                const end = new Date(start.getTime() + durationMs);
+
+                return { ...s, start, end };
+              });
+
+            // Find if any session is ongoing
+            const ongoingSession = parsedSessions.find(
+              (s) => now >= s.start && now <= s.end
+            );
+
+            // Find the next session in the future
+            const upcomingSession = parsedSessions
+              .filter((s) => s.start > now)
+              .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
+
+            return (
+              <div
+                data-aos="fade-in"
+                className="flex flex-col items-center gap-8"
+              >
+                <p className="text-center text-4xl md:text-6xl font-semibold">
+                  {race.raceName}
+                </p>
+
+                <div className="flex flex-col md:flex-row justify-center gap-x-8 gap-y-4">
+                  <p className="text-center text-2xl text-md font-medium">
+                    Round : {race.round}
+                  </p>
+                  <p className="md:border-r-2 border-darkbg dark:border-darkmodetext"></p>
+                  <p className="text-center text-2xl text-md font-medium">
+                    {race.Circuit?.circuitName}
+                    <span
+                      className={`mx-4 fi fi-${countryCode?.toLowerCase()}`}
+                    ></span>
+                  </p>
+                </div>
+
+                {ongoingSession ? (
+                  <p className="text-lg font-semibold">
+                    {ongoingSession.name} is happening right now!
+                  </p>
+                ) : upcomingSession ? (
+                  <>
+                    <p className="text-lg font-medium pr-2 -mb-2">
+                      Next session: {upcomingSession.name}
+                    </p>
+                    <Countdown
+                      targetDate={upcomingSession.start.toISOString()}
+                    />
+                  </>
+                ) : (
+                  <p className="text-lg font-medium">No upcoming sessions.</p>
+                )}
+
+                <Link to="/schedule">
+                  <CTAButton text="Check out the Schedule!" />
+                </Link>
+              </div>
+            );
+          })()}
 
         {/* Error */}
         {error && (
@@ -160,6 +236,7 @@ const Home = () => {
             <CTAButton text="View Drivers" />
           </Link>
         </section>
+
         <div className="w-full md:flex-1 flex justify-center items-center">
           <img src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1731256673/charles_transparent_upecsy.png" />
         </div>
