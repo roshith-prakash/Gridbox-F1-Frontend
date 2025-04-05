@@ -268,7 +268,7 @@ const CreatePost = () => {
             )}
 
             {/* Title + Content Section */}
-            <div className="p-5 md:p-10 md:pt-0 mt-8">
+            <div className="p-5 md:p-10 md:pt-0 mt-8 max-w-5xl mx-auto">
               {/* Post Title */}
               {title && (
                 <h1 className="mt-10 text-4xl lg:text-6xl font-bold text-ink">

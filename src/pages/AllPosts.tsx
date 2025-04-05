@@ -44,9 +44,7 @@ const AllPosts = () => {
   return (
     <div className="pb-32 bg-greyBG dark:bg-darkbg">
       {/* Title */}
-      <h1 className="text-4xl font-medium px-6 pt-5 italic">
-        The Paddock Report
-      </h1>
+      <h1 className="text-4xl font-medium px-6 pt-5">The Paddock Report</h1>
       {/* Subtitle */}
       <h2 className="mt-4 text-lg px-6">
         Stay up-to-date with the latest in Formula 1 on the GridBox F1&apos;s
