@@ -13,7 +13,7 @@ const PostCard = ({ post, index }) => {
       {/* Entire card is a link to post page to view the post */}
       <Link
         to={`/the-paddock-report/${post?.uid}`}
-        className="my-5 mx-5 bg-white hover:bg-[#e1e1e1]/10 dark:bg-secondarydarkbg dark:hover:bg-white/5 dark:text-darkmodetext w-full md:w-96 lg:w-80 overflow-hidden rounded-lg cursor-pointer shadow-lg hover:shadow-xl hover:scale-105 dark:border-2 dark:border-zinc-700 transition-all"
+        className="my-5 mx-5 bg-white hover:bg-[#e1e1e1]/10 dark:bg-secondarydarkbg dark:hover:bg-white/5 dark:text-darkmodetext w-full md:w-96 lg:w-80 overflow-hidden rounded-xl cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-5 dark:border-2 dark:border-zinc-700 transition-all"
       >
         {/* Thumbnail for post card. */}
         <img
@@ -21,14 +21,14 @@ const PostCard = ({ post, index }) => {
           className="h-60 w-full rounded-t-x object-center object-cover"
         />
         {/* Card Content Section */}
-        <div className="p-5">
+        <div className="py-5 px-3">
           {/* Post title - ellipsized if too long. */}
-          <p className="ml-2 mt-5 text-2xl font-medium h-16 line-clamp-2 overflow-hidden">
+          <p className="ml-2  text-2xl font-semibold h-16 line-clamp-2 overflow-hidden">
             {post?.title}
           </p>
 
           {/* How long ago the post was posted. */}
-          <p className="ml-2 my-5 text-sm overflow-hidden text-ellipsis text-greyText">
+          <p className="ml-2 my-5 text-sm overflow-hidden text-black/60 dark:text-white/60 text-ellipsis text-greyText">
             Posted {dayjs(post?.createdAt).fromNow()}
           </p>
         </div>
