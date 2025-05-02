@@ -12,6 +12,7 @@ import "flag-icons/css/flag-icons.min.css";
 
 // @ts-expect-error asset declaration
 import carDark from "@/assets/racing-car-dark.png";
+import dayjs from "dayjs";
 
 const Home = () => {
   const { isDarkMode } = useDarkMode();
@@ -177,7 +178,7 @@ const Home = () => {
                     Round : {race.round}
                   </p>
                   <p className="md:border-r-2 border-darkbg dark:border-darkmodetext"></p>
-                  <p className="text-center text-2xl text-md font-medium">
+                  <p className="text-center px-4 md:px-0 text-2xl text-md font-medium">
                     {race.Circuit?.circuitName}
                     <span
                       className={`mx-4 fi fi-${countryCode?.toLowerCase()}`}
@@ -186,14 +187,33 @@ const Home = () => {
                 </div>
 
                 {ongoingSession ? (
-                  <p className="text-lg font-semibold">
-                    {ongoingSession.name} is happening right now!
-                  </p>
+                  <>
+                    <p className="text-lg font-semibold">
+                      {ongoingSession.name} is happening right now!
+                    </p>
+                    <p className="text-lg">
+                      {dayjs
+                        .utc(`${ongoingSession.date}T${ongoingSession.time}`)
+                        .local()
+                        .format("Do MMMM YYYY, HH:mm:ss")}
+                    </p>
+                  </>
                 ) : upcomingSession ? (
                   <>
-                    <p className="text-lg font-medium pr-2 -mb-2">
-                      Next session: {upcomingSession.name}
-                    </p>
+                    <div className="flex text-xl flex-col md:flex-row justify-center gap-x-8 gap-y-4">
+                      <p className=" text-center font-medium pr-2 -mb-2">
+                        {upcomingSession.name}
+                      </p>
+                      <p className="md:border-r-2 border-darkbg dark:border-darkmodetext"></p>
+                      <p>
+                        {dayjs
+                          .utc(
+                            `${upcomingSession.date}T${upcomingSession.time}`
+                          )
+                          .local()
+                          .format("Do MMMM YYYY, hh:mm a")}
+                      </p>
+                    </div>
                     <Countdown
                       targetDate={upcomingSession.start.toISOString()}
                     />

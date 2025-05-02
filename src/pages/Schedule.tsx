@@ -1,5 +1,6 @@
+// Imports: React, state management, routing, utilities, styling, and libraries
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { axiosInstance } from "../utils/axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -7,41 +8,35 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 import { ErrorDiv, YearPicker } from "../components";
 import CTAButton from "../components/CTAButton";
 import { SyncLoader } from "react-spinners";
-import { FaCaretDown } from "react-icons/fa6";
-import { FaLink } from "react-icons/fa6";
-dayjs.extend(utc);
-dayjs.extend(advancedFormat);
-
-// To show flags for the drivers
+import { FaCaretDown, FaLink } from "react-icons/fa6";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import "flag-icons/css/flag-icons.min.css";
-
-// Register the locale for the countries constructor
-countries.registerLocale(enLocale);
-
-// Get URL Params
-import { useParams } from "react-router-dom";
-
-// Navigate Programatically
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDarkMode } from "../context/DarkModeContext";
 import { isAxiosError } from "axios";
+
+// Extend dayjs with useful plugins
+dayjs.extend(utc);
+dayjs.extend(advancedFormat);
+countries.registerLocale(enLocale);
 
 const Schedule = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
   const { year: urlYear } = useParams();
-  const [year, setYear] = useState<undefined | number>();
-  const [userSelectedYear, setUserSelectedYear] = useState<
-    undefined | number
-  >();
-  const [displayYear, setDisplayYear] = useState<undefined | number>();
+
+  // State variables
+  const [year, setYear] = useState<number>();
+  const [userSelectedYear, setUserSelectedYear] = useState<number>();
+  const [displayYear, setDisplayYear] = useState<number>();
   const [schedule, setSchedule] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
+  const [nextRaceIndex, setNextRaceIndex] = useState<number | null>(null);
+  const raceRefs = useRef<Array<HTMLDivElement | null>>([]); // For auto-scrolling
 
-  // Query function to fetch drivers for each year
+  // Query config for fetching F1 schedule from backend
   const {
     data,
     refetch: fetchSchedule,
@@ -49,42 +44,45 @@ const Schedule = () => {
     error,
   } = useQuery({
     queryKey: ["schedule", year],
-    queryFn: () => {
-      return axiosInstance.post("/getSchedule", {
-        year: year,
-      });
-    },
-    enabled: false,
+    queryFn: () => axiosInstance.post("/getSchedule", { year }),
+    enabled: false, // Manual trigger
     staleTime: Infinity,
   });
 
-  // Scroll to top of the page
+  // Scroll to top on component mount
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  // Set Schedule for the current year into the state
+  // Update schedule and next race index once data is fetched
   useEffect(() => {
     if (data?.data?.schedule) {
-      setSchedule(data?.data?.schedule?.schedule?.raceschedule);
-      setDisplayYear(data?.data?.schedule?.year);
+      const races = data.data.schedule.schedule.raceschedule;
+      setSchedule(races);
+      setDisplayYear(data.data.schedule.year);
+
+      const now = new Date();
+      const index = races.findIndex((race: any) => {
+        const raceDate = new Date(race.date + "T" + (race.time ?? "00:00:00Z"));
+        return raceDate > now;
+      });
+
+      setNextRaceIndex(index !== -1 ? index : races.length - 1);
     }
   }, [data?.data]);
 
-  // If year is present
+  // Handle URL year and validation
   useEffect(() => {
     if (urlYear) {
-      // Valid Year in URL param
+      const parsed = parseInt(urlYear);
       if (
-        urlYear &&
-        !Number.isNaN(urlYear) &&
-        parseInt(urlYear) >= 1950 &&
-        parseInt(urlYear) <= new Date().getFullYear()
+        !Number.isNaN(parsed) &&
+        parsed >= 1950 &&
+        parsed <= new Date().getFullYear()
       ) {
-        setYear(parseInt(urlYear));
+        setYear(parsed);
         setInvalidURL(false);
       } else {
-        console.log("Invalid year specified");
         setInvalidURL(true);
       }
     } else {
@@ -92,25 +90,40 @@ const Schedule = () => {
     }
   }, [urlYear]);
 
-  // Fetch data for initial load
+  // Fetch schedule when year is set
   useEffect(() => {
     if (year) {
       fetchSchedule();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchSchedule, year]);
 
-  // Set window title.
+  // Set document title dynamically
   useEffect(() => {
     document.title = displayYear
       ? `Schedule ${displayYear} | GridBox F1`
       : `Schedule | GridBox F1`;
   }, [displayYear]);
 
+  // Auto-scroll to the next race if the selected year is the current year
+  useEffect(() => {
+    const currentYear = new Date().getFullYear();
+    if (
+      nextRaceIndex !== null &&
+      raceRefs.current[nextRaceIndex] &&
+      typeof window !== "undefined" &&
+      year === currentYear
+    ) {
+      raceRefs.current[nextRaceIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [nextRaceIndex, year]);
+
   return (
     <main className="bg-greyBG dark:bg-darkbg flex justify-center py-10 rounded-lg">
       <section className="w-full max-w-[96%] rounded px-2 py-5 shadow bg-white dark:bg-secondarydarkbg">
-        {/* Input section */}
+        {/* Header with Year Picker and Fetch button */}
         <header className="flex flex-wrap items-center gap-x-5 gap-y-5 p-5 pb-10">
           <div className="flex flex-wrap w-full md:w-fit items-center gap-x-2 md:gap-x-5 gap-y-5">
             <span className="w-full md:w-fit text-lg italic">
@@ -123,18 +136,12 @@ const Schedule = () => {
               setYear={setUserSelectedYear}
             />
           </div>
-
-          {/* Change URL to fetch data */}
           <CTAButton
             className="w-full md:w-fit py-2 px-6 border-2 rounded"
             disabled={isLoading || invalidYear || !userSelectedYear}
-            onClick={() => {
-              navigate(`/schedule/${userSelectedYear}`);
-            }}
+            onClick={() => navigate(`/schedule/${userSelectedYear}`)}
             text="Fetch"
-          ></CTAButton>
-
-          {/* Loader */}
+          />
           {isLoading && (
             <div className="w-full md:w-fit flex justify-center">
               <SyncLoader color={isDarkMode ? "#FFFFFF" : "#000000"} />
@@ -142,9 +149,9 @@ const Schedule = () => {
           )}
         </header>
 
-        {/* Invalid year error  */}
+        {/* Validation Message */}
         <div
-          className={`text-red-600 dark:text-red-500 font-medium px-5 overflow-hidden  ${
+          className={`text-red-600 dark:text-red-500 font-medium px-5 overflow-hidden ${
             invalidYear ? "h-14" : "h-0"
           } transition-all`}
         >
@@ -156,339 +163,185 @@ const Schedule = () => {
           F1 Schedule {displayYear}
         </h1>
 
-        {/* Data unavailable */}
-        {error && isAxiosError(error) && error?.response?.status == 404 && (
+        {/* Error States */}
+        {error && isAxiosError(error) && error?.response?.status === 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv text="Schedule data for the requested year is not available." />
           </div>
         )}
-
-        {/* Server error */}
-        {error && isAxiosError(error) && error?.response?.status != 404 && (
+        {error && isAxiosError(error) && error?.response?.status !== 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
           </div>
         )}
-
-        {/* Invalid param in URL */}
         {!year && invalidURL && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv text="Invalid Year specified in URL." />
           </div>
         )}
 
-        {/* Timeline */}
+        {/* Schedule List */}
         {!error && schedule.length > 0 && (
-          <>
-            {/* Timeline */}
-            <div className="flex flex-col px-5 py-10 overflow-x-auto w-fit">
-              {schedule?.map((race, i) => {
-                const countryCode = countries.getAlpha2Code(
-                  race?.Circuit?.Location?.country,
-                  "en"
-                );
+          <div className="flex flex-col px-5 py-10 overflow-x-auto w-fit">
+            {schedule.map((race, i) => {
+              const countryCode = countries.getAlpha2Code(
+                race?.Circuit?.Location?.country,
+                "en"
+              );
 
-                let dateTime;
+              const raceDate = race?.time
+                ? `${race.date}T${race.time}`
+                : `${race.date}`;
 
-                if (race?.time) {
-                  dateTime = dayjs(`${race.date}T${race.time}`);
-                } else {
-                  dateTime = dayjs(`${race.date}`);
-                }
-
-                return (
-                  <div key={race?.date} className="flex gap-x-5">
-                    {/* Timeline element */}
-                    <div className="flex flex-col items-center">
-                      <div
-                        className={`p-4 border-hovercta ${
-                          new Date() > new Date(dateTime) && "bg-cta/80"
-                        } rounded-full border-4`}
-                      />
-                      {i + 1 != schedule.length && (
-                        <>
-                          <div className="h-full w-[1px] border-2 border-hovercta" />
-                          <FaCaretDown className="h-10" />
-                        </>
-                      )}
-                    </div>
-                    {/* Content Div */}
+              return (
+                <div
+                  key={race?.date}
+                  ref={(el) => (raceRefs.current[i] = el)}
+                  className="flex gap-x-5"
+                >
+                  {/* Timeline marker and line */}
+                  <div className="flex flex-col items-center">
                     <div
-                      data-aos="fade-left"
-                      className="flex-1 md:flex-none pb-16"
-                    >
-                      {/* Race Name */}
-                      <p className="font-medium text-3xl -mt-0.5 flex gap-x-2">
-                        {race?.raceName}
-                        <span
-                          className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
-                        ></span>
+                      className={`p-4 border-hovercta ${
+                        new Date() > new Date(raceDate) && "bg-cta/80"
+                      } rounded-full border-4`}
+                    />
+                    {i + 1 !== schedule.length && (
+                      <>
+                        <div className="h-full w-[1px] border-2 border-hovercta" />
+                        <FaCaretDown className="h-10" />
+                      </>
+                    )}
+                  </div>
+
+                  {/* Race Info Card */}
+                  <div
+                    data-aos="fade-left"
+                    className="flex-1 md:flex-none pb-16"
+                  >
+                    <p className="font-medium text-3xl -mt-0.5 flex gap-x-2">
+                      {race?.raceName}
+                      <span
+                        className={`mx-2 fi fi-${countryCode?.toLowerCase()}`}
+                      ></span>
+                    </p>
+
+                    <div className="mt-6 flex flex-col gap-y-4">
+                      <p>Round : {race?.round}</p>
+                      <p>
+                        Location : {race?.Circuit?.Location?.locality},{" "}
+                        {race?.Circuit?.Location?.country}
                       </p>
-                      {/* Info Div */}
-                      <div className="mt-6 flex flex-col gap-y-4">
-                        {/* Round */}
-                        <p>Round : {race?.round}</p>
 
-                        {/* Location */}
+                      {/* Weekend Schedule */}
+                      <div className="flex flex-col w-full bg-greyBG dark:bg-zinc-600 gap-y-4 py-3 px-4 rounded-lg">
+                        <p className="font-medium text-lg">Weekend Schedule:</p>
+                        {[
+                          { label: "FP1", key: "FirstPractice" },
+                          { label: "FP2", key: "SecondPractice" },
+                          { label: "FP3", key: "ThirdPractice" },
+                          {
+                            label: "Sprint Qualifying",
+                            key: "SprintQualifying",
+                          },
+                          { label: "Sprint", key: "Sprint" },
+                          { label: "Qualifying", key: "Qualifying" },
+                        ].map(
+                          ({ label, key }) =>
+                            race?.[key] && (
+                              <p key={key}>
+                                {label} :{" "}
+                                <span className="text-nowrap">
+                                  {race[key]?.time
+                                    ? dayjs(
+                                        `${race[key].date}T${race[key].time}`
+                                      ).format("Do MMMM YYYY, hh:mm a")
+                                    : dayjs(`${race[key].date}`).format(
+                                        "Do MMMM YYYY"
+                                      )}
+                                </span>
+                              </p>
+                            )
+                        )}
                         <p>
-                          {" "}
-                          Location : {race?.Circuit?.Location?.locality},{" "}
-                          {race?.Circuit?.Location?.country}
+                          Grand Prix :{" "}
+                          <span className="text-nowrap">
+                            {race?.time
+                              ? dayjs(raceDate).format("Do MMMM YYYY, HH:mm")
+                              : dayjs(raceDate).format("Do MMMM YYYY")}
+                          </span>
                         </p>
+                      </div>
 
-                        {/* Schedule Div */}
-                        <div className="flex flex-col w-full bg-greyBG dark:bg-zinc-600 gap-y-4 py-3 px-4 rounded-lg">
-                          <p className="font-medium text-lg">
-                            Weekend Schedule:
-                          </p>
+                      {/* External Link */}
+                      {race?.url && (
+                        <a
+                          href={race?.url}
+                          target="_blank"
+                          className="text-blue-500 py-2 flex gap-x-2 items-center"
+                        >
+                          Read More <FaLink />
+                        </a>
+                      )}
 
-                          {/* FP1 Date */}
-                          {race?.FirstPractice && (
-                            <p>
-                              FP1 :{" "}
-                              <span className="text-nowrap">
-                                {race?.FirstPractice?.time
-                                  ? dayjs(
-                                      `${race?.FirstPractice?.date}T${race?.FirstPractice?.time}`
-                                    ).format("Do MMMM YYYY") +
-                                    ", " +
-                                    dayjs(
-                                      `${race?.FirstPractice?.date}T${race?.FirstPractice?.time}`
-                                    ).format("HH:mm")
-                                  : dayjs(
-                                      `${race?.FirstPractice?.date}`
-                                    ).format("Do MMMM YYYY")}
-                              </span>
-                            </p>
-                          )}
-
-                          {/* FP2 Date */}
-                          {race?.SecondPractice && (
-                            <p>
-                              FP2 :{" "}
-                              <span className="text-nowrap">
-                                {race?.SecondPractice?.time
-                                  ? dayjs(
-                                      `${race?.SecondPractice?.date}T${race?.SecondPractice?.time}`
-                                    ).format("Do MMMM YYYY") +
-                                    ", " +
-                                    dayjs(
-                                      `${race?.SecondPractice?.date}T${race?.SecondPractice?.time}`
-                                    ).format("HH:mm")
-                                  : dayjs(
-                                      `${race?.SecondPractice?.date}`
-                                    ).format("Do MMMM YYYY")}
-                              </span>
-                            </p>
-                          )}
-
-                          {/* FP3 Date */}
-                          {race?.ThirdPractice && (
-                            <p>
-                              FP3 :{" "}
-                              <span className="text-nowrap">
-                                {race?.ThirdPractice?.time
-                                  ? dayjs(
-                                      `${race?.ThirdPractice?.date}T${race?.ThirdPractice?.time}`
-                                    ).format("Do MMMM YYYY") +
-                                    ", " +
-                                    dayjs(
-                                      `${race?.ThirdPractice?.date}T${race?.ThirdPractice?.time}`
-                                    ).format("HH:mm")
-                                  : dayjs(
-                                      `${race?.ThirdPractice?.date}`
-                                    ).format("Do MMMM YYYY")}
-                              </span>
-                            </p>
-                          )}
-
-                          {/* Sprint Qualifying Date */}
-                          {race?.SprintQualifying && (
-                            <p>
-                              Sprint Qualifying :{" "}
-                              <span className="text-nowrap">
-                                {race?.SprintQualifying?.time
-                                  ? dayjs(
-                                      `${race?.SprintQualifying?.date}T${race?.SprintQualifying?.time}`
-                                    ).format("Do MMMM YYYY") +
-                                    ", " +
-                                    dayjs(
-                                      `${race?.SprintQualifying?.date}T${race?.SprintQualifying?.time}`
-                                    ).format("HH:mm")
-                                  : dayjs(
-                                      `${race?.SprintQualifying?.date}`
-                                    ).format("Do MMMM YYYY")}
-                              </span>
-                            </p>
-                          )}
-
-                          {/* Sprint Date */}
-                          {race?.Sprint && (
-                            <p>
-                              Sprint :{" "}
-                              <span className="text-nowrap">
-                                {race?.Sprint?.time
-                                  ? dayjs(
-                                      `${race?.Sprint?.date}T${race?.Sprint?.time}`
-                                    ).format("Do MMMM YYYY") +
-                                    ", " +
-                                    dayjs(
-                                      `${race?.Sprint?.date}T${race?.Sprint?.time}`
-                                    ).format("HH:mm")
-                                  : dayjs(`${race?.Sprint?.date}`).format(
-                                      "Do MMMM YYYY"
-                                    )}
-                              </span>
-                            </p>
-                          )}
-
-                          {/* Qualifying Date */}
-                          {race?.Qualifying && (
-                            <p>
-                              Qualifying :{" "}
-                              <span className="text-nowrap">
-                                {race?.Qualifying?.time
-                                  ? dayjs(
-                                      `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
-                                    ).format("Do MMMM YYYY") +
-                                    ", " +
-                                    dayjs(
-                                      `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
-                                    ).format("HH:mm")
-                                  : dayjs(`${race?.Qualifying?.date}`).format(
-                                      "Do MMMM YYYY"
-                                    )}
-                              </span>
-                            </p>
-                          )}
-
-                          {/* Grand Prix Date */}
-                          <p>
-                            Grand Prix :{" "}
-                            <span className="text-nowrap">
-                              {race?.time
-                                ? dateTime.format("Do MMMM YYYY") +
-                                  ", " +
-                                  dateTime.format("HH:mm")
-                                : dateTime.format("Do MMMM YYYY")}
-                            </span>
-                          </p>
-                        </div>
-
-                        {/* URL to Wikipedia */}
-                        {race?.url && (
-                          <a
-                            href={race?.url}
-                            target="_blank"
-                            className="text-blue-500 py-2 flex gap-x-2 items-center"
-                          >
-                            Read More <FaLink />
-                          </a>
+                      {/* Result Buttons */}
+                      <div className="flex items-center flex-wrap gap-x-2 gap-y-4">
+                        {(new Date() >
+                          new Date(
+                            `${race?.Sprint?.date}T${race?.Sprint?.time}`
+                          ) ||
+                          new Date() >
+                            new Date(
+                              `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
+                            )) && (
+                          <p className="text-lg font-medium pr-2">Results:</p>
                         )}
 
-                        {/* Results Navigator - Displayed only if grand prix weekend is completed */}
+                        {!!race?.Sprint &&
+                          new Date() >
+                            new Date(
+                              `${race?.Sprint?.date}T${race?.Sprint?.time}`
+                            ) && (
+                            <CTAButton
+                              onClick={() => {
+                                navigate(
+                                  `/sprint-result/${displayYear}/${race?.round}`
+                                );
+                              }}
+                              text="Sprint"
+                            />
+                          )}
 
-                        <>
-                          <div className="flex items-center flex-wrap gap-x-2 gap-y-4">
-                            {(new Date() >
-                              new Date(
-                                `${race?.Sprint?.date}T${race?.Sprint?.time}`
-                              ) ||
-                              new Date() >
-                                new Date(
-                                  `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
-                                )) && (
-                              <p className="text-lg font-medium pr-2">
-                                Results:
-                              </p>
-                            )}
+                        {new Date() >
+                          new Date(
+                            `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
+                          ) && (
+                          <CTAButton
+                            onClick={() => {
+                              navigate(
+                                `/qualifying-result/${displayYear}/${race?.round}`
+                              );
+                            }}
+                            text="Qualifying"
+                          />
+                        )}
 
-                            {!!race?.Sprint &&
-                              new Date() >
-                                new Date(
-                                  `${race?.Sprint?.date}T${race?.Sprint?.time}`
-                                ) && (
-                                <CTAButton
-                                  onClick={() => {
-                                    navigate(
-                                      `/sprint-result/${displayYear}/${race?.round}`
-                                    );
-                                  }}
-                                  text="
-                              Sprint"
-                                ></CTAButton>
-                              )}
-
-                            {new Date() >
-                              new Date(
-                                `${race?.Qualifying?.date}T${race?.Qualifying?.time}`
-                              ) && (
-                              <CTAButton
-                                onClick={() => {
-                                  navigate(
-                                    `/qualifying-result/${displayYear}/${race?.round}`
-                                  );
-                                }}
-                                text="
-                              Qualifying"
-                              ></CTAButton>
-                            )}
-
-                            {new Date() > new Date(dateTime) && (
-                              <CTAButton
-                                onClick={() => {
-                                  navigate(
-                                    `/race-result/${displayYear}/${race?.round}`
-                                  );
-                                }}
-                                text="
-                              Race"
-                              ></CTAButton>
-                            )}
-                          </div>
-                        </>
+                        {new Date() > new Date(raceDate) && (
+                          <CTAButton
+                            onClick={() => {
+                              navigate(
+                                `/race-result/${displayYear}/${race?.round}`
+                              );
+                            }}
+                            text="Race"
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </>
-        )}
-
-        {/* Loading placeholder */}
-        {!invalidURL && !error && schedule.length == 0 && (
-          <div className="px-5 ">
-            {Array(10)
-              .fill(null)
-              ?.map((_, i) => {
-                return (
-                  <div key={i} className="flex gap-x-5">
-                    <div className="flex flex-col  items-center">
-                      <div className="p-4 border-cta rounded-full border-4" />
-                      {i + 1 != schedule.length && (
-                        <>
-                          <div className="h-full w-[1px] border-2 border-cta" />
-                          <FaCaretDown className="h-10" />
-                        </>
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-y-2 pb-16">
-                      <div className="w-full md:w-52 h-12 bg-gray-300 dark:bg-gray-500 animate-pulse rounded font-medium text-2xl"></div>
-                      <div className="mt-2 flex flex-col gap-y-2">
-                        <div className="w-full md:w-52 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
-                        <div className="flex gap-x-3">
-                          <div className="w-40 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
-                          <div className="w-9 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
-                        </div>
-                      </div>
-                      <div className="w-full md:w-52 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
-                      <div className="w-full md:w-52 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
-                      <div className="w-full md:w-52 h-8 bg-gray-300 dark:bg-gray-500 animate-pulse rounded" />
-                    </div>
-                  </div>
-                );
-              })}
+                </div>
+              );
+            })}
           </div>
         )}
       </section>
