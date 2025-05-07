@@ -217,7 +217,7 @@ const Schedule = () => {
                   {/* Race Info Card */}
                   <div
                     data-aos="fade-left"
-                    className="flex-1 md:flex-none pb-16"
+                    className="flex-1 w-full md:flex-none pb-16"
                   >
                     <p className="font-medium text-3xl -mt-0.5 flex gap-x-2">
                       {race?.raceName}
@@ -267,7 +267,7 @@ const Schedule = () => {
                           Grand Prix :{" "}
                           <span className="text-nowrap">
                             {race?.time
-                              ? dayjs(raceDate).format("Do MMMM YYYY, HH:mm")
+                              ? dayjs(raceDate).format("Do MMMM YYYY, hh:mm a")
                               : dayjs(raceDate).format("Do MMMM YYYY")}
                           </span>
                         </p>
