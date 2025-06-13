@@ -1,173 +1,152 @@
 import { Link } from "react-router-dom";
 import { useDarkMode } from "@/context/DarkModeContext";
+import {
+  Facebook,
+  Instagram,
+  Twitter,
+  Youtube,
+  ChevronRight,
+} from "lucide-react";
+
 // @ts-expect-error asset declaration not found
 import footerImage from "../assets/footer.svg";
 // @ts-expect-error asset declaration not found
 import car from "../assets/racing-car-dark.png";
 
 const Footer = () => {
+  const { isDarkMode } = useDarkMode();
+
+  const mainLinks = [
+    { name: "Home", path: "/" },
+    { name: "Drivers", path: "/drivers" },
+    { name: "Constructors", path: "/constructors" },
+    { name: "Circuits", path: "/circuits" },
+  ];
+
+  const standingsLinks = [
+    { name: "Drivers Standings", path: "/drivers-standings" },
+    { name: "Constructors Standings", path: "/constructors-standings" },
+  ];
+
+  const otherLinks = [
+    { name: "Schedule", path: "/schedule" },
+    { name: "The Paddock Report", path: "/the-paddock-report" },
+  ];
+
   return (
-    <footer
-      className={` bg-secondarydarkbg border-t-2 border-darkmodetext
-           pb-20 min-h-50vh relative text-white`}
-    >
-      {/* Black div - floating into page */}
-      <div className="absolute border-2 dark:border-white -top-16 w-[90vw] lg:w-[80vw] left-1/2 -translate-x-1/2 rounded-lg h-32 flex justify-center items-center bg-darkbg text-white">
-        <div className="text-lg md:text-xl font-medium gap-2 flex flex-wrap justify-center">
-          <img src={car} className="h-6" /> <span>GridBox</span>
-          <span>- Your one shot stop for everything F1 !</span>
-        </div>
-      </div>
-
-      {/* Rest of the footer */}
-      <div className="pt-24 md:pt-36 font-medium flex flex-col lg:flex-row">
-        <div className="flex-1">
-          {/* Site Name */}
-          <p className="flex justify-center items-center gap-x-2 text-4xl pt-8 md:pt-0 text-center font-semibold">
-            <img src={car} className="h-8" /> GridBox
-          </p>
-
-          {/* Links on Medium & Large Screens */}
-          <div className="hidden text-lg md:grid md:grid-cols-2 gap-x-5 gap-y-5 mt-10 text-center">
-            <div className="flex justify-center">
-              <Link to="/" className="hover:scale-110 transition-all">
-                Home
-              </Link>
+    <footer className="relative bg-secondarydarkbg border-t-2 border-darkmodetext/30 text-white">
+      {/* Main footer content */}
+      <div className="container mx-auto pt-28 pb-12 px-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {/* Brand column */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <img src={car} className="h-14" alt="GridBox" />
+              <span className="text-4xl font-bold">GridBox</span>
             </div>
-
-            <div className="flex justify-center">
-              <Link to="/circuits" className="hover:scale-110 transition-all">
-                Circuits
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link to="/drivers" className="hover:scale-110 transition-all">
-                Drivers
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link
-                to="/constructors"
-                className="hover:scale-110 transition-all"
+            <p className="text-gray-300">
+              Your one-stop destination for everything Formula 1. Get the latest
+              news, standings, race results, and more.
+            </p>
+            <div className="flex gap-4">
+              <a
+                href="#"
+                className="hover:text-darkmodeCTA transition-colors"
+                aria-label="Facebook"
               >
-                Constructors
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link to="/schedule" className="hover:scale-110 transition-all">
-                Schedule
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link
-                to="/the-paddock-report"
-                className="hover:scale-110 transition-all"
+                <Facebook size={25} />
+              </a>
+              <a
+                href="#"
+                className="hover:text-darkmodeCTA transition-colors"
+                aria-label="Twitter"
               >
-                The Paddock Report
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link
-                to="/drivers-standings"
-                className="hover:scale-110 transition-all"
+                <Twitter size={25} />
+              </a>
+              <a
+                href="#"
+                className="hover:text-darkmodeCTA transition-colors"
+                aria-label="Instagram"
               >
-                Drivers Standings
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link
-                to="/constructors-standings"
-                className="hover:scale-110 transition-all"
+                <Instagram size={25} />
+              </a>
+              <a
+                href="#"
+                className="hover:text-darkmodeCTA transition-colors"
+                aria-label="YouTube"
               >
-                Constructors Standings
-              </Link>
+                <Youtube size={25} />
+              </a>
             </div>
           </div>
 
-          {/* Links on Small Screens */}
-          <div className="md:hidden grid grid-cols-1 gap-x-5 gap-y-5 mt-10 text-center">
-            <div className="flex justify-center">
-              <Link to="/" className="hover:scale-110 transition-all">
-                Home
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link to="/drivers" className="hover:scale-110 transition-all">
-                Drivers
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link
-                to="/constructors"
-                className="hover:scale-110 transition-all"
-              >
-                Constructors
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link
-                to="/drivers-standings"
-                className="hover:scale-110 transition-all"
-              >
-                Drivers Standings
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link
-                to="/constructors-standings"
-                className="hover:scale-110 transition-all"
-              >
-                Constructors Standings
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link
-                to="/the-paddock-report"
-                className="hover:scale-110 transition-all"
-              >
-                The Paddock Report
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link to="/circuits" className="hover:scale-110 transition-all">
-                Circuits
-              </Link>
-            </div>
-
-            <div className="flex justify-center">
-              <Link to="/schedule" className="hover:scale-110 transition-all">
-                Schedule
-              </Link>
-            </div>
+          {/* Quick links */}
+          <div>
+            <h3 className="text-lg font-bold mb-6 border-b border-gray-700 pb-2">
+              Quick Links
+            </h3>
+            <ul className="space-y-3">
+              {mainLinks.map((link) => (
+                <li key={link.path} className="flex items-center">
+                  <ChevronRight size={16} className="text-darkmodeCTA mr-2" />
+                  <Link
+                    to={link.path}
+                    className="hover:text-darkmodeCTA transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* Developed by Roshith */}
-          <p className="mt-14 text-center">Developed by Roshith Prakash.</p>
-
-          {/* Year of Development */}
-          <p className="mt-3 text-center">2024.</p>
+          {/* Standings */}
+          <div>
+            <h3 className="text-lg font-bold mb-6 border-b border-gray-700 pb-2">
+              Standings
+            </h3>
+            <ul className="space-y-3">
+              {standingsLinks.map((link) => (
+                <li key={link.path} className="flex items-center">
+                  <ChevronRight size={16} className="text-darkmodeCTA mr-2" />
+                  <Link
+                    to={link.path}
+                    className="hover:text-darkmodeCTA transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+              {otherLinks.map((link) => (
+                <li key={link.path} className="flex items-center">
+                  <ChevronRight size={16} className="text-darkmodeCTA mr-2" />
+                  <Link
+                    to={link.path}
+                    className="hover:text-darkmodeCTA transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
-        {/* Image - Hidden on Smaller Screens */}
-        <div className="hidden flex-1 lg:flex justify-center items-center">
-          <img
-            // src="https://res.cloudinary.com/do8rpl9l4/image/upload/v1736414559/logo_cnblu2.png"
-            src={footerImage}
-            alt="GridBox"
-            className="h-96 pointer-events-none"
-          />
+        {/* Bottom bar */}
+        <div className="mt-16 pt-6 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center">
+          <div className="mb-4 md:mb-0">
+            <img
+              src={footerImage}
+              alt="GridBox"
+              className="h-20 md:h-24 pointer-events-none"
+            />
+          </div>
+          <div className="text-center md:text-right text-gray-400">
+            <p>Developed by Roshith Prakash</p>
+            <p className="mt-1">
+              © {new Date().getFullYear()} GridBox. All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

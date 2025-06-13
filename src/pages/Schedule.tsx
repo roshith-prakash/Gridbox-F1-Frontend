@@ -169,11 +169,13 @@ const Schedule = () => {
             <ErrorDiv text="Schedule data for the requested year is not available." />
           </div>
         )}
+
         {error && isAxiosError(error) && error?.response?.status !== 404 && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv />
           </div>
         )}
+
         {!year && invalidURL && (
           <div className="py-20 flex justify-center items-center">
             <ErrorDiv text="Invalid Year specified in URL." />
@@ -217,7 +219,7 @@ const Schedule = () => {
                   {/* Race Info Card */}
                   <div
                     data-aos="fade-left"
-                    className="flex-1 w-full md:flex-none pb-16"
+                    className="flex-1 md:flex-none pb-16"
                   >
                     <p className="font-medium text-3xl -mt-0.5 flex gap-x-2">
                       {race?.raceName}
@@ -234,8 +236,10 @@ const Schedule = () => {
                       </p>
 
                       {/* Weekend Schedule */}
-                      <div className="flex flex-col w-full bg-greyBG dark:bg-zinc-600 gap-y-4 py-3 px-4 rounded-lg">
-                        <p className="font-medium text-lg">Weekend Schedule:</p>
+                      <div className="flex flex-col w-96 bg-greyBG dark:bg-zinc-600 gap-y-4 py-3 px-4 rounded-xl">
+                        <p className="font-semibold text-lg">
+                          Weekend Schedule:
+                        </p>
                         {[
                           { label: "FP1", key: "FirstPractice" },
                           { label: "FP2", key: "SecondPractice" },

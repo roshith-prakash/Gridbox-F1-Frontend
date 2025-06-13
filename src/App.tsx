@@ -114,7 +114,7 @@ function App() {
               </Routes>
 
               {/* Footer */}
-              <section className=" bg-greyBG dark:bg-darkbg flex-1 pt-20">
+              <section className=" bg-greyBG dark:bg-darkbg flex-1 pt-10">
                 <Footer />
               </section>
             </div>

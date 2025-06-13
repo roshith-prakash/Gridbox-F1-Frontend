@@ -16,6 +16,7 @@ module.exports = {
         darkmodetext: "#E4E4E4",
         cta: "#9b0ced",
         hovercta: "#7123b0",
+        darkmodeCTA: "#b458ff",
         greyBG: "#F5F5F5",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
