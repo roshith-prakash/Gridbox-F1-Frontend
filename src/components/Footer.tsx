@@ -6,6 +6,8 @@ import {
   Twitter,
   Youtube,
   ChevronRight,
+  Mail,
+  Github,
 } from "lucide-react";
 
 // @ts-expect-error asset declaration not found
@@ -50,32 +52,25 @@ const Footer = () => {
             </p>
             <div className="flex gap-4">
               <a
-                href="#"
-                className="hover:text-darkmodeCTA transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook size={25} />
-              </a>
-              <a
-                href="#"
+                href="https://x.com/roshith_prakash"
                 className="hover:text-darkmodeCTA transition-colors"
                 aria-label="Twitter"
               >
                 <Twitter size={25} />
               </a>
               <a
-                href="#"
+                href="https://github.com/roshith-prakash"
                 className="hover:text-darkmodeCTA transition-colors"
                 aria-label="Instagram"
               >
-                <Instagram size={25} />
+                <Github size={25} />
               </a>
               <a
-                href="#"
+                href="mailto:roshithprakash07@gmail.com"
                 className="hover:text-darkmodeCTA transition-colors"
-                aria-label="YouTube"
+                aria-label="Email"
               >
-                <Youtube size={25} />
+                <Mail size={25} />
               </a>
             </div>
           </div>
