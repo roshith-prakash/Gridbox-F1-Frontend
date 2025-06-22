@@ -383,13 +383,6 @@ const DriverStandings = () => {
                 </TableHeader>
                 <TableBody>
                   {standings?.map((item, i) => {
-                    const DriverCountry =
-                      nationalityMap[String(item?.Driver?.nationality).trim()];
-                    const DriverCountryCode = countries.getAlpha2Code(
-                      DriverCountry,
-                      "en"
-                    );
-
                     return (
                       <TableRow
                         className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
@@ -402,27 +395,14 @@ const DriverStandings = () => {
 
                         {/* Driver name + flag */}
                         <TableCell className="px-2">
-                          <span
-                            className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
-                          ></span>
                           {item?.Driver?.givenName} {item?.Driver?.familyName}
                         </TableCell>
 
                         {/* Map constructors - display Constructor name + flag */}
                         <TableCell className="px-2 flex gap-x-2">
                           {item?.Constructors?.map((constructor, j) => {
-                            const ConstructorCountry =
-                              nationalityMap[
-                                String(constructor?.nationality).trim()
-                              ];
-                            const ConstructorCountryCode =
-                              countries.getAlpha2Code(ConstructorCountry, "en");
-
                             return (
                               <div key={j} className="flex">
-                                <span
-                                  className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
-                                ></span>
                                 {constructor?.name}{" "}
                               </div>
                             );
