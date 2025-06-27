@@ -63,11 +63,17 @@ const Navbar = () => {
       {/* Navigation links on large screens */}
       <div className="hidden lg:flex gap-x-5  pt-1 text-lg font-medium">
         {/* Link to drivers page */}
-        <Link to="/drivers" className="hover:text-cta transition-all">
+        <Link
+          to="/drivers"
+          className="hover:text-cta dark:hover:text-darkmodeCTA transition-all"
+        >
           Drivers
         </Link>
         {/* Link to constructors page */}
-        <Link to="/constructors" className="hover:text-cta transition-all">
+        <Link
+          to="/constructors"
+          className="hover:text-cta dark:hover:text-darkmodeCTA transition-all"
+        >
           Constructors
         </Link>
 
@@ -82,12 +88,12 @@ const Navbar = () => {
                 <ListItem
                   to="/drivers-standings"
                   title="Drivers Standings"
-                  className="text-lg text-center hover:text-cta transition-all"
+                  className="text-lg text-center hover:text-cta dark:hover:text-darkmodeCTA transition-all"
                 ></ListItem>
                 <ListItem
                   to="/constructors-standings"
                   title="Constructors Standings"
-                  className="text-lg text-center hover:text-cta transition-all"
+                  className="text-lg text-center hover:text-cta dark:hover:text-darkmodeCTA transition-all"
                 ></ListItem>
               </NavigationMenuContent>
             </NavigationMenuItem>
@@ -97,18 +103,24 @@ const Navbar = () => {
         {/* Link to Paddock Report */}
         <Link
           to="/the-paddock-report"
-          className="hover:text-cta -translate-x-1 transition-all"
+          className="hover:text-cta dark:hover:text-darkmodeCTA -translate-x-1 transition-all"
         >
           The Paddock Report
         </Link>
 
         {/* Link to Schedule */}
-        <Link to="/schedule" className="hover:text-cta transition-all">
+        <Link
+          to="/schedule"
+          className="hover:text-cta dark:hover:text-darkmodeCTA transition-all"
+        >
           Schedule
         </Link>
 
         {/* Link to circuits */}
-        <Link to="/circuits" className="hover:text-cta transition-all">
+        <Link
+          to="/circuits"
+          className="hover:text-cta dark:hover:text-darkmodeCTA transition-all"
+        >
           Circuits
         </Link>
 
@@ -117,9 +129,9 @@ const Navbar = () => {
           className="hidden lg:block outline-none"
         >
           {isDarkMode ? (
-            <IoSunnySharp className="text-2xl -translate-y-1 hover:text-cta transition-all" />
+            <IoSunnySharp className="text-2xl -translate-y-1 hover:text-cta dark:hover:text-darkmodeCTA transition-all" />
           ) : (
-            <IoMoon className="text-2xl -translate-y-1 hover:text-cta transition-all" />
+            <IoMoon className="text-2xl -translate-y-1 hover:text-cta dark:hover:text-darkmodeCTA transition-all" />
           )}
         </button>
       </div>
@@ -131,9 +143,9 @@ const Navbar = () => {
           className="translate-y-0.5 outline-none"
         >
           {isDarkMode ? (
-            <IoSunnySharp className="text-2xl hover:text-cta transition-all" />
+            <IoSunnySharp className="text-2xl hover:text-cta dark:hover:text-darkmodeCTA transition-all" />
           ) : (
-            <IoMoon className="text-2xl hover:text-cta transition-all" />
+            <IoMoon className="text-2xl hover:text-cta dark:hover:text-darkmodeCTA transition-all" />
           )}
         </button>
         <Drawer direction="right">
@@ -169,14 +181,20 @@ const Navbar = () => {
               <div className="pt-20 flex flex-col text-lg items-center gap-y-10">
                 {/* Link to Home Page */}
                 <DrawerClose asChild>
-                  <Link to="/" className="hover:text-cta transition-all">
+                  <Link
+                    to="/"
+                    className="hover:text-cta dark:hover:text-darkmodeCTA transition-all"
+                  >
                     Home
                   </Link>
                 </DrawerClose>
 
                 {/* Link to Drivers page */}
                 <DrawerClose asChild>
-                  <Link to="/drivers" className="hover:text-cta transition-all">
+                  <Link
+                    to="/drivers"
+                    className="hover:text-cta dark:hover:text-darkmodeCTA transition-all"
+                  >
                     Drivers
                   </Link>
                 </DrawerClose>
@@ -185,7 +203,7 @@ const Navbar = () => {
                 <DrawerClose asChild>
                   <Link
                     to="/constructors"
-                    className="hover:text-cta transition-all"
+                    className="hover:text-cta dark:hover:text-darkmodeCTA transition-all"
                   >
                     Constructors
                   </Link>
@@ -203,14 +221,14 @@ const Navbar = () => {
                           <ListItem
                             to="/drivers-standings"
                             title="Drivers Standings"
-                            className="text-lg text-center hover:text-cta transition-all"
+                            className="text-lg text-center hover:text-cta dark:hover:text-darkmodeCTA transition-all"
                           ></ListItem>
                         </DrawerClose>
                         <DrawerClose asChild>
                           <ListItem
                             to="/constructors-standings"
                             title="Constructors Standings"
-                            className="text-lg text-center hover:text-cta transition-all"
+                            className="text-lg text-center hover:text-cta dark:hover:text-darkmodeCTA transition-all"
                           ></ListItem>
                         </DrawerClose>
                       </NavigationMenuContent>
@@ -222,7 +240,7 @@ const Navbar = () => {
                 <DrawerClose asChild>
                   <Link
                     to="/the-paddock-report"
-                    className="hover:text-cta transition-all"
+                    className="hover:text-cta dark:hover:text-darkmodeCTA transition-all"
                   >
                     The Paddock Report
                   </Link>
@@ -232,7 +250,7 @@ const Navbar = () => {
                 <DrawerClose asChild>
                   <Link
                     to="/schedule"
-                    className="hover:text-cta transition-all"
+                    className="hover:text-cta dark:hover:text-darkmodeCTA transition-all"
                   >
                     Schedule
                   </Link>
@@ -242,7 +260,7 @@ const Navbar = () => {
                 <DrawerClose asChild>
                   <Link
                     to="/circuits"
-                    className="hover:text-cta transition-all"
+                    className="hover:text-cta dark:hover:text-darkmodeCTA transition-all"
                   >
                     Circuits
                   </Link>

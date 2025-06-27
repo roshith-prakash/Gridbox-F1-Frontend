@@ -71,7 +71,10 @@ const DriverStandingCard = ({ item }) => {
           );
 
           return (
-            <div key={j} className="flex">
+            <div
+              key={j}
+              className="flex bg-black/5 dark:bg-white/5 px-3 py-1 rounded-full"
+            >
               <span
                 className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
               ></span>
@@ -402,7 +405,10 @@ const DriverStandings = () => {
                         <TableCell className="px-2 flex gap-x-2">
                           {item?.Constructors?.map((constructor, j) => {
                             return (
-                              <div key={j} className="flex">
+                              <div
+                                key={j}
+                                className="flex bg-black/5 dark:bg-white/5 px-3 py-0.5 rounded-full"
+                              >
                                 {constructor?.name}{" "}
                               </div>
                             );

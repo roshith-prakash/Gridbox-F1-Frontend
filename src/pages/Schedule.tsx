@@ -236,7 +236,7 @@ const Schedule = () => {
                       </p>
 
                       {/* Weekend Schedule */}
-                      <div className="flex flex-col w-96 bg-greyBG dark:bg-zinc-600 gap-y-4 py-3 px-4 rounded-xl">
+                      <div className="flex flex-col max-w-96 bg-greyBG dark:bg-zinc-600 gap-y-4 py-3 px-4 rounded-xl">
                         <p className="font-semibold text-lg">
                           Weekend Schedule:
                         </p>
