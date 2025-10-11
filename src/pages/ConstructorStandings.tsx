@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import * as PropTypes from "prop-types";
-import { ErrorDiv, YearPicker } from "../components";
+import { ErrorDiv, OutlineButton, YearPicker } from "../components";
 import CTAButton from "../components/CTAButton";
 import { SyncLoader } from "react-spinners";
 
@@ -30,8 +30,14 @@ countries.registerLocale(enLocale);
 
 // --------------------------------------------------------------------------------------------------------
 
-// To be displayed on Mobile screens
-const ConstructorStandingCard = ({ item }) => {
+// --------------------------------------------------------------------------------------------------------
+// Constructor Card (Mobile) with Points Difference
+const ConstructorStandingCard = ({
+  item,
+  toLeader,
+  leaderPoints,
+  previousPoints,
+}) => {
   const ConstructorCountry =
     nationalityMap[String(item?.Constructor?.nationality).trim()];
   const ConstructorCountryCode = countries.getAlpha2Code(
@@ -39,25 +45,35 @@ const ConstructorStandingCard = ({ item }) => {
     "en"
   );
 
+  const pointsDifference = toLeader
+    ? leaderPoints - item.points
+    : previousPoints !== undefined
+    ? previousPoints - item.points
+    : "-";
+
   return (
     <div className="flex flex-col overflow-hidden divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg">
       {/* Position + Constructor Name */}
       <p className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100 dark:bg-zinc-800">
         {item?.position}. <span>{item?.Constructor?.name}</span>
       </p>
-      {/* Display Points and Grand Prix wins */}
-      <div className="flex justify-between">
-        <p className="px-5 py-3 text-lg font-medium">
-          Points : <span>{item?.points}</span>
+      {/* Points and Grand Prix Wins */}
+      <div className="flex justify-between px-5 py-3">
+        <p className="text-lg font-medium">
+          Points: <span>{item?.points}</span>
         </p>
-        <p className="px-5 py-3">
-          Grand Prix Wins : <span>{item?.wins}</span>
+        <p>
+          Wins: <span>{item?.wins}</span>
         </p>
       </div>
-
-      {/* Display Constructor Nationality */}
+      {/* Points Difference */}
       <p className="px-5 py-3">
-        Nationality : {item?.Constructor?.nationality}{" "}
+        {toLeader ? "To Leader:" : "To Previous:"}{" "}
+        <span>{pointsDifference}</span>
+      </p>
+      {/* Constructor Nationality */}
+      <p className="px-5 py-3">
+        Nationality: {item?.Constructor?.nationality}{" "}
         <span
           className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
         ></span>
@@ -66,99 +82,80 @@ const ConstructorStandingCard = ({ item }) => {
   );
 };
 
-ConstructorStandingCard.propTypes = {
-  item: PropTypes.shape({
-    driver: PropTypes.object,
-    Constructor: PropTypes.object,
-    position: PropTypes.number.isRequired,
-    points: PropTypes.number,
-    wins: PropTypes.number,
-  }).isRequired,
-};
-
 // --------------------------------------------------------------------------------------------------------
-
-// Loading Placeholder Table / Card
+// Loading Table/Card Fixes
 const LoadingTableCard = () => {
+  const { isDarkMode } = useDarkMode();
+
   return (
     <>
       <div className="hidden md:block pt-10 pb-5 w-full overflow-x-auto">
         <table className="rounded-lg w-full overflow-hidden bg-white dark:bg-secondarydarkbg">
           <TableHeader>
             <TableRow className="text-left bg-gray-100 dark:bg-zinc-800">
-              <TableHead className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap">
-                Position
-              </TableHead>
-              <TableHead className="font-bold text-black dark:text-darkmodetext">
-                Constructor
-              </TableHead>
-              <TableHead className="font-bold text-black dark:text-darkmodetext">
-                Nationality
-              </TableHead>
-              <TableHead className="font-bold text-black dark:text-darkmodetext">
-                Points
-              </TableHead>
-              <TableHead className="font-bold text-black dark:text-darkmodetext">
-                Wins
-              </TableHead>
+              {[
+                "Position",
+                "Constructor",
+                "Nationality",
+                "Points",
+                "Diff",
+                "Wins",
+              ].map((head, i) => (
+                <TableHead
+                  key={i}
+                  className="font-bold text-black dark:text-darkmodetext py-6 pl-3 text-nowrap"
+                >
+                  {head}
+                </TableHead>
+              ))}
             </TableRow>
           </TableHeader>
           <TableBody>
             {Array(20)
               .fill(null)
-              ?.map((driver, i) => {
-                return (
-                  <TableRow
-                    className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
-                    key={i}
-                  >
-                    <TableCell className="font-medium py-3 px-3 md:w-[5em]">
-                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-10 h-5 rounded"></div>
-                    </TableCell>
-                    <TableCell className="px-2">
-                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[90%] h-5 rounded"></div>
-                    </TableCell>
-                    <TableCell className="px-2">
-                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[40%] h-5 rounded"></div>
-                    </TableCell>
-                    <TableCell className="px-2">
-                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[40%] h-5 rounded"></div>
-                    </TableCell>
-                    <TableCell className="gap-x-2 px-2 text-nowrap">
-                      <div className="bg-gray-300 dark:bg-gray-500 animate-pulse w-[70%] h-5 rounded"></div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+              .map((_, i) => (
+                <TableRow
+                  className="text-left border-b-2 border-gray-100 dark:border-zinc-600"
+                  key={i}
+                >
+                  {Array(6)
+                    .fill(null)
+                    .map((_, j) => (
+                      <TableCell key={j} className="px-2 py-3">
+                        <div
+                          className={`bg-gray-300 dark:bg-gray-500 animate-pulse w-full h-5 rounded`}
+                        ></div>
+                      </TableCell>
+                    ))}
+                </TableRow>
+              ))}
           </TableBody>
         </table>
       </div>
+
       <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-        {/* Loading Cards on Mobile Screen */}
         {Array(20)
           .fill(null)
-          ?.map((_, i) => {
-            return (
-              <div
-                key={i}
-                className="flex flex-col divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg"
-              >
-                <div className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100 dark:bg-zinc-800">
-                  <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
-                </div>
-                <div className="flex justify-between px-5 py-3">
-                  <div className="h-5 w-[30%] bg-gray-300 dark:bg-gray-500 rounded"></div>
-
-                  <div className="h-5 w-[30%] bg-gray-300 dark:bg-gray-500 rounded"></div>
-                </div>
-
-                <div className="flex gap-x-2 px-5 py-3">
-                  <div className="h-5 w-[70%] bg-gray- animate-pulse rounded"></div>
-                  <div className="h-5 w-[10%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
-                </div>
+          .map((_, i) => (
+            <div
+              key={i}
+              className="flex flex-col divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg"
+            >
+              <div className="text-lg px-5 font-medium py-3 flex gap-x-3 bg-gray-100 dark:bg-zinc-800">
+                <div className="h-5 w-[70%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
               </div>
-            );
-          })}
+              <div className="flex justify-between px-5 py-3">
+                <div className="h-5 w-[30%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
+                <div className="h-5 w-[30%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
+              </div>
+              <div className="px-5 py-3">
+                <div className="h-5 w-[40%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
+              </div>
+              <div className="px-5 py-3">
+                <div className="h-5 w-[50%] bg-gray-300 dark:bg-gray-500 animate-pulse rounded"></div>
+              </div>
+            </div>
+          ))}
       </div>
     </>
   );
@@ -178,6 +175,7 @@ const ConstructorStandings = () => {
   const [standings, setStandings] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
+  const [toLeader, setToLeader] = useState(true);
 
   // Query function to fetch standings for each year
   const {
@@ -335,6 +333,14 @@ const ConstructorStandings = () => {
                     <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Points
                     </TableHead>
+                    <TableHead
+                      onClick={() => {
+                        setToLeader((prev) => !prev);
+                      }}
+                      className="font-bold text-black dark:text-darkmodetext cursor-pointer"
+                    >
+                      {toLeader ? "To Leader" : "To Previous "}
+                    </TableHead>
                     <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Wins
                     </TableHead>
@@ -375,6 +381,14 @@ const ConstructorStandings = () => {
                         <TableCell className="gap-x-2 px-2 text-nowrap">
                           {item?.points}
                         </TableCell>
+
+                        {/* Difference */}
+                        <TableCell className="gap-x-2 px-2 text-nowrap">
+                          {toLeader
+                            ? standings[0]?.points - item?.points || "-"
+                            : standings[i - 1]?.points - item?.points || "-"}
+                        </TableCell>
+
                         {/* Grand Prix Wins */}
                         <TableCell className="px-2 text-nowrap">
                           {item?.wins}
@@ -387,9 +401,26 @@ const ConstructorStandings = () => {
             </div>
             {/* Cards to be displayed on smaller screens */}
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-              {standings?.map((item) => {
+              <OutlineButton
+                className="w-min"
+                onClick={() => {
+                  setToLeader((prev) => !prev);
+                }}
+                text={toLeader ? "Showing: To Leader" : "Showing: To Previous"}
+              ></OutlineButton>
+
+              {standings?.map((item, i) => {
+                const leaderPoints = standings[0]?.points;
+                const previousPoints =
+                  i > 0 ? standings[i - 1]?.points : undefined;
                 return (
-                  <ConstructorStandingCard item={item} key={item.driverId} />
+                  <ConstructorStandingCard
+                    key={item.position}
+                    item={item}
+                    toLeader={toLeader}
+                    leaderPoints={leaderPoints}
+                    previousPoints={previousPoints}
+                  />
                 );
               })}
             </div>

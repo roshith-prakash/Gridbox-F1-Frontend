@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import * as PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
-import { ErrorDiv, YearPicker } from "../components";
+import { ErrorDiv, OutlineButton, YearPicker } from "../components";
 import CTAButton from "../components/CTAButton";
 import { SyncLoader } from "react-spinners";
 
@@ -27,11 +27,21 @@ import { isAxiosError } from "axios";
 // Register the locale for the countries Constructor
 countries.registerLocale(enLocale);
 
-// To be displayed on Mobile screens
-const DriverStandingCard = ({ item }) => {
+const DriverStandingCard = ({
+  item,
+  toLeader,
+  leaderPoints,
+  previousPoints,
+}) => {
   const DriverCountry =
     nationalityMap[String(item?.Driver?.nationality).trim()];
   const DriverCountryCode = countries.getAlpha2Code(DriverCountry, "en");
+
+  const pointsDifference = toLeader
+    ? leaderPoints - item.points
+    : previousPoints !== undefined
+    ? previousPoints - item.points
+    : "-";
 
   return (
     <div className="flex flex-col overflow-hidden divide-y-2 divide-gray-100 dark:divide-zinc-600 border-2 dark:border-zinc-600 w-full max-w-[95%] rounded-lg shadow-lg">
@@ -45,21 +55,29 @@ const DriverStandingCard = ({ item }) => {
           className={`mx-2 fi fi-${DriverCountryCode?.toLowerCase()}`}
         ></span>
       </p>
+
       {/* Points scored */}
       <p className="px-5 py-3 text-lg font-medium">
-        Points : <span>{item?.points}</span>
+        Points: <span>{item?.points}</span>
       </p>
+
+      {/* Points Difference (tap to toggle) */}
+      <div className="px-5 py-3 cursor-pointer font-medium">
+        {toLeader ? "To Leader:" : "To Previous:"} {pointsDifference}
+      </div>
+
       {/* Driver Code + Number */}
       <div className="flex px-5 py-3">
         <p className="flex-1">
-          Code : {item?.Driver?.code ? item?.Driver?.code : "-"}
+          Code: {item?.Driver?.code ? item?.Driver?.code : "-"}
         </p>
         <p className="flex-1">
-          Number :{" "}
+          Number:{" "}
           {item?.Driver?.permanentNumber ? item?.Driver?.permanentNumber : "-"}
         </p>
       </div>
-      {/* Constructor + Nationality */}
+
+      {/* Constructor(s) */}
       <div className="px-5 flex gap-x-2 py-3">
         Constructor:{" "}
         {item?.Constructors?.map((constructor, j) => {
@@ -78,27 +96,18 @@ const DriverStandingCard = ({ item }) => {
               <span
                 className={`mx-2 fi fi-${ConstructorCountryCode?.toLowerCase()}`}
               ></span>
-              {constructor?.name}{" "}
+              {constructor?.name}
             </div>
           );
         })}
       </div>
+
       {/* Grand Prix Wins */}
       <p className="px-5 py-3">
-        Grand Prix Wins : <span>{item?.wins}</span>
+        Grand Prix Wins: <span>{item?.wins}</span>
       </p>
     </div>
   );
-};
-
-DriverStandingCard.propTypes = {
-  item: PropTypes.shape({
-    Driver: PropTypes.object,
-    Constructors: PropTypes.object,
-    position: PropTypes.number.isRequired,
-    points: PropTypes.number,
-    wins: PropTypes.number,
-  }).isRequired,
 };
 
 // Loading Placeholder Table / Card
@@ -219,6 +228,7 @@ const DriverStandings = () => {
   const [standings, setStandings] = useState([]);
   const [invalidYear, setInvalidYear] = useState(false);
   const [invalidURL, setInvalidURL] = useState(false);
+  const [toLeader, setToLeader] = useState(true);
 
   // Query function to fetch standings for each year
   const {
@@ -379,6 +389,14 @@ const DriverStandings = () => {
                     <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Points
                     </TableHead>
+                    <TableHead
+                      onClick={() => {
+                        setToLeader((prev) => !prev);
+                      }}
+                      className="font-bold text-black dark:text-darkmodetext cursor-pointer"
+                    >
+                      {toLeader ? "To Leader" : "To Previous "}
+                    </TableHead>
                     <TableHead className="font-bold text-black dark:text-darkmodetext">
                       Wins
                     </TableHead>
@@ -420,6 +438,13 @@ const DriverStandings = () => {
                           {item?.points}
                         </TableCell>
 
+                        {/* Difference */}
+                        <TableCell className="gap-x-2 px-2 text-nowrap">
+                          {toLeader
+                            ? standings[0]?.points - item?.points || "-"
+                            : standings[i - 1]?.points - item?.points || "-"}
+                        </TableCell>
+
                         {/* Grand Prix wins */}
                         <TableCell className="px-2 text-nowrap">
                           {item?.wins}
@@ -430,10 +455,29 @@ const DriverStandings = () => {
                 </TableBody>
               </table>
             </div>
-            {/* Cards to be displayed on smaller screens */}
+            {/* Cards for mobile */}
             <div className="md:hidden flex flex-col items-center gap-y-5 py-10">
-              {standings?.map((item) => {
-                return <DriverStandingCard item={item} key={item.DriverId} />;
+              <OutlineButton
+                className="w-min"
+                onClick={() => {
+                  setToLeader((prev) => !prev);
+                }}
+                text={toLeader ? "Showing: To Leader" : "Showing: To Previous"}
+              ></OutlineButton>
+
+              {standings?.map((item, i) => {
+                const leaderPoints = standings[0]?.points;
+                const previousPoints =
+                  i > 0 ? standings[i - 1]?.points : undefined;
+                return (
+                  <DriverStandingCard
+                    key={item.DriverId}
+                    item={item}
+                    toLeader={toLeader}
+                    leaderPoints={leaderPoints}
+                    previousPoints={previousPoints}
+                  />
+                );
               })}
             </div>
           </>
